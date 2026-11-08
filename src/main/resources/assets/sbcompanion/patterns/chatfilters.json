@@ -1,0 +1,446 @@
+{
+  "_about": "Chat filter categories. Each is a feature switch; patterns match the line with colour codes removed. Copy to config/sbcompanion/patterns/ to change, /sbc reload applies.",
+  "categories": [
+    {
+      "id": "chat_lobby",
+      "title": "Join and welcome spam",
+      "description": "Hides the welcome lines, profile ids and update notes when you join SkyBlock.",
+      "default": true,
+      "patterns": [
+        "^Welcome to Hypixel SkyBlock!?$",
+        "^You are playing on profile: .*",
+        "^Profile ID: .*",
+        "^Latest update: .*"
+      ]
+    },
+    {
+      "id": "chat_warp",
+      "title": "Warp and transfer lines",
+      "description": "Hides Warping..., Sending to server and similar transfer messages.",
+      "default": true,
+      "patterns": [
+        "^Warping( you to .*)?\\.{0,3}$",
+        "^Sending to server .*",
+        "^Transferring you to .*",
+        "^Warped from the \\S+ to the \\S+!$",
+        "^Request join for Hub .*\\.\\.\\.$",
+        "^Request join for Dungeon Hub #.*\\.\\.\\.$",
+        "^Warped to .*!$",
+        "^Warping using transfer token\\.\\.\\.$",
+        "^Finding player\\.\\.\\.$",
+        "^Sending a visit request\\.\\.\\.$"
+      ]
+    },
+    {
+      "id": "chat_guildexp",
+      "title": "Guild and event EXP lines",
+      "description": "Hides lines like You earned 2 GEXP from playing SkyBlock!",
+      "default": true,
+      "patterns": [
+        "^You earned \\d+ GEXP( \\+ \\d+ Event EXP)? from playing SkyBlock!$",
+        "^You earned \\d+ Event EXP from playing SkyBlock!$"
+      ]
+    },
+    {
+      "id": "chat_combo",
+      "title": "Kill combo lines",
+      "description": "Hides +5 Kill Combo and its buffs.",
+      "default": true,
+      "patterns": [
+        "^\\+\\d+ Kill Combo( \\+\\d+% .*)?$",
+        "^Your Kill Combo has expired! You reached a \\d+ Kill Combo!$",
+        "^\\+.* Kill Combo( .*)?$"
+      ]
+    },
+    {
+      "id": "chat_mana",
+      "title": "Cooldown warnings",
+      "description": "Hides 'Ability on cooldown' and 'no more charges'. The HUD already shows them.",
+      "default": true,
+      "patterns": [
+        "^This ability is on cooldown for .*",
+        "^No more charges, next one in .*"
+      ]
+    },
+    {
+      "id": "chat_social",
+      "title": "Friend and guild join/leave",
+      "description": "Hides Friend > X joined. and Guild > X left.",
+      "default": false,
+      "patterns": [
+        "^(Friend|Guild) > \\S+ (joined|left)\\.$"
+      ]
+    },
+    {
+      "id": "chat_pet",
+      "title": "Pet summon lines",
+      "description": "Hides You summoned your X and You despawned your X.",
+      "default": true,
+      "patterns": [
+        "^You (summoned|despawned) your .*",
+        "^Autopet equipped your .*"
+      ]
+    },
+    {
+      "id": "chat_bazaar",
+      "title": "Bazaar, auction and bank progress lines",
+      "description": "Hides the submitting, executing and claiming steps of orders and auctions, and depositing or withdrawing coins.",
+      "default": true,
+      "patterns": [
+        "^\\[Bazaar\\] (Submitting|Executing|Setting up|Cancelling|Putting goods in escrow|Claiming order)\\.{0,3}.*",
+        "^Putting (item|coins) in escrow\\.\\.\\.$",
+        "^Setting up the auction\\.\\.\\.$",
+        "^Processing (purchase|bid)\\.\\.\\.$",
+        "^Claiming BIN auction\\.\\.\\.$",
+        "^(Depositing|Withdrawing) coins\\.\\.\\.$"
+      ]
+    },
+    {
+      "id": "chat_dungeon",
+      "title": "Dungeon combat spam",
+      "description": "Hides damage, healing, orb and buff lines inside a dungeon run.",
+      "default": true,
+      "patterns": [
+        "^Your .* hit \\S+ .*(enemy|enemies) for .* damage\\.$",
+        "^.* (exploded, hitting|struck) you for .* damage\\.$",
+        "^You were healed for .* health by .*",
+        "^.* healed you for .* health!$",
+        "^You gained .* HP worth of absorption .*",
+        "^Dungeon starts in .* seconds\\.$",
+        "^.* picked up your .* Orb!$",
+        "^A mystical force in this room prevents you from using that ability!$",
+        "^DUNGEON BUFF! .*",
+        "^.* is ready to use! Press DROP to activate it!$"
+      ]
+    },
+    {
+      "id": "chat_noise",
+      "title": "Repeating server reminders",
+      "description": "Hides reminders that repeat constantly: blocks in the way, and trees you cannot damage yet.",
+      "default": true,
+      "patterns": [
+        "^You can't use this while in combat!$",
+        "^There are blocks in the way!?$",
+        "^You cannot damage a tree while it is regenerating!$",
+        "^The toughness of this tree is way too high!$"
+      ]
+    },
+    {
+      "id": "chat_stash",
+      "title": "Stash reminders",
+      "description": "Hides every stash line. Off, the reminders are shortened to one clickable line instead.",
+      "default": false,
+      "patterns": [
+        "^You have \\d+ (items|materials) stashed away!.*",
+        "^Click here to pick (them|it) up!.*",
+        "^One or more items didn't fit in your inventory and were added to your item stash! .*"
+      ]
+    },
+    {
+      "id": "chat_sacrifice",
+      "title": "Other players' sacrifices",
+      "description": "Hides SACRIFICE! and BONUS LOOT! about other players at the Dragon's Lair.",
+      "default": true,
+      "patterns": [
+        "^SACRIFICE! .* turned .* into .*!$",
+        "^BONUS LOOT! They also received .*"
+      ]
+    },
+    {
+      "id": "chat_raredrops_others",
+      "title": "Other players' rare rewards",
+      "description": "Hides RARE REWARD! about other players' chests.",
+      "default": true,
+      "patterns": [
+        "^RARE REWARD! \\S+ found a .* in their .* Chest!$"
+      ]
+    },
+    {
+      "id": "chat_parkour",
+      "title": "Parkour lines",
+      "description": "Hides started, finished, checkpoint and cancelled parkour lines.",
+      "default": false,
+      "patterns": [
+        "^(Started|Finished|Reached checkpoint #\\d+ for|Wrong checkpoint for|You haven't reached all checkpoints for) parkour .*",
+        "^Cancelled parkour!.*"
+      ]
+    },
+    {
+      "id": "chat_rewardbundle",
+      "title": "Unclaimed reward reminders",
+      "description": "Hides You haven't claimed your X Rewards yet! Talk to ...",
+      "default": false,
+      "patterns": [
+        "^You haven't claimed your .* Rewards yet!$",
+        "^Talk to the .* in the .*!$"
+      ]
+    },
+    {
+      "id": "chat_hoppity_begin",
+      "title": "Hoppity's Hunt has begun",
+      "description": "Hides the line when the hunt starts.",
+      "default": true,
+      "patterns": [
+        "^Hoppity's Hunt has begun! Help Hoppity find his Chocolate Rabbit Eggs across SkyBlock each day during the Spring!$"
+      ]
+    },
+    {
+      "id": "chat_event_level",
+      "title": "Event level up",
+      "description": "Hides You are now Event Level, the Event Silver you earned and the LEVEL UP line.",
+      "default": true,
+      "patterns": [
+        "^\\s*You are now Event Level .*!$",
+        "^\\s*You earned .* Event Silver!$",
+        "^\\s*. LEVEL UP! .$"
+      ]
+    },
+    {
+      "id": "chat_diana",
+      "title": "Griffin burrow lines",
+      "description": "Hides burrows dug, Griffin Feathers and coins dug out; the Diana cards count them.",
+      "default": false,
+      "patterns": [
+        "^You (?:dug out a Griffin Burrow|finished the Griffin burrow chain)!.*$",
+        "^Wow! You dug out [\\d,.]+ coins!$",
+        "^RARE DROP! You dug out a Griffin Feather!$"
+      ]
+    },
+    {
+      "id": "chat_hoppity_appear",
+      "title": "Hoppity egg appeared",
+      "description": "Hides HOPPITY'S HUNT A Chocolate X Egg has appeared!",
+      "default": true,
+      "patterns": [
+        "^HOPPITY'S HUNT A Chocolate .* Egg has appeared!$"
+      ]
+    },
+    {
+      "id": "chat_shards",
+      "title": "Hunting shard chatter",
+      "description": "Hides 'X ate too much and passed out!' and other redundant shard lines.",
+      "default": true,
+      "patterns": [
+        "^\\S+ ate too much and passed out! You caught it!$",
+        "^You caught yourself an? \\S+! The shard was sent to your Hunting Box!$",
+        "^The \\S+ is exhausted\\.\\.\\.$"
+      ]
+    },
+    {
+      "id": "chat_anita",
+      "title": "Anita fortune reminder",
+      "description": "Hides [NPC] Jacob: Your Anita's Talisman is giving you ...",
+      "default": true,
+      "patterns": [
+        "^\\[NPC\\] Jacob: Your Anita's .* is giving you .* during the contest!$"
+      ]
+    },
+    {
+      "id": "chat_arachne",
+      "title": "Arachne call lines",
+      "description": "Hides Arachne's Calling and Arachne Crystal placed from other players, also inside the Sanctuary. The Arachne fight filter is the finer one.",
+      "default": false,
+      "patterns": [
+        "^☄ .* placed an Arachne's Calling!.*",
+        "^☄ .* placed an Arachne Crystal! Something is awakening!$"
+      ]
+    },
+    {
+      "id": "chat_watchdog",
+      "title": "Watchdog announcements",
+      "description": "Hides the [WATCHDOG ANNOUNCEMENT] blocks.",
+      "default": true,
+      "patterns": [
+        "^\\[WATCHDOG ANNOUNCEMENT\\]$",
+        "^Watchdog has banned .* players in the last 7 days\\.$",
+        "^Staff have banned an additional .* in the last 7 days\\.$",
+        "^Blacklisted modifications are a bannable offense!$"
+      ]
+    },
+    {
+      "id": "chat_firesale",
+      "title": "Fire sale announcements",
+      "description": "Hides FIRE SALE lines.",
+      "default": true,
+      "patterns": [
+        "^FIRE SALE .*",
+        "^\\[Fire Sale\\] .*",
+        "^. FIRE SALE .(\\n|.)*$",
+        "^♨ Fire Sales for .* are starting soon!$",
+        "^♨ .* (Skin|Rune|Dye) (for a limited time )?\\(.* left\\)!?$",
+        "^♨ Visit the Community Shop in the next .* to grab yours! \\[WARP\\]$",
+        "^♨ A Fire Sale for .* is starting soon!$",
+        "^♨ Fire Sales? for .* ended!$",
+        "^♨ And \\d+ more!$",
+        "^♨ Selling multiple items for a limited time!$"
+      ]
+    },
+    {
+      "id": "chat_skymall",
+      "title": "Sky Mall buff lines",
+      "description": "Hides New day! Your Sky Mall buff changed! Away from the mining islands only; there it stays.",
+      "default": true,
+      "patterns": [
+        "^New day! Your Sky Mall buff changed!$",
+        "^New buff: (?:Gain )?(?:.+) (?:Mining Speed|Mining Fortune|more Powder while mining|Pickaxe Ability cooldowns|chance to find Golden and Diamond Goblins|Titanium drops)\\.$",
+        "^You can disable this messaging by toggling Sky Mall in your /hotm!$"
+      ]
+    },
+    {
+      "id": "chat_lottery",
+      "title": "Lottery buff lines",
+      "description": "Hides the daily line that your Lottery buff changed.",
+      "default": false,
+      "patterns": [
+        "^New day! Your Lottery buff changed!$",
+        "^You can disable this messaging by toggling Lottery in your /hotf!$"
+      ]
+    },
+    {
+      "id": "chat_ads",
+      "title": "Trade and visit advertisements",
+      "description": "Hides lines in public chat selling, buying or asking for visits, and keeps everything else.",
+      "default": false,
+      "patterns": [
+        "^(\\[[^\\]]+\\] )?\\S+: .*\\b(selling|buying|wts|wtb|wtt|lowballing|lowball|visit my island|visit me|/visit)\\b.*",
+        "^(?:\\[[0-9]+\\] )?(?:[^ ] )?(?:\\[[A-Z+]+\\] )?[A-Za-z0-9_]+: (?i:(?:i(?:m|'m| am)? |(?:is )?any(?: ?one|1) )?(?:buy|sell|lowball|trade?)(?:ing)?(?:\\W|$))",
+        "^(?:\\[[0-9]+\\] )?(?:[^ ] )?(?:\\[[A-Z+]+\\] )?[A-Za-z0-9_]+: .*(.)\\1{7,}",
+        "^(?:\\[[0-9]+\\] )?(?:[^ ] )?(?:\\[[A-Z+]+\\] )?[A-Za-z0-9_]+: .*(?i:\\W(?:on|in|check|at) my (?:ah|bin)(?:\\W|$))"
+      ]
+    },
+    {
+      "id": "chat_implosion",
+      "title": "Implosion and wave lines",
+      "description": "Hides Your Implosion hit X enemies ... and Your Molten Wave ...",
+      "default": true,
+      "patterns": [
+        "^Your (Implosion|Molten Wave|Spirit Sceptre) hit \\d+ enem(y|ies) for .* damage\\.$"
+      ]
+    },
+    {
+      "id": "chat_aote",
+      "title": "Teleport ability lines",
+      "description": "Hides There are blocks in the way! and similar from the Aspect of the End.",
+      "default": true,
+      "patterns": [
+        "^There are blocks in the way!$"
+      ]
+    },
+    {
+      "id": "chat_dungeon_start",
+      "title": "Dungeon class stat lines",
+      "description": "Hides [Berserk] Melee Damage 48% -> 88% and the other class buff lines at the start of a run.",
+      "default": true,
+      "patterns": [
+        "^\\[(Berserk|Mage|Archer|Tank|Healer)\\] .* -> .*$"
+      ]
+    },
+    {
+      "id": "chat_dungeon_boss",
+      "title": "Boss dialogue",
+      "description": "Hides [BOSS] Name: ... speech lines. The Dungeon copilot still reads them.",
+      "default": true,
+      "patterns": [
+        "^\\[BOSS\\] [A-Za-z' ]+: .*$"
+      ]
+    },
+    {
+      "id": "chat_lobbies",
+      "title": "Hypixel lobby announcements",
+      "description": "In the lobbies outside SkyBlock, hides player joins, mystery boxes, prototype and tournament lines.",
+      "default": true,
+      "patterns": [
+        "^(?:>>> )?.* (?:joined|(?:spooked|slid) into) the lobby!(?: <<<)?$",
+        "You can now create your own Hypixel SMP server!",
+        "For the best experience, click the text below to enable Snow\\s.*Particles in this lobby!\\s*.*Click to enable Snow Particles",
+        "^✦ .* found an? .* Mystery Box!$",
+        "^✦ .* found an? .* in a (?:Holiday )?Mystery Box!$",
+        "^✦ You earned \\d+ Mystery Dust!$",
+        "^✦ You earned \\d+ Pet Consumables items!$",
+        "^➤ You have reached your Hype limit! Add Hype to Prototype Lobby minigames by right-clicking with the Hype Diamond!$",
+        "Welcome to the Prototype Lobby",
+        "HYPIXEL is hosting a BED WARS DOUBLES tournament!",
+        "HYPIXEL BED WARS DOUBLES tournament is live!",
+        "HYPIXEL is hosting a TNT RUN tournament!",
+        "You are still radiating with Generosity!"
+      ]
+    },
+    {
+      "id": "chat_teleport_pads",
+      "title": "Teleport pad lines",
+      "description": "Hides that you warped from one pad to the other, and pads without a destination.",
+      "default": false,
+      "patterns": [
+        "^Warped from the .* to the .*!$",
+        "^This Teleport Pad does not have a destination set!$"
+      ]
+    },
+    {
+      "id": "chat_factory_upgrade",
+      "title": "Chocolate Factory upgrades",
+      "description": "Hides Hypixel's lines about employees promoted, barn capacity and chocolate per click.",
+      "default": false,
+      "patterns": [
+        "^.* has been promoted to \\[.*\\] .*!$",
+        "^Your Rabbit Barn capacity has been increased to .* Rabbits!$",
+        "^You will now produce .* Chocolate per click!$",
+        "^You upgraded to .*?!$"
+      ]
+    },
+    {
+      "id": "chat_legacy_items",
+      "title": "Legacy items warning",
+      "description": "Hides the reminder that you have legacy items to exchange in /legacytrades.",
+      "default": false,
+      "patterns": [
+        "^You currently have one or more Legacy Items in your inventory or sacks that are no longer used throughout the game! Exchange them in the Legacy Trades menu, accessed through /legacytrades!$"
+      ]
+    },
+    {
+      "id": "chat_feast_chef",
+      "title": "Feast Chef Ted",
+      "description": "Hides Thanks for the donation! Kernels going into your purse while you farm.",
+      "default": true,
+      "patterns": [
+        "^\\[NPC\\] Feast Chef Ted: Thanks for the donation! I've added a Kernel to your purse\\.$"
+      ]
+    },
+    {
+      "id": "chat_heal",
+      "title": "Heal lines",
+      "description": "Hides You healed yourself, and that someone healed you.",
+      "default": true,
+      "patterns": [
+        "^You healed yourself for -?[0-9]{1,3}(?>,[0-9]{3})*(?:\\.[1-9])? health!$",
+        "^[a-zA-Z0-9_]{2,16} healed you for -?[0-9]{1,3}(?>,[0-9]{3})*(?:\\.[1-9])? health!$"
+      ]
+    },
+    {
+      "id": "chat_showoff",
+      "title": "Show-off lines",
+      "description": "Hides other players using /show: is holding, is wearing, has.",
+      "default": false,
+      "patterns": [
+        "^(?:\\[[0-9]+\\] )?(?:[^ ] )?(?:\\[[A-Z+]+\\] )?[A-Za-z0-9_]+ (?:is holding|is wearing|is friends with a|has) \\[.+\\]$"
+      ]
+    },
+    {
+      "id": "chat_deaths",
+      "title": "All player deaths",
+      "description": "Hides every death line, near or far. To hide only those far away, use Hide far death messages.",
+      "default": false,
+      "patterns": [
+        "^☠ .*"
+      ]
+    },
+    {
+      "id": "chat_chicken_head",
+      "title": "Chicken Head eggs",
+      "description": "Hides You laid an egg!",
+      "default": true,
+      "patterns": [
+        "^You laid an egg!$"
+      ]
+    }
+  ]
+}

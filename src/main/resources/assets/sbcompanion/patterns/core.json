@@ -1,0 +1,29 @@
+{
+  "_about": "Regular expressions the mod matches against Hypixel text. Copy this file to config/sbcompanion/patterns/ to override entries without rebuilding; use /sbc reload.",
+  "Gain.COINS": {
+    "regex": "([\\d,]+(?:\\.\\d+)?)\\s*(?:coins?)\\b",
+    "flags": "CASE_INSENSITIVE"
+  },
+  "Gain.QTY": "^(.*?)\\s+x(\\d+)$",
+  "GameState.STRIP": "§.",
+  "GameState.PURSE": "(?:Purse|Piggy): ([\\d,]+)",
+  "GameState.BITS": "Bits: ([\\d,]+)",
+  "GameState.COPPER": "Copper: ([\\d,]+)",
+  "GameState.MOTES": "Motes: ([\\d,]+)",
+  "GameState.AREA_TAB": "^\\s*(?:Area|Dungeon): (.+)$",
+  "GameState.PROFILE_TAB": "^\\s*Profile: (\\S+)\\s*(.*)$",
+  "GameState.LEVEL_TAB": "SB Level: \\[?(\\d+)",
+  "GameState.BANK_TAB": "^\\s*Bank: ([\\d,.]+[kKmMbB]?)",
+  "GameState.COOKIE_TAB": "^\\s*Cookie Buff\\s*$",
+  "GameState.SKILL_TAB": "^\\s*([A-Z][a-z]+) (\\d+|[IVXLC]+): ([\\d.]+)%|^\\s*([A-Z][a-z]+) (\\d+|[IVXLC]+): MAX",
+  "Vitals.HP": "([\\d,]+)/([\\d,]+)\\s*❤\\S*",
+  "Vitals.DEF": "([\\d,]+)\\s*❈\\s*Defense",
+  "Vitals.MANA": "([\\d,]+)/([\\d,]+)\\s*✎\\s*(?:Mana)?",
+  "Vitals.OVER": "([\\d,]+)\\s*ʬ",
+  "Vitals.GAIN": "\\+([\\d,.]+) ([A-Za-z]+) \\(([\\d,.]+)%\\)",
+  "Vitals.GAIN2": "\\+([\\d,.]+) ([A-Za-z]+) \\(([\\d,.]+)/([\\d,.]+[kKmMbB]?)\\)",
+  "Vitals.STAT": "^\\s*([A-Z][A-Za-z' ]{2,24}):\\s*[^\\d\\s-]?\\s*(-?[\\d,.]+%?)\\s*$",
+  "Vitals.PET": "^\\s*\\[Lvl (\\d+)]\\s*(.+?)\\s*$",
+  "Vitals.TOKEN": "([\\d,]+)(?:/([\\d,]+))?\\s*([^\\d\\s,/.+\\-()\\[\\]%]{1,2})(?:\\s+(Defense|Mana|Health|Overflow Mana))?",
+  "Vitals.HEAL": "\\+([\\d,]+)[▁-█]"
+}

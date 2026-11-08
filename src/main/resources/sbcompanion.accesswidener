@@ -1,0 +1,18 @@
+accessWidener v2 official
+
+# What the layer in dev.zmuzy.sbc.ui.layout needs of the game: the same openings owo-lib made for its graphics object and screens.
+accessible method net/minecraft/client/gui/screens/Screen addRenderableWidget (Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;
+
+accessible class net/minecraft/client/gui/GuiGraphicsExtractor$ScissorStack
+extendable method net/minecraft/client/gui/GuiGraphicsExtractor setTooltipForNextFrameInternal (Lnet/minecraft/client/gui/Font;Ljava/util/List;IILnet/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipPositioner;Lnet/minecraft/resources/Identifier;Z)V
+accessible field net/minecraft/client/gui/GuiGraphicsExtractor guiRenderState Lnet/minecraft/client/renderer/state/gui/GuiRenderState;
+accessible field net/minecraft/client/gui/GuiGraphicsExtractor pose Lorg/joml/Matrix3x2fStack;
+mutable field net/minecraft/client/gui/GuiGraphicsExtractor pose Lorg/joml/Matrix3x2fStack;
+accessible field net/minecraft/client/gui/GuiGraphicsExtractor scissorStack Lnet/minecraft/client/gui/GuiGraphicsExtractor$ScissorStack;
+mutable field net/minecraft/client/gui/GuiGraphicsExtractor scissorStack Lnet/minecraft/client/gui/GuiGraphicsExtractor$ScissorStack;
+accessible field net/minecraft/client/gui/GuiGraphicsExtractor deferredTooltip Ljava/lang/Runnable;
+accessible field net/minecraft/client/gui/GuiGraphicsExtractor mouseX I
+accessible field net/minecraft/client/gui/GuiGraphicsExtractor mouseY I
+
+# FarmingKeys: whether a key toggles, as SkyHanni opens it.
+accessible field net/minecraft/client/ToggleKeyMapping needsToggle Ljava/util/function/BooleanSupplier;

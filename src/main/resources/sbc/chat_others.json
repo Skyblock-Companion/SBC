@@ -1,0 +1,118 @@
+{
+  "_about": "SkyHanni ChatFilter.kt, the groups behind its Others switch, with colour codes taken out. exact: the whole line. regex: the whole line. coloured: the whole line with its colour codes, for lines only their colour tells apart.",
+  "slayer": {
+    "exact": ["NICE! SLAYER BOSS SLAIN!", "You received kill credit for assisting on a slayer miniboss!", "SLAYER QUEST STARTED!", "SLAYER QUEST COMPLETE!"],
+    "regex": [
+      "» Slay .* Combat XP worth of .*\\.",
+      ".*Slayer LVL 9 - LVL MAXED OUT!",
+      "» Talk to Maddox to claim your .* Slayer XP!",
+      "✆ RING\\.\\.\\. .*"
+    ]
+  },
+  "slayer_drops": {
+    "exact": [],
+    "regex": [
+      "RARE DROP! \\((?:.*x )?Revenant Viscera\\) .*",
+      "RARE DROP! \\((?:.*x )?Foul Flesh\\) .*",
+      "RARE DROP! Golden Powder .*",
+      "VERY RARE DROP! {1,2}\\(.* Pestilence Rune I\\) .*",
+      "VERY RARE DROP! {1,2}\\(Revenant Catalyst\\) .*",
+      "VERY RARE DROP! {1,2}\\(Undead Catalyst\\) .*",
+      "RARE DROP! Arachne's Keeper Fragment .+",
+      "RARE DROP! Travel Scroll to Spider's Den Top of Nest .+",
+      "VERY RARE DROP! {1,2}\\(◆ Bite Rune I\\) .+",
+      "RARE DROP! \\((?:.+x )?Toxic Arrow Poison\\) .+",
+      "VERY RARE DROP! {1,2}\\(Bane of Arthropods VI\\) .+",
+      "RARE DROP! \\(.*x Twilight Arrow Poison\\) .*",
+      "VERY RARE DROP! {1,2}\\(Mana Steal I\\) .*",
+      "VERY RARE DROP! {1,2}\\(Sinful Dice\\) .*",
+      "VERY RARE DROP! {1,2}\\(Null Atom\\) .*",
+      "VERY RARE DROP! {1,2}\\(Transmission Tuner\\) .*",
+      "VERY RARE DROP! {1,2}\\(◆ Endersnake Rune I\\) .*",
+      "CRAZY RARE DROP! {1,2}\\(Pocket Espresso Machine\\) .*",
+      "VERY RARE DROP! {1,2}\\(◆ End Rune I\\) .*",
+      "VERY RARE DROP! {1,2}\\(Hazmat Enderman\\) .*",
+      "VERY RARE DROP! {1,2}\\(Wisp's Ice-Flavored Water I Splash Potion\\) .*",
+      "RARE DROP! \\(Bundle of Magma Arrows\\) .*",
+      "VERY RARE DROP! {1,2}\\(\\d+x (?:Glowstone|Blaze Rod|Magma Cream|Nether Wart) Distillate\\) .*"
+    ]
+  },
+  "useless_drops": {
+    "exact": ["RARE DROP! Enchanted Ender Pearl", "RARE DROP! Enchanted End Stone", "RARE DROP! Crystal Fragment"],
+    "regex": [
+      "RARE DROP! Enchanted Ender Pearl .*",
+      "RARE DROP! Carrot .*",
+      "RARE DROP! Potato .*",
+      "RARE DROP! Machine Gun Bow .*",
+      "RARE DROP! Earth Shard .*",
+      "RARE DROP! Zombie Lord Chestplate .*"
+    ]
+  },
+  "notifications": {
+    "exact": [
+      "Your previous Plasmaflux Power Orb was removed!",
+      "You used your Mining Speed Boost Pickaxe Ability!",
+      "Your Mining Speed Boost has expired!",
+      "Mining Speed Boost is now available!",
+      "You have just received 0 coins as interest in your personal bank account!",
+      "Since you've been away you earned 0 coins as interest in your personal bank account!",
+      "You have just received 0 coins as interest in your co-op bank account!"
+    ],
+    "regex": ["You tipped \\d+ players? in \\d+(?: different)? games?!"]
+  },
+  "separators": {
+    "exact": [],
+    "regex": [],
+    "coloured": ["§9§m-----------------------------------------------------", "§b-----------------------------------------------------"]
+  },
+  "money": {
+    "exact": ["Visit the Auction House to collect your item!"],
+    "regex": [
+      "Buy Order Setup! .*x .* for .* coins\\.",
+      "Sell Offer Setup! .*x .* for .* coins\\.",
+      "Cancelled! Refunded .* coins from cancelling buy order!",
+      "Cancelled! Refunded .*x .* from cancelling sell offer!"
+    ]
+  },
+  "snow_cannon": {
+    "exact": [],
+    "regex": ["☃ .* mounted a Snow Cannon!"]
+  },
+  "warnings": {
+    "exact": [
+      "You are sending commands too fast! Please slow down.",
+      "You can't use this while in combat!",
+      "You can not modify your equipped armor set!",
+      "Please wait a few seconds between refreshing!",
+      "This item is not salvageable!",
+      "Place a Dungeon weapon or armor piece above the anvil to salvage it!",
+      "Whoa! Slow down there!",
+      "Wait a moment before confirming!",
+      "Your radio is weak. Find another enjoyer to boost it.",
+      "Your radio signal is strong!",
+      "Your radio lost signal. There's too many enjoyers on this channel."
+    ],
+    "regex": []
+  },
+  "spam": {
+    "exact": [
+      "There are blocks in the way!",
+      "Your Blessing enchant got you double drops!",
+      "GOOD CATCH! You found a Fish Bait.",
+      "GOOD CATCH! You found a Grand Experience Bottle.",
+      "GOOD CATCH! You found a Blessed Bait.",
+      "GOOD CATCH! You found a Dark Bait.",
+      "GOOD CATCH! You found a Light Bait.",
+      "GOOD CATCH! You found a Hot Bait.",
+      "GOOD CATCH! You found a Spooky Bait.",
+      "[NPC] Jacob: My contest has started!",
+      "Obtain a Booster Cookie from the community shop in the hub!"
+    ],
+    "regex": [
+      "Your Implosion hit .* for .* damage\\.",
+      "Your Molten Wave hit .* for .* damage\\.",
+      "Your Spirit Sceptre hit .* for .* damage\\.",
+      "You need a tool with a Breaking Power of \\d to mine .*! Speak to Fragilis by the entrance to the Crystal Hollows to learn more!"
+    ]
+  }
+}

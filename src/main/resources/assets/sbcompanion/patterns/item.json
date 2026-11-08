@@ -1,0 +1,11 @@
+{
+  "_about": "Regular expressions the mod matches against Hypixel text. Copy this file to config/sbcompanion/patterns/ to override entries without rebuilding; use /sbc reload.",
+  "SlotInfo.PET": "\\[Lvl (\\d+)]",
+  "SlotInfo.ROMAN_END": "\\s([IVXLCDM]+)$",
+  "SlotInfo.ROMAN_LORE": "^(.*?)\\s([IVXLCDM]+)$",
+  "StorageCache.EC": "^Ender Chest \\((\\d+)/(\\d+)\\)$",
+  "StorageCache.BP": "^(.+) Backpack \\(Slot #(\\d+)\\)$",
+  "StorageCache.MENU_EC": "^Ender Chest Page (\\d+)$",
+  "StorageCache.MENU_BP": "(?i)backpack.*?slot\\s*#?\\s*(\\d+)|^(.+ backpack)$",
+  "StorageCache.SLOTS": "(\\d+) slots"
+}

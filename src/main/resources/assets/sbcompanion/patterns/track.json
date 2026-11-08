@@ -1,0 +1,15 @@
+{
+  "_about": "Regular expressions the mod matches against Hypixel text. Copy this file to config/sbcompanion/patterns/ to override entries without rebuilding; use /sbc reload.",
+  "Dps.DAMAGE": "^[^\\d]{0,3}([\\d,]{1,15})[^\\d]{0,3}$",
+  "Tracker.SKILL_GAIN": "\\+([\\d,.]+) (Farming|Mining|Combat|Foraging|Fishing|Enchanting|Alchemy|Taming|Carpentry|Hunting|Runecrafting|Social) \\(",
+  "Tracker.SB_XP": "\\+(\\d+) SkyBlock XP",
+  "Tracker.WITHDRAW": "(?i)(?:You have withdrawn|Withdrew|You sold|Sold) .*coins",
+  "Watcher.MINION": "^(.+) Minion ([IVX]+)$",
+  "GameRead.MINION_LIMIT": "^Minion limit: (?<slots>\\d+)/\\d+$",
+  "GameRead.MINION_TAB": "^Minions: \\d+/(?<slots>\\d+)$",
+  "Watcher.XP": "(?i)\\+?\\s*([\\d,]+)\\s*(?:SkyBlock XP|SB XP|SkyBlock Experience)|SkyBlock XP[^\\d]{0,6}([\\d,]+)",
+  "Watcher.PROGRESS": "([\\d,.]+[kKmM]?)\\s*/\\s*([\\d,.]+[kKmM]?)",
+  "Watcher.TIME_LEFT": "(?:(\\d+)d)?\\s*(?:(\\d+)h)?\\s*(?:(\\d+)m)?\\s*(?:(\\d+)s)?\\s*$",
+  "Watcher.NPC_NAME": "^[A-Z][A-Za-z' .]{2,28}$",
+  "Watcher.FORGE_TIER": "(?i)Heart of the Mountain (?:Tier )?([IVX]+|\\d+)"
+}

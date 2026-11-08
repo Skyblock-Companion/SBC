@@ -1,0 +1,99 @@
+{
+  "type": "rift",
+  "config_button": {
+    "grid_x": 60,
+    "grid_y": 31,
+    "texture": {
+      "height": 512,
+      "location": "sbcompanion:textures/gui/warp/icon.png",
+      "width": 512
+    },
+    "width_percentage": 0.05
+  },
+  "island_list": [
+    {
+      "grid_x": 17,
+      "grid_y": 9,
+      "hover_effect_texture": {
+        "height": 644,
+        "location": "sbcompanion:textures/gui/warp/islands/rift.png",
+        "width": 1051
+      },
+      "name": "Rift",
+      "texture": {
+        "height": 644,
+        "location": "sbcompanion:textures/gui/warp/islands/rift.png",
+        "width": 1051
+      },
+      "warp_list": [
+        {
+          "display_name": "Wizard Tower",
+          "grid_x": 21,
+          "grid_y": 12,
+          "slot_index": 10
+        },
+        {
+          "display_name": "Lagoon Hut",
+          "grid_x": 30,
+          "grid_y": 22,
+          "slot_index": 11
+        },
+        {
+          "display_name": "Dreadfarm",
+          "grid_x": 13,
+          "grid_y": 28,
+          "slot_index": 12
+        },
+        {
+          "display_name": "Plaza",
+          "grid_x": 14,
+          "grid_y": 19,
+          "slot_index": 13
+        },
+        {
+          "display_name": "Colosseum",
+          "grid_x": 24,
+          "grid_y": 25,
+          "slot_index": 14
+        },
+        {
+          "display_name": "Stillgore Château",
+          "grid_x": 5,
+          "grid_y": 4,
+          "slot_index": 15
+        },
+        {
+          "display_name": "Mountaintop",
+          "grid_x": 16,
+          "grid_y": 7,
+          "slot_index": 16
+        }
+      ],
+      "width_percentage": 0.4645,
+      "z_level": 0
+    }
+  ],
+  "regular_warp_menu_button": {
+    "grid_x": 60,
+    "grid_y": 29,
+    "texture": {
+      "height": 64,
+      "location": "sbcompanion:textures/gui/warp/regular_warp_menu.png",
+      "width": 128
+    },
+    "width_percentage": 0.05
+  },
+  "warp_icon": {
+    "hover_effect_texture": {
+      "height": 256,
+      "location": "sbcompanion:textures/gui/warp/portal.png",
+      "width": 207
+    },
+    "texture": {
+      "height": 256,
+      "location": "sbcompanion:textures/gui/warp/portal.png",
+      "width": 207
+    },
+    "width_percentage": 0.02
+  }
+}

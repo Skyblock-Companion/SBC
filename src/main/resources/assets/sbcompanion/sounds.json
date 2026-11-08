@@ -1,0 +1,7 @@
+{
+  "ui.interaction": {
+    "sounds": [
+      "sbcompanion:ui_interaction"
+    ]
+  }
+}

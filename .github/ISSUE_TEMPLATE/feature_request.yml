@@ -1,0 +1,39 @@
+name: Feature request
+description: An idea for something new or better
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What should the mod do
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which island or activity
+      options:
+        - Garden
+        - Mining
+        - Dungeons
+        - Slayer
+        - Crimson Isle
+        - Fishing
+        - Foraging
+        - Rift
+        - Events
+        - HUD
+        - Items
+        - Chat
+        - Other
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it helps
+      description: What it makes easier or faster
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples
+      description: Pictures, a mockup, or how another mod does it

@@ -1,0 +1,25 @@
+{
+  "_comment": "what the jar's data is. sources = the commit each bundled copy came from, bump it when you bundle again (a download older than that date doesnt replace the jar's copy). pinned = regex keys (no SH.) or files a release fixed by hand, no download can undo them. drop a pin once upstream has the fix",
+  "sources": {
+    "skyhanni": {
+      "commit": "f7e462253205d1cf4f795519eb457b3eb41949ea",
+      "date": "2026-11-01T21:33:48Z"
+    },
+    "neu": {
+      "commit": "aa70f29b85dd83ee10263fdaef0c56eb5f2627bb",
+      "date": "2026-11-03T11:19:41Z"
+    },
+    "hypixel": {
+      "commit": "api.hypixel.net",
+      "date": "2026-11-05T14:26:17Z"
+    }
+  },
+  "pinned": {
+    "regexes": [],
+    "files": {
+      "skyhanni": [],
+      "neu": [],
+      "hypixel": []
+    }
+  }
+}

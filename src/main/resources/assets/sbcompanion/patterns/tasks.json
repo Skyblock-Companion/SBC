@@ -1,0 +1,6 @@
+{
+  "_about": "Regular expressions the mod matches against Hypixel text. Copy this file to config/sbcompanion/patterns/ to override entries without rebuilding; use /sbc reload.",
+  "FactionQuests.LINE": "^\\s*([✖✔])\\s+(.+?)(?:\\s+x(\\d+))?\\s*$",
+  "FactionQuests.KUUDRA": "(?i)Kill Kuudra (\\w+) Tier",
+  "FactionQuests.FACTION_TAB": "(Barbarian|Mage) Reputation:"
+}

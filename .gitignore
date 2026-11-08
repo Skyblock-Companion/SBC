@@ -1,0 +1,15 @@
+# build output + local game runs, never in git
+build/
+.gradle/
+.kotlin/
+run/
+logs/
+*.log
+__pycache__/
+
+# a players api key lives here
+config.json
+
+.idea/
+.vscode/
+*.iml

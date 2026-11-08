@@ -1,0 +1,23 @@
+{
+  "_about": "Regular expressions the mod matches against Hypixel text. Copy this file to config/sbcompanion/patterns/ to override entries without rebuilding; use /sbc reload.",
+  "Puzzles.ORDER": "^Click in order!$",
+  "Puzzles.STARTS": "^What starts with: '([A-Z])'\\?$",
+  "Puzzles.COLOR": "^Select all the ([A-Z ]+) items!$",
+  "Puzzles.PANES": "^Correct all the panes!$",
+  "Puzzles.SAME": "^Change all to same color!$",
+  "Puzzles.CLASS_AFTER": "(\\S+) \\((Archer|Berserk|Mage|Healer|Tank)\\b",
+  "Puzzles.CLASS_BEFORE": "\\[(Archer|Berserk|Mage|Healer|Tank)\\] (\\S+)",
+  "RoomPuzzles.WEIRDO": "^\\[NPC\\] ([A-Z][a-z]+): (?:The reward is(?: not in my chest!|n't in any of our chests\\.)|My chest (?:doesn't have the reward\\. We are all telling the truth\\.|has the reward and I'm telling the truth!)|At least one of them is lying, and the reward is not in [A-Z][a-z]+'s chest!|Both of them are telling the truth\\. Also, [A-Z][a-z]+ has the reward in their chest!)$",
+  "RoomPuzzles.QUESTION": "^ {2,}([A-Za-z0-9,' ]+\\?)$",
+  "RoomPuzzles.ANSWER": "^ {2,}([\\u24D0\\u24D1\\u24D2]) ([A-Za-z0-9 ]+)$",
+  "RoomPuzzles.ORUO": "^\\[STATUE\\] Oruo the Omniscient: (\\w+ answered Question #\\d correctly!|I bestow upon you all the power of a hundred years!|Yikes)$",
+  "Score.FLOOR": "The Catacombs \\(([EFM]\\d*)\\)",
+  "Score.CLEARED": "Cleared: (\\d+)%",
+  "Score.ELAPSED": "Time Elapsed: (?:(\\d+)h ?)?(?:(\\d+)m ?)?(?:(\\d+)s)?",
+  "Score.ROOMS": "Completed Rooms: (\\d+)",
+  "Score.SECRETS": "Secrets Found: (\\d+\\.?\\d*)%",
+  "Score.CRYPTS": "Crypts: (\\d+)",
+  "Score.PUZZLE_COUNT": "Puzzles: \\((\\d+)\\)",
+  "Score.PUZZLE": "^\\s*[A-Za-z' ]+: \\[([\\u2714\\u2716\\u2726])\\]",
+  "Score.DEATH": "^ \\u2620 (\\S+) .*"
+}

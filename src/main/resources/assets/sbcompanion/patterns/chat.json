@@ -1,0 +1,22 @@
+{
+  "_about": "Regular expressions the mod matches against Hypixel text. Copy this file to config/sbcompanion/patterns/ to override entries without rebuilding; use /sbc reload.",
+  "Alerts.PESTS_MANY": "^\\w+! (\\d+) \\S+ Pests? have spawned in (?:Plot - )?(.*)!$",
+  "Alerts.PEST_ONE": "^\\w+! A \\S+ Pest has appeared in (?:Plot - )?(.*)!$",
+  "Party.NAME": "(?:\\[[^\\]]+\\] )?(\\w{3,16}) ●",
+  "Party.JOINED": "^(?:\\[[^\\]]+\\] )?(\\w{3,16}) joined the party\\.$",
+  "Party.LEFT": "^(?:\\[[^\\]]+\\] )?(\\w{3,16}) (?:has left the party|has been removed from the party|was removed from your party|disconnected, they have 5 minutes to rejoin before they are removed from the party)\\.?$",
+  "Party.YOURS": "^You have joined (?:\\[[^\\]]+\\] )?(\\w{3,16})'s party!$",
+  "Party.WITH": "^You'll be partying with: (.*)$",
+  "_source_Compact": "Compact.POTION_* = SkyHanni features/chat/CompactSplashPotionMessage.kt potionEffectPatternList; Compact.BESTIARY_* = CompactBestiaryChatMessage.kt; Compact.RANK_* = playerchat/PlayerChatModifier.kt",
+  "Compact.POTION_0": "§a§lBUFF! §fYou were splashed by (?<playerName>.*) §fwith §r(?<effectName>.*)§r§f! Press TAB or type /effects to view your active effects!",
+  "Compact.POTION_1": "§a§lBUFF! §fYou have gained §r(?<effectName>.*)§r§f! Press TAB or type /effects to view your active effects!",
+  "Compact.POTION_2": "§a§lBUFF! §fYou splashed yourself with §r(?<effectName>.*)§r§f! Press TAB or type /effects to view your active effects!",
+  "Compact.POTION_3": "§a§lBUFF! §fYou have gained §r(?<effectName>§2Poisoned Candy I)§r§f!",
+  "Compact.POTION_4": "§a§lBUFF! §fYou splashed yourself with §r(?<effectName>§2Poisoned Candy I)§r§f!",
+  "Compact.POTION_5": "§a§lBUFF! §fYou were splashed by (?<playerName>.*) §fwith §r(?<effectName>§2Poisoned Candy I)§r§f!",
+  "Compact.BESTIARY_MILESTONE": "^.+(§8\\d{1,3}➡§e\\d{1,3})$",
+  "Compact.RANK_0": "§[ab6]\\[(?:VIP|MVP)(?:§.|\\+)*] {1,2}(?:§[7ab6])?(\\w{2,16})",
+  "Compact.RANK_1": "§[7ab6](\\w{2,16})§r(?!§7x)(?!$)",
+  "Compact.RANK_POSSESSIVE": "§[7ab6]((?:\\w+){2,16})'s",
+  "Compact.RANK_SPACE": "§[7ab6]((?:\\w+){2,16}) (§.)"
+}

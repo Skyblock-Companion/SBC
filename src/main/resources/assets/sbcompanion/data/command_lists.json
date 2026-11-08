@@ -1,0 +1,30 @@
+{
+  "_comment": "our own tab completion lists, only from game facts. rng_meters = just what neus constants/rngscore.json says (catacombs floors + slayers), the other menu categories arent in any source so no guessing. chapters is empty on purpose, nothing says where they are",
+  "rng_meters": {
+    "Catacombs": ["F1", "F2", "F3", "F4", "F5", "F6", "F7", "M1", "M2", "M3", "M4", "M5", "M6", "M7"],
+    "Slayer": ["Revenant Horror", "Tarantula Broodfather", "Sven Packmaster", "Voidgloom Seraph", "Inferno Demonlord", "Riftstalker Bloodfiend"]
+  },
+  "join_instances": {
+    "CATACOMBS_ENTRANCE": "Catacombs",
+    "CATACOMBS_FLOOR_ONE": "Catacombs",
+    "CATACOMBS_FLOOR_TWO": "Catacombs",
+    "CATACOMBS_FLOOR_THREE": "Catacombs",
+    "CATACOMBS_FLOOR_FOUR": "Catacombs",
+    "CATACOMBS_FLOOR_FIVE": "Catacombs",
+    "CATACOMBS_FLOOR_SIX": "Catacombs",
+    "CATACOMBS_FLOOR_SEVEN": "Catacombs",
+    "MASTER_CATACOMBS_FLOOR_ONE": "Catacombs",
+    "MASTER_CATACOMBS_FLOOR_TWO": "Catacombs",
+    "MASTER_CATACOMBS_FLOOR_THREE": "Catacombs",
+    "MASTER_CATACOMBS_FLOOR_FOUR": "Catacombs",
+    "MASTER_CATACOMBS_FLOOR_FIVE": "Catacombs",
+    "MASTER_CATACOMBS_FLOOR_SIX": "Catacombs",
+    "MASTER_CATACOMBS_FLOOR_SEVEN": "Catacombs",
+    "KUUDRA_NORMAL": "Kuudra",
+    "KUUDRA_HOT": "Kuudra",
+    "KUUDRA_BURNING": "Kuudra",
+    "KUUDRA_FIERY": "Kuudra",
+    "KUUDRA_INFERNAL": "Kuudra"
+  },
+  "chapters": []
+}

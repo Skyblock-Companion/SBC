@@ -1,0 +1,25 @@
+{
+  "_about": "Regular expressions the mod matches against Hypixel text. Copy this file to config/sbcompanion/patterns/ to override entries without rebuilding; use /sbc reload.",
+  "AreaPanel.HEADER": "^([A-Z][A-Za-z' ]{2,28}?):\\s*(\\(.*\\))?$",
+  "AreaPanel.KNOWN": "^(Info|Pet:?|Pet Training:?|Event: .*|Skills: ?[\\d.]*|Stats:?|Guests \\(\\d+\\)|Minions: \\d+/\\d+|Island closes in: .*|North Stars: \\d+|Collection:?|Jacob's Contest:.*|Slayer:?|Daily Quests:?|Active Effects: \\(\\d+\\)|Bestiary:?|Essence:.*|Forges:?|Timers:?|Opened Rooms: \\d+|Party:.*|Party \\(\\d+\\)|Trapper:?|Commissions:?|Powders:?|Crystals:?( \\d+)?|Unclaimed chests: \\d+|(Thunder|Rain): .*|Broodmother: .*|Protector: .*|Dragon: .*|Volcano: .*|(Barbarian|Mage) Reputation:|Faction Quests:?|Trophy Fish:?|Good to know:|Composter:?|Garden Level: .*|Copper: .*|Sowdust: .*|Pests:?|Pest Traps: .*|Full Traps: .*|No Bait: .*|Visitors: \\(\\d+\\)|Crop Milestones:?|Dungeons:?|Puzzles: \\(\\d+\\)|Player Stats|Fire Sales: .*|Players \\(\\d+\\))$",
+  "Dialogue.NPC_LINE": "^\\[NPC\\]\\s+([^:]{1,40}):\\s*(.*)$",
+  "SkyBlockMenuScreen.STAT": "^[^A-Za-z]*([A-Za-z][A-Za-z ]+?)\\s+([\\d,.]+%?)\\s*$",
+  "StyledMenuScreen.PCT": "(\\d+(?:\\.\\d+)?)%",
+  "StyledMenuScreen.FRACTION": "([\\d,.]+[kKmMbB]?)\\s*/\\s*([\\d,.]+[kKmMbB]?)",
+  "StyledMenuScreen.NUMERAL": "(?:^|\\s)([IVXLCDM]+|\\d+)$",
+  "StyledMenuScreen.STAT_LINE": "^\\s*(?:[^\\w\\s]\\s*)?([A-Za-z][A-Za-z' ]+?)\\s+(-?[\\d,]+(?:\\.\\d+)?%?)\\s*$",
+  "StyledMenuScreen.MEMBER": "^\\s*(?:[^A-Za-z0-9_]+\\s*)?([A-Za-z0-9_]{3,16}):\\s*(Archer|Berserk|Healer|Mage|Tank)\\s*\\((?:Lvl\\s*)?(\\d+)\\)",
+  "StyledMenuScreen.PARTY_SLOTS": "\\((\\d)/(\\d)\\)",
+  "StyledMenuScreen.CLASS_NAME": "^(?:\\[Lvl (\\d+)\\]\\s*)?(Healer|Mage|Berserk|Archer|Tank)(?:\\s+(\\d+))?$",
+  "StyledMenuScreen.TIER": "\\b(XII|XI|X|IX|VIII|VII|VI|V|IV|III|II|I)\\b",
+  "StyledMenuScreen.PET": "^\\[Lvl (\\d+)\\]\\s*(.+)$",
+  "StyledMenuScreen.XP": {
+    "regex": "\\+?([\\d,]+)\\s*(?:SkyBlock\\s+)?(?:XP|Experience)",
+    "flags": "CASE_INSENSITIVE"
+  },
+  "StyledMenuScreen.TASK_COUNT": "^(\\d+) Tasks?$",
+  "StyledMenuScreen.LEVEL_REWARDS": "level (\\d+) rewards",
+  "StyledMenuScreen.PLAYER": "^([A-Za-z0-9_]{3,16}):\\s*(.+)$",
+  "StyledMenuScreen.PRODUCT": "^▶\\s*(.+?)(?:\\s+([\\d.,]+[kKmMbB]?)\\s*\\|\\s*([\\d.,]+[kKmMbB]?))?$",
+  "StyledMenuScreen.PRODUCTS": "^\\d+ products?$"
+}
