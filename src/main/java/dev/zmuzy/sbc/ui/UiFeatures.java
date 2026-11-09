@@ -35,16 +35,17 @@ public final class UiFeatures {
                 .when(() -> GameState.inSkyBlock || SbcMod.DEV));
         Features.add(new Feature("price_lookup", "Items", "Item price lookup key", "Press the Price key (F6) over an item to search it in the Bazaar (/bz) or the Auction House (/auctionsearch).", "Skyblocker: item price lookup")
                 .when(() -> GameState.inSkyBlock || SbcMod.DEV));
-        Interactions.onSlotClick((screen, slot, slotId, button) -> marketSearch(screen, slot));
+        Interactions.onSlotClick((screen, slot, slotId, button) -> marketSearch(screen, slot, button));
     }
 
     public static boolean hidePotionEffects() {
         return Features.on("hide_potion_effects") && (GameState.inSkyBlock || SbcMod.DEV) || dev.zmuzy.sbc.ui.panels.GardenPlotsPanel.hidesEffects();
     }
 
-    // market search button wants a sign, our search lists matches while you type
-    private static boolean marketSearch(AbstractContainerScreen<?> screen, Slot slot) {
-        if (slot == null || screen == null || !Features.on("market_search")) return false;
+    // market search button wants a sign, our search lists matches while you type. only a left click: a right
+    // click is hypixels own "clear the search" and goes through
+    static boolean marketSearch(AbstractContainerScreen<?> screen, Slot slot, int button) {
+        if (button != 0 || slot == null || screen == null || !Features.on("market_search")) return false;
         String title = screen.getTitle().getString();
         if (!MarketSearchScreen.isMarketTitle(title)) return false;
         String sn = GameState.strip(slot.getItem().getHoverName().getString()).trim();
