@@ -6,7 +6,6 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -27,6 +26,9 @@ import java.util.UUID;
 // sb items (hypixels own, FurfSky, Defrosted...) draw it their way
 public final class ItemIcons {
     private static final Map<String, ItemStack> cache = new HashMap<>();
+    // the model hypixel itself puts on an item, by sb id, from every item seen in your inventory or an open
+    // menu. it beats our data, which can be older than the item
+    private static final Map<String, String> seen = new java.util.concurrent.ConcurrentHashMap<>();
 
     private ItemIcons() {}
 
@@ -46,7 +48,8 @@ public final class ItemIcons {
                 tag.putString("id", sbId);
                 st.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
             }
-            if (e != null && e.model() != null && modelLoaded(e.model())) st.set(DataComponents.ITEM_MODEL, Identifier.parse(e.model()));
+            String model = sbId == null ? null : seen.getOrDefault(sbId, e != null ? e.model() : null);
+            if (model != null && modelLoaded(model)) st.set(DataComponents.ITEM_MODEL, Identifier.parse(model));
             String tex = texture != null ? texture : e != null ? e.texture() : null;
             if (tex != null && item == Items.PLAYER_HEAD) st.set(DataComponents.PROFILE, head(tex));
             if (glint || (e != null && e.glint())) st.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -77,19 +80,43 @@ public final class ItemIcons {
         return ResolvableProfile.createResolved(new GameProfile(id, "Pet", props));
     }
 
-    private static ItemModel missing;
+    private static final Identifier NOT_A_MODEL = Identifier.fromNamespaceAndPath("sbcompanion", "definitely_missing");
 
-    // hypixels item models only exist while their server pack is loaded
+    // hypixels item models only exist while their server pack is loaded. the game's "missing" model is a new
+    // one after every pack reload, so it is asked for each time
     private static boolean modelLoaded(String model) {
         var mm = Minecraft.getInstance().getModelManager();
-        if (missing == null) missing = mm.getItemModel(Identifier.fromNamespaceAndPath("sbcompanion", "definitely_missing"));
-        return mm.getItemModel(Identifier.parse(model)) != missing;
+        try {
+            return mm.getItemModel(Identifier.parse(model)) != mm.getItemModel(NOT_A_MODEL);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // once a second: what hypixel put on the items you can see right now
+    public static void noteSeen(Minecraft mc) {
+        if (mc.player == null) return;
+        boolean added = false;
+        for (ItemStack st : mc.player.getInventory().getNonEquipmentItems()) added |= note(st);
+        if (mc.player.containerMenu != null) for (var slot : mc.player.containerMenu.slots) added |= note(slot.getItem());
+        if (added) {
+            cache.clear();
+            ItemInfo.clearCache();
+        }
+    }
+
+    private static boolean note(ItemStack st) {
+        if (st == null || st.isEmpty()) return false;
+        Identifier model = st.get(DataComponents.ITEM_MODEL);
+        if (model == null || model.getNamespace().equals("minecraft")) return false;
+        String id = Gain.sbId(st);
+        if (id.isEmpty()) return false;
+        return !model.toString().equals(seen.put(id, model.toString()));
     }
 
     // call on resource pack reload so models get checked again
     public static void reset() {
         cache.clear();
         ItemInfo.clearCache();
-        missing = null;
     }
 }

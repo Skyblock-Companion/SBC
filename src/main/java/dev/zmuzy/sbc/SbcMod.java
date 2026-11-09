@@ -582,6 +582,7 @@ public class SbcMod implements ClientModInitializer {
             lastLevel = mc.level;
             dev.zmuzy.sbc.core.ItemIcons.reset();
         }
+        if (ticks % 20 == 0) Safe.run("ItemIcons.noteSeen", () -> dev.zmuzy.sbc.core.ItemIcons.noteSeen(mc));
         while (hudEditKey.consumeClick()) if (mc.gui.screen() == null) dev.zmuzy.sbc.ui.screens.HudEditorScreen.open();
         dev.zmuzy.sbc.item.SlotLocks.settleWithOtherMod(mc, lockKey);
         if (Config.keysToMove) {
