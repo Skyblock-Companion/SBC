@@ -68,9 +68,16 @@ public final class HudTexture {
         return hooked;
     }
 
+    // share of frames since the last resetShare. "off" while the setting is off, so a recording made with it
+    // off never shows the frames from before
     public static String share() {
+        if (!on()) return "off";
         long all = fresh + shown;
         return all == 0 ? "-" : Math.round(100.0 * shown / all) + "%";
+    }
+
+    public static void resetShare() {
+        fresh = shown = 0;
     }
 
     public static void forget() {

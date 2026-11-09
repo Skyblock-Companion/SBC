@@ -67,6 +67,7 @@ public final class FrameProbe {
         endAt = startedAt + seconds * 1_000_000_000L;
         nextSecond = startedAt;
         gcBefore = gcCount();
+        dev.zmuzy.sbc.ui.HudTexture.resetShare();
         on = true;
     }
 

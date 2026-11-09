@@ -85,7 +85,7 @@ public final class FrameReport {
             mods.add(id + " " + m.getMetadata().getVersion().getFriendlyString());
         }
         out.add("mods: " + String.join(", ", mods));
-        out.add("this mod: HUD as a picture " + dev.zmuzy.sbc.ui.HudTexture.share() + " of frames, perf overlay " + (Config.I.perfOverlay ? "on (it costs a little)" : "off"));
+        out.add("this mod: HUD as a picture " + dev.zmuzy.sbc.ui.HudTexture.share() + (dev.zmuzy.sbc.ui.HudTexture.on() ? " of frames" : "") + ", perf overlay " + (Config.I.perfOverlay ? "on (it costs a little)" : "off"));
         return out;
     }
 
