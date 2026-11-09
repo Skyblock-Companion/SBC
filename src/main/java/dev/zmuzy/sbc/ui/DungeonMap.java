@@ -31,7 +31,7 @@ public final class DungeonMap {
     private static final String ID = "dungeonmap";
     private static final int CELL = 15, GAP = 2, PAD = 7, TITLE = 14;
     // even sizes so the grid lands on whole pixels at the smaller hud size
-    private static final int M_CELL = 14, M_GAP = 2, M_STEP = M_CELL + M_GAP, M_GRID = Dungeon.CELLS * M_STEP - M_GAP, M_SIDE = 96, M_GUTTER = 6, CHIP_ROW = 12, STAT_ROW = 12;
+    private static final int M_CELL = 18, M_GAP = 2, M_STEP = M_CELL + M_GAP, M_GRID = Dungeon.CELLS * M_STEP - M_GAP, M_SIDE = 96, M_GUTTER = 6, CHIP_ROW = 12, STAT_ROW = 12;
     private static final int CELL_EMPTY = 0x90050911, ROOM_CHIP = 0xFFC9A66B;
     private static final int[] GRADE_AT = {100, 160, 230, 270, 300};
     private static final String[] GRADE_NAME = {"C", "B", "A", "S", "S+"};
@@ -137,6 +137,8 @@ public final class DungeonMap {
             case "Puzzle" -> 0xFFA66CE0;
             case "Trap" -> 0xFFEF9F27;
             case "Miniboss" -> 0xFFFFD36B;
+            // a door seen on the map, the room behind it not opened yet
+            case "Unknown" -> 0xFF4A4A4A;
             default -> 0xFF8A6A3C;
         };
     }
@@ -236,6 +238,16 @@ public final class DungeonMap {
         boolean routes = Features.on("dungeon_routes"), score = scoreRow() > 0;
         List<Tile> tiles = new ArrayList<>();
         for (var r : Dungeon.rooms()) tiles.add(tileOf(r, cur, routes));
+        // what hypixels map in slot 9 shows that we havent stood in yet (the team opened it)
+        Set<Long> known = new HashSet<>();
+        for (Tile t : tiles) known.addAll(t.cells());
+        for (var r : dev.zmuzy.sbc.dungeon.MapRooms.rooms()) {
+            Set<Long> cells = new HashSet<>();
+            for (int[] c : r.cells()) cells.add(pack(c[0], c[1]));
+            if (cells.stream().anyMatch(known::contains)) continue;
+            tiles.add(new Tile(r.kind(), cells, -1, false));
+            known.addAll(cells);
+        }
         List<Routes.Step> steps = cur == null || !routes ? List.of() : Routes.steps(cur.def.id());
         int step = cur == null ? 0 : cur.step;
         String type = step < steps.size() ? steps.get(step).type() : "";
@@ -452,7 +464,7 @@ public final class DungeonMap {
         return score >= 300 ? Modern.GOOD : score >= 270 ? Modern.AQUA : score >= 230 ? Modern.GOLD : Modern.LABEL;
     }
 
-    private static void drawClassic(Ui ui, int x, int y) {
+    private static void drawClassic(Ui ui, GuiGraphicsExtractor g, int x, int y) {
         ElementStyle st = ElementStyle.of(ID);
         var look = Looks.of(ID);
         View v = view();
@@ -467,6 +479,13 @@ public final class DungeonMap {
         }
 
         int gx = x + Modern.PAD, gy = top;
+        // in a run: hypixels own map from slot 9 with your arrow. the editor and pictures get the drawn grid
+        ui.rect(gx, gy, M_GRID, M_GRID, CELL_EMPTY);
+        if (sampleShown() || !dev.zmuzy.sbc.dungeon.HypixelMap.draw(g, gx, gy, M_GRID)) drawGrid(ui, v, gx, gy);
+        sideAndRoom(ui, v, x, y, w, gx, gy, accent, labelColor, valueColor);
+    }
+
+    private static void drawGrid(Ui ui, View v, int gx, int gy) {
         for (int i = 0; i < Dungeon.CELLS; i++)
             for (int j = 0; j < Dungeon.CELLS; j++) ui.rect(gx + i * M_STEP, gy + j * M_STEP, M_CELL, M_CELL, CELL_EMPTY);
         for (Tile t : v.tiles()) {
@@ -487,7 +506,9 @@ public final class DungeonMap {
             ui.rect(px + 1, py + 1, 2, 2, Modern.AQUA);
         }
         team(ui, gx, gy);
+    }
 
+    private static void sideAndRoom(Ui ui, View v, int x, int y, int w, int gx, int gy, int accent, int labelColor, int valueColor) {
         // next to it: legend (= count of each kind) + run numbers
         int sx = gx + M_GRID + M_GUTTER, sy = gy;
         String here = null;
@@ -576,7 +597,6 @@ public final class DungeonMap {
     // --- both ---
 
     public static void draw(Ui ui, GuiGraphicsExtractor g, int x, int y) {
-        drawClassic(ui, x, y);
-        return;
+        drawClassic(ui, g, x, y);
     }
 }

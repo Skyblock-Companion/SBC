@@ -6,6 +6,7 @@
     "MenuPacketsMixin",
     "ExperimentStackMixin",
     "ContainerAccess",
+    "MapRendererAccess",
     "SlotOverlayMixin",
     "ClickGuardMixin",
     "ContainerClickMixin",

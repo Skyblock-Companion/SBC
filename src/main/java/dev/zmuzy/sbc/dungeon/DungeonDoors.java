@@ -139,7 +139,11 @@ public final class DungeonDoors {
 
     // from skyblocker DungeonMap.getMapIdComponent: map in the last hotbar slot, or the last one seen while
     // something else is there
-    private static MapItemSavedData map(Minecraft mc) {
+    static net.minecraft.world.level.saveddata.maps.MapId mapId() {
+        return mapId;
+    }
+
+    static MapItemSavedData map(Minecraft mc) {
         ItemStack st = mc.player.getInventory().getNonEquipmentItems().get(8);
         if (st.is(Items.FILLED_MAP) && st.has(DataComponents.MAP_ID)) mapId = st.get(DataComponents.MAP_ID);
         return mapId == null ? null : MapItem.getSavedData(mapId, mc.level);
