@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 public final class ProfileServer {
     // this release name, sent with every call, the server compares it with VERSION_CHECK. same as jar_name in
     // gradle.properties
-    public static final String VERSION = "beta-0.1";
+    public static final String VERSION = "beta-0.2";
     private static final String BASE = "https://sbc.muzy.io/";
     private static final long WAIT_AFTER_FAILURE_MS = 5 * 60_000L;
     private static volatile long downUntil;
