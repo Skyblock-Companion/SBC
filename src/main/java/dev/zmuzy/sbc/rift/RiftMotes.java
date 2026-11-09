@@ -44,7 +44,7 @@ public final class RiftMotes {
     static final Patterns.P BURGER = Patterns.p("SH.rift.everywhere.burger"), LIFETIME = Patterns.p("SH.rift.everywhere.motes.lifetime-nocolor"),
             EXPORTABLE = Patterns.p("SH.utils.item.rift.exportable");
     private static final String MOTES_GRUBBER = "Motes Grubber", CONSUMABLE_ITEMS = "Miscellaneous ➜ Consumable Items";
-    private static final Pattern ORB_PICKUP = Pattern.compile("ORB! Picked up \\+(?<motes>\\d+) Motes, recovered \\+2ф Rift Time!");
+    private static final Pattern ORB_PICKUP = Pattern.compile("ORB! Picked up \\+(?<motes>\\d+) Motes, recovered \\+2[ф\uE020] Rift Time!");
     private static final Pattern MOTES_PRICE = Pattern.compile("(?<price>\\d+(\\.\\d)?) Motes");
     private static final Pattern PROGRESS = Pattern.compile("Total Progress: (?<percent>\\d+)%");
 

@@ -12,6 +12,8 @@ import java.util.regex.Matcher;
 public final class KuudraApi {
     static final Patterns.P TIER = Patterns.p("SH.data.kuudra.scoreboard.tier");
     static final Patterns.P COMPLETE = Patterns.p("SH.data.kuudra.chat.complete");
+    // the party entering says the tier too, so a changed sidebar line still leaves us the tier
+    static final java.util.regex.Pattern ENTERED = java.util.regex.Pattern.compile("^(?:\\[[^\\]]+\\] )?\\w+ entered Kuudra's Hollow, (Basic|Hot|Burning|Fiery|Infernal) Tier!$");
 
     public static final List<String> TIERS = List.of("basic", "hot", "burning", "fiery", "infernal");
 
@@ -50,6 +52,11 @@ public final class KuudraApi {
 
     // formatted line
     public static boolean onChat(String formatted) {
+        Matcher entered = ENTERED.matcher(dev.zmuzy.sbc.core.GameState.strip(formatted).trim());
+        if (entered.matches()) {
+            kuudraTier = TIERS.indexOf(entered.group(1).toLowerCase(java.util.Locale.ROOT)) + 1;
+            return false;
+        }
         if (!COMPLETE.matcher(formatted).matches()) return false;
         Integer tier = kuudraTier;
         if (tier == null) return true;
