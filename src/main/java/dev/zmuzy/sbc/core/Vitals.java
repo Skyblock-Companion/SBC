@@ -139,6 +139,11 @@ public final class Vitals {
     public static String petXp = "";
     public static int petColor;
     public static String petTier = "";
+    // a swap the tab doesnt show (dungeons have no pet line). from skyhanni CurrentPetApi (summon) and
+    // PetStoragePatterns (autopet), read on the plain line with the rarity from the names colour
+    private static final Pattern PET_SUMMON = Pattern.compile("^You summoned your (.+?)(?: ✦)?!$");
+    private static final Pattern PET_DESPAWN = Pattern.compile("^You despawned your (.+?)(?: ✦)?!$");
+    private static final Pattern PET_AUTO = Pattern.compile("^Autopet equipped your \\[Lvl (\\d+)] (?:\\[\\d+✦] )?(.+?)(?: ✦)?! VIEW RULE(?: \\(\\d+\\))?$");
     private static final java.util.regex.Pattern PET_XP = java.util.regex.Pattern.compile("\\(([\\d.]+)%\\)\\s*$");
     private static final java.util.regex.Pattern PET_NUMBERS = java.util.regex.Pattern.compile("([\\d,.]+[kKmMbB]?)\\s*/\\s*([\\d,.]+[kKmMbB]?)\\s*XP");
     // "<icon> Ferocity 55" in the sb menu profile item + stats menu (skyhanni menuPattern)
@@ -404,6 +409,55 @@ public final class Vitals {
             petXpPct = xp;
             petXp = xpNumbers;
         }
+    }
+
+    public static void petChat(net.minecraft.network.chat.Component line, String plain) {
+        Matcher m;
+        if (PET_DESPAWN.matcher(plain).matches()) {
+            petName = "";
+            petLevel = 0;
+            petXpPct = -1;
+            petXp = "";
+            return;
+        }
+        int level = -1;
+        String name;
+        if ((m = PET_AUTO.matcher(plain)).matches()) {
+            level = Integer.parseInt(m.group(1));
+            name = m.group(2).trim();
+        } else if ((m = PET_SUMMON.matcher(plain)).matches()) name = m.group(1).trim();
+        else return;
+        int color = nameColor(line, name);
+        String tier = color == 0 ? "" : tierOfColor(color);
+        if (level < 0) level = knownLevel(name, tier);
+        // the tab fills the bar again outside dungeons, a new pet starts without the old ones
+        if (!name.equals(petName) || !tier.equals(petTier)) {
+            petXpPct = -1;
+            petXp = "";
+        }
+        petName = name;
+        petLevel = Math.max(0, level);
+        if (color != 0) {
+            petColor = color;
+            petTier = tier;
+        }
+    }
+
+    private static int nameColor(net.minecraft.network.chat.Component line, String name) {
+        int[] color = {0};
+        line.visit((style, text) -> {
+            if (color[0] == 0 && style.getColor() != null && !text.isBlank() && name.contains(text.replace("✦", "").trim())) color[0] = style.getColor().getValue();
+            return java.util.Optional.empty();
+        }, net.minecraft.network.chat.Style.EMPTY);
+        return color[0];
+    }
+
+    // level from the pets we know (menu or /pv), 0 when this one isnt there
+    static int knownLevel(String name, String tier) {
+        Profile.Data d = Profile.current;
+        if (d == null) return 0;
+        for (Profile.Pet p : d.pets) if (p.name().equalsIgnoreCase(name) && (tier.isEmpty() || tier.equals(p.tier()))) return p.level();
+        return 0;
     }
 
     // pet tab line with colors, name color = rarity

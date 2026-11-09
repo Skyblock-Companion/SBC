@@ -312,6 +312,10 @@ public final class Bits {
 
     public static void register() {
         Safe.endTick("Bits.tick", Bits::tick);
+        ChatBus.register(5, "pet_chat", null, line -> {
+            Vitals.petChat(line.component(), line.plain());
+            return ChatBus.PASS;
+        });
         ChatBus.register(5, "bits", null, line -> {
             Seen s = GameProfile.current();
             if (s != null) chat(s, line.plain());

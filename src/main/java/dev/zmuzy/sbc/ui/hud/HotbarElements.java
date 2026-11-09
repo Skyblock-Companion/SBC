@@ -385,7 +385,8 @@ public final class HotbarElements {
         }
 
         private String level() {
-            return "Lvl " + (Vitals.petName.isEmpty() && demo ? 95 : Vitals.petLevel);
+            // a summon from chat with a pet we never saw has no level yet
+            return Vitals.petName.isEmpty() && demo ? "Lvl 95" : Vitals.petLevel > 0 ? "Lvl " + Vitals.petLevel : "Lvl ?";
         }
 
         private boolean sample() {
