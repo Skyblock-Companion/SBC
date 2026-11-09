@@ -26,30 +26,43 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-// page a new player sees once, first time the game hits the title screen with the mod: keep the recommended
-// setup in one click, or go through the short pages. nothing changes till Finish
+// page a new player sees once, first time the game hits the title screen with the mod. fast: a few general
+// questions about how you play and what you like. detailed: the same, then every helper of what you play, one
+// page per activity. nothing is answered for you and nothing changes till Finish; K changes anything later
 public final class SetupScreen extends SbcScreen {
     public static final String DISCORD = "https://discord.gg/QrqX3pgVW2";
-    private static final String[] PAGES = {"Welcome", "What you play", "Daily routine", "Look", "Extras", "Done"};
-    private static final int LAST = PAGES.length - 1;
+    private static final String[] PAGES = {"Welcome", "What you play", "Your screen", "Chat", "Daily routine", "Preferences", "Done"};
+    static final int LAST = PAGES.length - 1;
+
+    // chat filters that hide or shorten lines and are on from the start: "cleaner" keeps them, "as hypixel sends it"
+    // turns them off
+    static final List<String> CHAT_CLEANER = List.of("chat_lobby", "chat_implosion", "chat_warp", "chat_aote", "chat_repeat", "chat_guildexp",
+            "chat_dungeon_start", "chat_combo", "chat_dungeon_boss", "chat_mana", "chat_lobbies", "chat_pet", "chat_bazaar", "chat_dungeon", "chat_noise",
+            "chat_feast_chef", "chat_heal", "chat_sacrifice", "chat_raredrops_others", "chat_chicken_head", "chat_compact_jacob", "chat_compact_chest",
+            "chat_compact_potions", "chat_hoppity_begin", "chat_stash_compact", "chat_compact_bestiary", "chat_event_level", "chat_compact_experiments",
+            "chat_hoppity_appear", "chat_shards", "chat_anita", "chat_watchdog", "chat_firesale", "chat_skymall", "bingo_compact_chat");
+    // the ones that are off from the start: "as clean as possible" adds them
+    static final List<String> CHAT_CLEANEST = List.of("chat_ads", "chat_join_leave", "chat_social", "chat_teleport_pads", "chat_stash", "chat_parkour",
+            "chat_rewardbundle", "chat_others", "chat_arachne", "chat_lottery", "chat_empty", "chat_hide_far_deaths", "chat_showoff", "gift_chat_filter",
+            "chat_factory_upgrade", "chat_legacy_items");
+    static final String CHAT_HYPIXEL = "hypixel", CHAT_CLEAN = "cleaner", CHAT_CLEANEST_ID = "cleanest";
 
     private int page;
-    // true after "Set it up my way": finish applies the pages, back on the last page goes back to them
-    private boolean visited;
-    // activities you turned off on page 2, their features go off on finish
-    private final Set<String> skipped = new LinkedHashSet<>();
-    private float size = Config.I.hudAll;
-    private boolean smooth = Config.I.hudAnimations;
-    private boolean hearts = hideHearts();
-    private boolean briefing = Config.I.loginBriefing;
-    private boolean routine = routineOn();
+    // the answers. null = not answered yet: Next waits for every question on its page
+    private final Set<String> playing = new LinkedHashSet<>();
+    private Float size;
+    private Boolean bars, smooth, routine, rotate, throughWalls, viewmodel, briefing;
+    private String chat;
     private String preset = Config.I.routinePreset;
     private boolean autoGuide = Config.I.autoGuide;
-    private boolean viewmodel = enabled(dev.zmuzy.sbc.render.HeldItem.ID);
-    private boolean throughWalls = Config.I.pathThroughWalls;
-    private boolean rotate = Config.I.minimapRotate;
-    private boolean visitorBox = visitorBoxOn();
-    private boolean witchCard = enabled(dev.zmuzy.sbc.events.WitchIngredients.ID);
+    // Next pressed with a question left open
+    private boolean missing;
+    // the detailed setup: after the questions, a page per activity you play and one for the general helpers
+    private boolean detailed;
+    private static final int GROUP_PAGE = 100;
+    private int groupAt;
+    // helpers switched by hand on those pages. only these are applied, so they never undo an answer
+    private final java.util.Map<String, Boolean> changed = new java.util.LinkedHashMap<>();
     private FlowLayout body;
 
     public SetupScreen(Screen parent) {
@@ -153,62 +166,92 @@ public final class SetupScreen extends SbcScreen {
             body.child(label("Every island, one clean HUD", dim()).horizontalTextAlignment(HorizontalAlignment.CENTER).horizontalSizing(Sizing.fill(100)).margins(Insets.bottom(4)));
         } else {
             body.child(steps());
-            body.child(new Showcase.BigText(PAGES[page].toUpperCase(java.util.Locale.ROOT), 1.5f, 0xFFFFFF, 0xB9CCFF).margins(Insets.bottom(2)));
+            String title = page == GROUP_PAGE ? detailGroups().get(groupAt).name() : PAGES[page];
+            body.child(new Showcase.BigText(title.toUpperCase(java.util.Locale.ROOT), 1.5f, 0xFFFFFF, 0xB9CCFF).margins(Insets.bottom(2)));
         }
         switch (page) {
             case 0 -> welcome();
             case 1 -> activities();
-            case 2 -> routinePage();
-            case 3 -> look();
-            case 4 -> extras();
+            case 2 -> screenPage();
+            case 3 -> chatPage();
+            case 4 -> routinePage();
+            case 5 -> preferences();
+            case GROUP_PAGE -> groupPage();
             default -> done();
         }
     }
 
-    // pages of the path youre on. the quick one still asks about the routine, its the one thing worth choosing
-    static int[] path(boolean myWay) {
-        return myWay ? new int[]{1, 2, 3, 4, LAST} : new int[]{2, LAST};
-    }
-
-    // where you are: dot per step, done ones lit, "Step 2 of 4" next to them
+    // where you are: dot per step, done ones lit, "Step 2 of 6" next to them
     private FlowLayout steps() {
         FlowLayout row = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
         row.horizontalAlignment(HorizontalAlignment.CENTER);
         row.verticalAlignment(VerticalAlignment.CENTER);
         row.gap(4);
-        int[] path = path(visited);
-        int at = 0;
-        for (int i = 0; i < path.length; i++) if (path[i] == page) at = i + 1;
-        for (int i = 1; i <= path.length; i++) {
+        List<Object> flow = flow();
+        int at = flow.indexOf(here()) + 1;
+        for (int i = 1; i <= flow.size(); i++) {
             int on = i <= at ? 0xFF42A5F5 : 0x40FFFFFF;
             FlowLayout dot = UIContainers.horizontalFlow(Sizing.fixed(i == at ? 14 : 6), Sizing.fixed(4));
             dot.surface(dev.zmuzy.sbc.ui.layout.Surface.flat(on));
             row.child(dot);
         }
-        row.child(label("  Step " + at + " of " + path.length, dim()));
+        row.child(label("  Step " + at + " of " + flow.size(), dim()));
         return row;
+    }
+
+    // the pages in order: the questions, then (detailed) a page per activity, then done
+    List<Object> flow() {
+        List<Object> out = new ArrayList<>(List.of(1, 2, 3, 4, 5));
+        if (detailed) out.addAll(detailGroups());
+        out.add(LAST);
+        return out;
+    }
+
+    private Object here() {
+        return page == GROUP_PAGE ? detailGroups().get(groupAt) : page;
+    }
+
+    // the activities you picked (all of them when you picked none), then the general helpers
+    List<HudGroups.Group> detailGroups() {
+        List<HudGroups.Group> out = new ArrayList<>();
+        for (HudGroups.Group g : HudGroups.ALL) if (g != HudGroups.GENERAL && (playing.isEmpty() || playing.contains(g.name()))) out.add(g);
+        out.add(HudGroups.GENERAL);
+        return out;
+    }
+
+    private void goTo(Object stop) {
+        if (stop instanceof HudGroups.Group g) {
+            page = GROUP_PAGE;
+            groupAt = detailGroups().indexOf(g);
+        } else page = (Integer) stop;
+        missing = false;
+        fill();
     }
 
     private void welcome() {
         int w = textWidth();
-        body.child(label("Everything is set up for you already: bars, HUD cards, prices on items and helpers for every island.", text())
+        body.child(label("A few quick questions about how you play and what you like. Nothing is picked for you, and nothing changes until you finish.", text())
                 .maxWidth(w).horizontalTextAlignment(HorizontalAlignment.CENTER).horizontalSizing(Sizing.fill(100)));
-        body.child(label("Keep it as it is, or take a minute to make it yours. Everything can be changed later with K.", dim())
+        body.child(label("What isn't asked keeps its default, and everything can be changed later with " + key(openKey(), "K") + ".", dim())
                 .maxWidth(w).horizontalTextAlignment(HorizontalAlignment.CENTER).horizontalSizing(Sizing.fill(100)));
         FlowLayout choices = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
         choices.gap(6);
         choices.margins(Insets.top(4));
-        choices.child(choice("Use the recommended setup", "Pick your daily routine, then play", 0xFF4CAF50, () -> {
-            visited = false;
-            page = 2;
-            fill();
+        choices.child(choice("Fast setup", "A few questions, about a minute", 0xFF4CAF50, () -> {
+            detailed = false;
+            go(1);
         }));
-        choices.child(choice("Set it up my way", "Five short steps", 0xFF42A5F5, () -> {
-            visited = true;
-            page = 1;
-            fill();
+        choices.child(choice("Detailed setup", "The same questions, then every helper of what you play", 0xFF42A5F5, () -> {
+            detailed = true;
+            go(1);
         }));
         body.child(choices);
+        FlowLayout row = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
+        row.verticalAlignment(VerticalAlignment.CENTER);
+        row.gap(6);
+        row.child(label("Or keep every default as it is.", dim()).horizontalSizing(Sizing.expand()));
+        row.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Skip"), b -> skip())).horizontalSizing(Sizing.fixed(80)));
+        body.child(row);
         body.child(discordRow());
     }
 
@@ -218,14 +261,53 @@ public final class SetupScreen extends SbcScreen {
         card.padding(Insets.of(3, 5, 5, 5));
         card.gap(4);
         card.child(label(title, Color.ofArgb(Modern.lighten(color, 0.45f))).margins(Insets.bottom(4)));
-        card.child(label(line, dim()));
+        card.child(label(line, dim()).maxWidth(half() - 10));
         card.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Choose"), b -> go.run())).horizontalSizing(Sizing.fill(100)));
         return card;
     }
 
+    // every helper of one activity, each with what it does and a switch that shows how it will be
+    private void groupPage() {
+        HudGroups.Group g = detailGroups().get(groupAt);
+        body.child(label(g == HudGroups.GENERAL ? "The helpers every island has: chat, items, menus, the map and more. Switch off what you don't want."
+                : "Every helper for " + g.name() + ". Switch off what you don't want.", text()).maxWidth(textWidth()));
+        FlowLayout list = UIContainers.verticalFlow(Sizing.fill(100), Sizing.content());
+        list.gap(3);
+        String module = null;
+        for (Feature f : helpers(g)) {
+            if (!f.module.equals(module)) {
+                module = f.module;
+                list.child(label(module, Color.ofArgb(Modern.AQUA)).margins(Insets.top(3)));
+            }
+            String id = f.id;
+            list.child(SettingsScreen.ui(SbcWidgets.toggle(Component.literal(f.title)).checked(willBeOn(f)).onChanged(on -> changed.put(id, on)))
+                    .horizontalSizing(Sizing.fill(100)));
+            if (!f.description.isEmpty()) list.child(label(f.description, dim()).maxWidth(textWidth() - 12).margins(Insets.left(4)));
+        }
+        body.child(SbcWidgets.scroll(Sizing.fill(100), Sizing.fixed(Math.max(120, Math.min(260, height - 170))), list));
+        body.child(nav());
+    }
+
+    // the switchable helpers of a group, by section
+    static List<Feature> helpers(HudGroups.Group g) {
+        List<Feature> out = new ArrayList<>();
+        for (Feature f : Features.all()) if (!f.alwaysOn && g.sections().contains(f.module)) out.add(f);
+        out.sort(java.util.Comparator.comparing((Feature f) -> f.module).thenComparing(f -> f.title));
+        return out;
+    }
+
+    // how a helper will be after Finish: a hand switch, else what the answers do to it, else as it is now
+    boolean willBeOn(Feature f) {
+        if (changed.containsKey(f.id)) return changed.get(f.id);
+        if (chat != null && CHAT_CLEANER.contains(f.id)) return !chat.equals(CHAT_HYPIXEL);
+        if (chat != null && CHAT_CLEANEST.contains(f.id)) return chat.equals(CHAT_CLEANEST_ID);
+        if (viewmodel != null && f.id.equals(dev.zmuzy.sbc.render.HeldItem.ID)) return viewmodel;
+        return f.enabled();
+    }
+
     private void activities() {
         int w = textWidth();
-        body.child(label("Untick what you never do and its helpers switch off. Everything else stays on.", dim()).maxWidth(w));
+        body.child(label("Pick what you play. Their helpers stay on and the others switch off. Pick nothing and every island keeps its helpers.", text()).maxWidth(w));
         FlowLayout grid = UIContainers.verticalFlow(Sizing.fill(100), Sizing.content());
         grid.gap(3);
         FlowLayout row = null;
@@ -242,17 +324,17 @@ public final class SetupScreen extends SbcScreen {
             cell.padding(Insets.of(4));
             cell.verticalAlignment(VerticalAlignment.CENTER);
             String name = g.name();
-            cell.child(SettingsScreen.ui(SbcWidgets.toggle(Component.literal(name)).checked(!skipped.contains(name)).onChanged(on -> {
-                if (on) skipped.remove(name);
-                else skipped.add(name);
+            cell.child(SettingsScreen.ui(SbcWidgets.toggle(Component.literal(name)).checked(playing.contains(name)).onChanged(on -> {
+                if (on) playing.add(name);
+                else playing.remove(name);
             })).horizontalSizing(Sizing.fixed(half() - 30)));
             cell.child(label(count(g) + "", dim()));
             row.child(cell);
         }
         body.child(grid);
         body.child(label("The number is how many helpers each one has. General helpers (chat, items, menus, map) always stay.", dim()).maxWidth(w));
-        body.child(label(placesLine(key(hudKey(), "H")), text()).maxWidth(w).margins(Insets.top(2)));
-        body.child(nav(0, 2));
+        body.child(label(placesLine(key(hudKey(), "H")), dim()).maxWidth(w));
+        body.child(nav());
     }
 
     // what happens to what you pick, so the hud placing itself is no surprise
@@ -260,16 +342,34 @@ public final class SetupScreen extends SbcScreen {
         return "The mod will place what you pick on the screen. Afterwards you can move, resize or turn off any card with " + key + ".";
     }
 
+    private void screenPage() {
+        ask("How big should the HUD be?", List.of("Small", "Normal", "Large"), List.of(0.8f, 1f, 1.25f), size, v -> size = v);
+        ask("Health, mana and defense", List.of("Bars from the mod", "Vanilla hearts"), List.of(true, false), bars, v -> bars = v);
+        ask("When cards change size or place", List.of("Ease into place", "Jump right away"), List.of(true, false), smooth, v -> smooth = v);
+        body.child(label("You can edit everything in the HUD editor later: press " + key(hudKey(), "H") + " in game.", dim()).maxWidth(textWidth()));
+        body.child(nav());
+    }
+
+    private void chatPage() {
+        body.child(label("SkyBlock's chat is busy. How much of it do you want to see?", text()).maxWidth(textWidth()));
+        ask(null, List.of("As Hypixel sends it", "Cleaner", "As clean as possible"), List.of(CHAT_HYPIXEL, CHAT_CLEAN, CHAT_CLEANEST_ID), chat, v -> chat = v);
+        String about = chat == null ? "" : switch (chat) {
+            case CHAT_HYPIXEL -> "Every line stays as it is. No line is hidden or shortened.";
+            case CHAT_CLEAN -> "Spam, repeated lines and server reminders are hidden, and rewards are shortened. Player messages always stay.";
+            default -> "Like Cleaner, and also ads, lobby joins, friend and guild joins, empty lines and more. Player messages always stay.";
+        };
+        if (!about.isEmpty()) body.child(label(about, dim()).maxWidth(textWidth()));
+        body.child(label("Each filter can be switched on its own later in the settings.", dim()).maxWidth(textWidth()));
+        body.child(nav());
+    }
+
     // daily routine: what it is, want it or not, what kind of day, does the guide start by itself
     private void routinePage() {
         int w = textWidth();
         body.child(label("The routine is your daily to-do list: the dailies worth doing (visitors, experiments, Fetchur, quests and more), "
                 + "on a card on your screen. Each one ticks itself off as you do it, and the guide draws a line to the next.", text()).maxWidth(w));
-        body.child(toggle("Use the daily routine", routine, v -> {
-            routine = v;
-            fill();
-        }));
-        if (routine) {
+        ask(null, List.of("Use the routine", "No routine"), List.of(true, false), routine, v -> routine = v);
+        if (Boolean.TRUE.equals(routine)) {
             body.child(label("What kind of day?", text()).margins(Insets.top(2)));
             FlowLayout grid = UIContainers.verticalFlow(Sizing.fill(100), Sizing.content());
             grid.gap(3);
@@ -291,10 +391,10 @@ public final class SetupScreen extends SbcScreen {
             body.child(grid);
             body.child(label(chosenPreset().about(), dim()).maxWidth(w));
             body.child(toggle("Start the guide by itself the first time you join each day", autoGuide, v -> autoGuide = v));
-        } else {
-            body.child(label("No routine card and no guide. You can turn it on any time in the settings (K).", dim()).maxWidth(w));
+        } else if (Boolean.FALSE.equals(routine)) {
+            body.child(label("No routine card and no guide. You can turn it on any time in the settings.", dim()).maxWidth(w));
         }
-        body.child(visited ? nav(1, 3) : nav(0, LAST));
+        body.child(nav());
     }
 
     private dev.zmuzy.sbc.tasks.RoutinePreset.Preset chosenPreset() {
@@ -307,79 +407,110 @@ public final class SetupScreen extends SbcScreen {
         return (textWidth() - 8) / 3;
     }
 
-    private static boolean routineOn() {
-        Feature f = Features.get("routine");
-        return f == null || f.enabled();
+    private void preferences() {
+        ask("The minimap", List.of("Turns with you", "North stays up"), List.of(true, false), rotate, v -> rotate = v);
+        ask("The route line to where you're going", List.of("Shows through walls", "Only where you can see"), List.of(true, false), throughWalls, v -> throughWalls = v);
+        ask("The item in your hand", List.of("Small and floating", "As the game draws it"), List.of(true, false), viewmodel, v -> viewmodel = v);
+        ask("When you join SkyBlock", List.of("Show what is ready today", "Show nothing"), List.of(true, false), briefing, v -> briefing = v);
+        body.child(nav());
     }
 
-    private void look() {
-        int w = textWidth();
-        FlowLayout sizeRow = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
-        sizeRow.verticalAlignment(VerticalAlignment.CENTER);
-        sizeRow.gap(6);
-        sizeRow.child(label("HUD size", text()).horizontalSizing(Sizing.fixed(70)));
-        SbcWidgets.Slider slider = SbcWidgets.slider(Sizing.expand(), 0.5, 2.0);
-        slider.decimalPlaces(2);
-        slider.setFromDiscreteValue(size);
-        slider.onChanged(v -> size = (float) (Math.round(v * 20) / 20.0));
-        sizeRow.child(SettingsScreen.ui(slider));
-        body.child(sizeRow);
-        body.child(toggle("Smooth HUD: panels ease into place", smooth, v -> smooth = v));
-        body.child(toggle("Health, mana and defense bars instead of the vanilla hearts", hearts, v -> hearts = v));
-        body.child(toggle("Short summary of what is ready each time you join SkyBlock", briefing, v -> briefing = v));
-        body.child(label("The HUD editor (" + key(hudKey(), "H") + ") moves and resizes each card.", dim()).maxWidth(w));
-        body.child(nav(2, 4));
+    // one question: its line, then a button per answer. the picked one says so
+    private <T> void ask(String question, List<String> names, List<T> values, T current, java.util.function.Consumer<T> set) {
+        if (question != null) body.child(label(question, text()).margins(Insets.top(2)));
+        FlowLayout row = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
+        row.gap(4);
+        int each = (textWidth() - 4 * (names.size() - 1)) / names.size();
+        for (int i = 0; i < names.size(); i++) {
+            T v = values.get(i);
+            boolean on = v.equals(current);
+            row.child(SettingsScreen.ui(SbcWidgets.button(Component.literal((on ? "> " : "") + names.get(i)), b -> {
+                set.accept(v);
+                missing = false;
+                fill();
+            })).horizontalSizing(Sizing.fixed(each)));
+        }
+        body.child(row);
     }
 
-    // newer stuff that changes what you see in the world
-    private void extras() {
-        int w = textWidth();
-        body.child(label("A few more, each one can be changed later with " + key(openKey(), "K") + ".", dim()).maxWidth(w));
-        body.child(toggle("Small floating item in your hand with a slow swing (Viewmodel)", viewmodel, v -> viewmodel = v));
-        body.child(toggle("Route line shows through walls", throughWalls, v -> throughWalls = v));
-        body.child(toggle("Minimap turns with you instead of north up", rotate, v -> rotate = v));
-        body.child(toggle("Box around a new Garden visitor", visitorBox, v -> visitorBox = v));
-        body.child(toggle("Witch ingredients card during the Year of the Witch", witchCard, v -> witchCard = v));
-        body.child(label("Viewmodel changes only the item: a bare hand stays as the game draws it, and hits stay as fast as they are.", dim()).maxWidth(w));
-        body.child(nav(3, LAST));
+    // every question on the page answered. what you play is a choice too: nothing picked means keep them all
+    boolean answered(int p) {
+        return switch (p) {
+            case 2 -> size != null && bars != null && smooth != null;
+            case 3 -> chat != null;
+            case 4 -> routine != null;
+            case 5 -> rotate != null && throughWalls != null && viewmodel != null && briefing != null;
+            default -> true;
+        };
     }
 
     private UIComponent toggle(String text, boolean value, java.util.function.Consumer<Boolean> set) {
         return SettingsScreen.ui(SbcWidgets.toggle(Component.literal(text)).checked(value).onChanged(set::accept)).horizontalSizing(Sizing.fill(100));
     }
 
+    // what finish is about to do, line by line, so nothing comes as a surprise
+    List<String> summary() {
+        List<String> out = new ArrayList<>();
+        if (playing.isEmpty()) out.add("Every island keeps its helpers.");
+        else {
+            List<String> off = new ArrayList<>();
+            for (HudGroups.Group g : HudGroups.ALL) if (g != HudGroups.GENERAL && !playing.contains(g.name())) off.add(g.name());
+            out.add("Helpers for " + String.join(", ", playing) + ".");
+            if (!off.isEmpty()) out.add("Switching off: " + String.join(", ", off) + ".");
+        }
+        if (size != null) out.add("HUD size " + (size < 1f ? "small" : size > 1f ? "large" : "normal") + ", " + (Boolean.TRUE.equals(bars) ? "bars from the mod" : "vanilla hearts")
+                + (Boolean.TRUE.equals(smooth) ? ", cards ease into place." : ", cards jump right away."));
+        if (chat != null) out.add("Chat " + switch (chat) {
+            case CHAT_HYPIXEL -> "as Hypixel sends it.";
+            case CHAT_CLEAN -> "cleaner.";
+            default -> "as clean as possible.";
+        });
+        if (routine != null) out.add(routine ? "Daily routine: " + chosenPreset().name() + (autoGuide ? ", the guide starts by itself." : ".") : "No daily routine.");
+        if (rotate != null) out.add("Minimap " + (rotate ? "turns with you" : "keeps north up") + ", route line " + (Boolean.TRUE.equals(throughWalls) ? "through walls" : "only where you can see") + ".");
+        if (viewmodel != null) out.add((viewmodel ? "Small floating item in your hand" : "Item in your hand as the game draws it") + (Boolean.TRUE.equals(briefing) ? ", and a summary when you join." : "."));
+        long on = changed.values().stream().filter(v -> v).count(), off = changed.size() - on;
+        if (!changed.isEmpty()) out.add("Switched by hand: " + (on > 0 ? on + " on" : "") + (on > 0 && off > 0 ? ", " : "") + (off > 0 ? off + " off" : "") + ".");
+        return out;
+    }
+
     private void done() {
         int w = textWidth();
-        body.child(label("You're set.", text()));
-        List<String> lines = new ArrayList<>();
-        lines.add(key(openKey(), "K") + " opens the settings: every helper, its options and a search.");
-        lines.add(key(hudKey(), "H") + " opens the HUD editor, where you can edit everything.");
-        lines.add("/sbc lists the commands; /sbc setup and /sbc tutorial bring these pages back.");
-        if (!skipped.isEmpty()) lines.add("Switching off: " + String.join(", ", skipped) + ".");
-        for (String s : lines) body.child(label("- " + s, dim()).maxWidth(w));
+        body.child(label("This is what Finish will set:", text()));
+        for (String s : summary()) body.child(label("- " + s, text()).maxWidth(w));
+        body.child(label(key(openKey(), "K") + " opens the menu and the settings, " + key(hudKey(), "H") + " the HUD editor. /sbc setup brings these questions back.", dim())
+                .maxWidth(w).margins(Insets.top(2)));
         body.child(discordRow());
         FlowLayout row = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
         row.gap(6);
         row.margins(Insets.top(4));
-        row.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Back"), b -> {
-            page = visited ? LAST - 1 : 2;
-            fill();
-        })).horizontalSizing(Sizing.fixed(80)));
-        row.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Next: learn the keys"), b -> finish())).horizontalSizing(Sizing.expand()));
+        List<Object> flow = flow();
+        Object back = flow.get(flow.size() - 2);
+        row.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Back"), b -> goTo(back))).horizontalSizing(Sizing.fixed(80)));
+        row.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Finish and learn the keys"), b -> finish())).horizontalSizing(Sizing.expand()));
         body.child(row);
     }
 
-    private FlowLayout nav(int back, int next) {
+    private void go(int to) {
+        page = to;
+        missing = false;
+        fill();
+    }
+
+    private FlowLayout nav() {
+        List<Object> flow = flow();
+        int at = flow.indexOf(here());
+        Object back = at <= 0 ? (Object) 0 : flow.get(at - 1), next = flow.get(Math.min(flow.size() - 1, at + 1));
+        if (missing) body.child(label("Answer each question to go on.", Color.ofArgb(Modern.WARN)));
         FlowLayout row = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
         row.gap(6);
         row.margins(Insets.top(4));
-        row.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Back"), b -> {
-            page = back;
-            fill();
-        })).horizontalSizing(Sizing.fixed(80)));
+        row.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Back"), b -> goTo(back))).horizontalSizing(Sizing.fixed(80)));
         row.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Next"), b -> {
-            page = next;
-            fill();
+            if (answered(page)) goTo(next);
+            else {
+                missing = true;
+                fill();
+            }
         })).horizontalSizing(Sizing.expand()));
         return row;
     }
@@ -394,25 +525,24 @@ public final class SetupScreen extends SbcScreen {
         return row;
     }
 
-    // applies the choices. the quick path only changes the routine, the rest of the recommended setup stays as is
+    // applies every answer, then the keys come next over the same title screen
     private void finish() {
-        if (visited) {
-            apply(skipped, size, smooth, hearts, briefing);
-            applyExtras(viewmodel, throughWalls, rotate, visitorBox, witchCard);
-        }
-        applyRoutine(routine, preset, autoGuide);
+        applyActivities(playing);
+        applyScreen(size, bars, smooth);
+        applyChat(chat);
+        applyRoutine(Boolean.TRUE.equals(routine), preset, autoGuide);
+        applyPreferences(rotate, throughWalls, viewmodel, briefing);
+        applyHandSwitches(changed);
         Config.I.setupDone = true;
         Config.save();
-        // keys come next, over the same title screen
         minecraft.gui.setScreen(new TutorialScreen(parent));
     }
 
-    // routine page choices. routine off = its card + the auto guide go too
-    static void applyRoutine(boolean on, String preset, boolean autoGuide) {
-        Feature f = Features.get("routine");
-        if (f != null && f.enabled() != on) f.setEnabled(on);
-        for (dev.zmuzy.sbc.tasks.RoutinePreset.Preset p : dev.zmuzy.sbc.tasks.RoutinePreset.ALL) if (p.id().equals(preset)) Config.I.routinePreset = preset;
-        Config.I.autoGuide = on && autoGuide;
+    // skip keeps every default, and the keys still come next
+    private void skip() {
+        Config.I.setupDone = true;
+        Config.save();
+        minecraft.gui.setScreen(new TutorialScreen(parent));
     }
 
     // closing early keeps the defaults and doesnt ask again
@@ -423,30 +553,48 @@ public final class SetupScreen extends SbcScreen {
         super.onClose();
     }
 
-    // what finish does, split out so a test can run it without a screen
-    static void apply(Set<String> skipped, float size, boolean smooth, boolean hearts, boolean briefing) {
+    // --- what finish does, split out so tests can run it without a screen. null = not answered, left alone ---
+
+    // nothing picked keeps every island. otherwise the islands not picked switch their helpers off
+    static void applyActivities(Set<String> playing) {
+        if (playing.isEmpty()) return;
         for (HudGroups.Group g : HudGroups.ALL) {
-            if (g == HudGroups.GENERAL || !skipped.contains(g.name())) continue;
+            if (g == HudGroups.GENERAL || playing.contains(g.name())) continue;
             for (Feature f : Features.all()) if (!f.alwaysOn && g.sections().contains(f.module) && f.enabled()) f.setEnabled(false);
         }
-        Config.I.hudAll = Math.max(0.5f, Math.min(2f, size));
-        Config.I.hudAnimations = smooth;
-        Config.I.loginBriefing = briefing;
-        Option o = heartsOption();
-        if (o != null) o.set(hearts);
     }
 
-    // the extras page, split out like apply so a test runs it
-    static void applyExtras(boolean viewmodel, boolean throughWalls, boolean rotate, boolean visitorBox, boolean witchCard) {
-        setEnabled(dev.zmuzy.sbc.render.HeldItem.ID, viewmodel);
-        setEnabled(dev.zmuzy.sbc.events.WitchIngredients.ID, witchCard);
-        Config.I.pathThroughWalls = throughWalls;
-        Config.I.minimapRotate = rotate;
-        Option o = visitorOption();
-        if (o != null) {
-            boolean names = o.text().equals("Both") || o.text().equals("Name");
-            o.set(visitorBox ? (names ? "Both" : "Color") : (names ? "Name" : "Off"));
-        }
+    static void applyScreen(Float size, Boolean bars, Boolean smooth) {
+        if (size != null) Config.I.hudAll = Math.max(0.5f, Math.min(2f, size));
+        if (smooth != null) Config.I.hudAnimations = smooth;
+        Option o = heartsOption();
+        if (bars != null && o != null) o.set(bars);
+    }
+
+    static void applyChat(String level) {
+        if (level == null) return;
+        for (String id : CHAT_CLEANER) setEnabled(id, !level.equals(CHAT_HYPIXEL));
+        for (String id : CHAT_CLEANEST) setEnabled(id, level.equals(CHAT_CLEANEST_ID));
+    }
+
+    // routine page choices. routine off = its card + the auto guide go too
+    static void applyRoutine(boolean on, String preset, boolean autoGuide) {
+        Feature f = Features.get("routine");
+        if (f != null && f.enabled() != on) f.setEnabled(on);
+        for (dev.zmuzy.sbc.tasks.RoutinePreset.Preset p : dev.zmuzy.sbc.tasks.RoutinePreset.ALL) if (p.id().equals(preset)) Config.I.routinePreset = preset;
+        Config.I.autoGuide = on && autoGuide;
+    }
+
+    // the detailed pages: only what was switched by hand, after every answer
+    static void applyHandSwitches(java.util.Map<String, Boolean> changed) {
+        for (var e : changed.entrySet()) setEnabled(e.getKey(), e.getValue());
+    }
+
+    static void applyPreferences(Boolean rotate, Boolean throughWalls, Boolean viewmodel, Boolean briefing) {
+        if (rotate != null) Config.I.minimapRotate = rotate;
+        if (throughWalls != null) Config.I.pathThroughWalls = throughWalls;
+        if (viewmodel != null) setEnabled(dev.zmuzy.sbc.render.HeldItem.ID, viewmodel);
+        if (briefing != null) Config.I.loginBriefing = briefing;
     }
 
     private static boolean enabled(String id) {
@@ -459,16 +607,6 @@ public final class SetupScreen extends SbcScreen {
         if (f != null && f.enabled() != on) f.setEnabled(on);
     }
 
-    private static Option visitorOption() {
-        Feature f = Features.get(dev.zmuzy.sbc.garden.visitor.VisitorWorld.STATUS);
-        return f == null ? null : f.option("garden_visitor_status.highlight");
-    }
-
-    private static boolean visitorBoxOn() {
-        Option o = visitorOption();
-        return o != null && (o.text().equals("Both") || o.text().equals("Color"));
-    }
-
     // how many switchable helpers a category has
     static int count(HudGroups.Group g) {
         int n = 0;
@@ -479,11 +617,6 @@ public final class SetupScreen extends SbcScreen {
     private static Option heartsOption() {
         Feature bars = Features.get("bars");
         return bars == null ? null : bars.option("hideVanilla");
-    }
-
-    private static boolean hideHearts() {
-        Option o = heartsOption();
-        return o == null || o.bool();
     }
 
     private static net.minecraft.client.KeyMapping openKey() {
