@@ -142,6 +142,21 @@ public final class Tips {
         return id;
     }
 
+    // what this kind really sold for lately, under the lowest bin. true when lines were added
+    private static boolean sold(List<Component> lines, CompoundTag ea, int n) {
+        return sold(lines, ea, n, false);
+    }
+
+    private static boolean sold(List<Component> lines, CompoundTag ea, int n, boolean gap) {
+        if (!on("tip_prices", "tip_prices.sold")) return false;
+        dev.zmuzy.sbc.core.SoldPrices.Sold s = dev.zmuzy.sbc.core.SoldPrices.of(ea);
+        if (s == null) return false;
+        if (gap) line(lines, "");
+        line(lines, "§6Sold median (3 days) §e" + Prices.coins(s.median() * n) + (n > 1 ? " §8(" + n + "x)" : ""));
+        line(lines, "§6Sales §e" + dev.zmuzy.sbc.core.SoldPrices.perDay(s.perDay()) + "/day");
+        return true;
+    }
+
     // prices, estimated value, craft profit
     public static void prices(ItemStack st, List<Component> lines) {
         String id = Gain.sbId(st);
@@ -163,6 +178,7 @@ public final class Tips {
                     line(lines, "");
                     line(lines, "§6Lowest BIN §cNone on the AH");
                 }
+                if (bookBin > 0 || AuctionPrices.noneListed(data(st))) sold(lines, data(st), n);
             }
             return;
         }
@@ -181,6 +197,7 @@ public final class Tips {
             any = true;
             line(lines, "§6Lowest BIN §cNone on the AH");
         }
+        if (Prices.get(bzId) == null && on("tip_prices", "tip_prices.lowestBin")) any |= sold(lines, data(st), n, !any);
         CompoundTag ea = data(st);
         double est = 0;
         try {

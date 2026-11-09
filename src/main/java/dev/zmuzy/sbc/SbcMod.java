@@ -626,6 +626,7 @@ public class SbcMod implements ClientModInitializer {
             if (GameState.onHypixel || DEV) {
                 Safe.run("Prices.tick", Prices::tick);
                 Safe.run("AuctionPrices.tick", dev.zmuzy.sbc.core.AuctionPrices::tick);
+                Safe.run("SoldPrices.tick", dev.zmuzy.sbc.core.SoldPrices::tick);
                 Safe.run("SkyHelperPrices.tick", dev.zmuzy.sbc.core.SkyHelperPrices::tick);
                 Safe.run("Mayor.tick", Mayor::tick);
             }

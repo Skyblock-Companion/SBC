@@ -58,6 +58,7 @@ public final class Builtin {
                 .when(SKYBLOCK).tooltip(Tips::prices)
                 .option(Option.bool("tip_prices.bazaar", "Bazaar price", "", true))
                 .option(Option.bool("tip_prices.lowestBin", "Lowest BIN", "", true))
+                .option(Option.bool("tip_prices.sold", "What it sold for", "The median price of real sales over the last 3 days, and how many sell a day.", true))
                 .option(Option.bool("tip_prices.estimated", "Estimated value", "", true))
                 .option(Option.bool("tip_prices.npc", "NPC price", "", true))
                 .option(Option.bool("tip_prices.george", "George's price for pets", "What George pays for a pet with no experience.", true))
