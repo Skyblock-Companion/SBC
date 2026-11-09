@@ -46,6 +46,21 @@ public final class WebPage {
         return WIKI + "/index.php?search=" + URLEncoder.encode(text, StandardCharsets.UTF_8);
     }
 
+    // the first few sentences of a wiki page in plain text (TextExtracts), "" when there is no such page
+    public static CompletableFuture<String> intro(String title) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                JsonObject json = api("action=query&prop=extracts&exintro=1&explaintext=1&exsentences=3&redirects=1&titles=" + URLEncoder.encode(title, StandardCharsets.UTF_8));
+                JsonArray pages = json.getAsJsonObject("query").getAsJsonArray("pages");
+                if (pages.isEmpty()) return "";
+                JsonObject page = pages.get(0).getAsJsonObject();
+                return page.has("extract") ? page.get("extract").getAsString().replaceAll("\\s+", " ").trim() : "";
+            } catch (Exception e) {
+                return "";
+            }
+        });
+    }
+
     public static CompletableFuture<WebPage> load(String url) {
         return CompletableFuture.supplyAsync(() -> {
             WebPage p = new WebPage();

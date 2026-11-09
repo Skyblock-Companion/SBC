@@ -105,6 +105,7 @@ public final class ItemRepo {
             if (itemsJson != null) {
                 for (JsonElement e : JsonParser.parseString(itemsJson).getAsJsonArray()) add(e.getAsJsonObject());
             }
+            loadShards();
             if (petsJson != null) {
                 JsonObject root = JsonParser.parseString(petsJson).getAsJsonObject();
                 for (Map.Entry<String, JsonElement> p : root.entrySet()) {
@@ -153,6 +154,19 @@ public final class ItemRepo {
             } catch (Exception ignored) {
             }
         });
+    }
+
+    // hunting shards arent in the item repo: neu's copy of each (head, lore) under its bazaar id, made by
+    // humanize-tools/data/make_shards.py. an id the repo has already stays the repos
+    static void loadShards() throws java.io.IOException {
+        try (var in = dev.zmuzy.sbc.core.data.DataFiles.neu("shard_items.json")) {
+            if (in == null) return;
+            for (JsonElement e : JsonParser.parseReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonArray()) {
+                JsonObject o = e.getAsJsonObject();
+                String sid = o.getAsJsonObject("components").getAsJsonObject("minecraft:custom_data").get("id").getAsString();
+                if (!items.containsKey(sid)) add(o);
+            }
+        }
     }
 
     private static void add(JsonObject o) {

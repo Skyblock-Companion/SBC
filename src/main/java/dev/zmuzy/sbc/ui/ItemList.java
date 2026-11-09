@@ -28,8 +28,9 @@ import java.util.Locale;
 // click = recipe, right click = what its used in, F = star
 public final class ItemList {
     private static final Ui ui = new Ui();
-    private static final String[] FILTERS = {"All", "Bazaar", "Craft", "Starred"};
-    private static final int[] FILTER_COLORS = {Modern.AQUA, Modern.WARN, Modern.GOOD, Modern.GOLD};
+    // World = npcs, mobs, places and warps (WorldIndex). All has them too while you search
+    private static final String[] FILTERS = {"All", "Bazaar", "Craft", "World", "Stars"};
+    private static final int[] FILTER_COLORS = {Modern.AQUA, Modern.WARN, Modern.GOOD, 0xFF55FF55, Modern.GOLD};
     private static final int COL = 20;
 
     private static String query = "";
@@ -41,9 +42,9 @@ public final class ItemList {
     private static final int[] counts = new int[FILTERS.length];
     private static String hoverId;
 
-    // the line under the mouse, for keys pressed over the list
+    // the item under the mouse, for keys pressed over the list. a world entry isnt an item
     public static String hoveredId() {
-        return hoverId;
+        return WorldIndex.is(hoverId) ? null : hoverId;
     }
     private static int px, py, pw, ph, rows, cols;
     private static boolean placed;
@@ -69,7 +70,7 @@ public final class ItemList {
 
     private static void refresh() {
         String head = query + "|" + filter + "|" + Store.I.favourites.size();
-        String key = head + "|" + ItemRepo.ids().size() + "|" + Prices.all().size();
+        String key = head + "|" + ItemRepo.ids().size() + "|" + Prices.all().size() + "|" + WorldIndex.all().size();
         if (key.equals(shownKey)) return;
         shownKey = key;
         String q = query.toLowerCase(Locale.ROOT).trim();
@@ -85,8 +86,8 @@ public final class ItemList {
             counts[0]++;
             if (bazaar) counts[1]++;
             if (craft) counts[2]++;
-            if (star) counts[3]++;
-            if (filter == 1 && !bazaar || filter == 2 && !craft || filter == 3 && !star) continue;
+            if (star) counts[4]++;
+            if (filter == 1 && !bazaar || filter == 2 && !craft || filter == 3 || filter == 4 && !star) continue;
             if (strict) out.add(id);
             else loose.add(id);
         }
@@ -95,6 +96,16 @@ public final class ItemList {
             if (fa != fb) return fa ? -1 : 1;
             return dev.zmuzy.sbc.core.GameState.strip(ItemRepo.name(a)).compareToIgnoreCase(dev.zmuzy.sbc.core.GameState.strip(ItemRepo.name(b)));
         });
+        // the world: by name, kind, island or area ("baker", "npc hub"), all of it on the World tab
+        List<String> world = new ArrayList<>();
+        for (WorldIndex.Entry e : WorldIndex.all()) {
+            if (!q.isEmpty() && !match(e.id(), e.name() + " " + e.kind() + " " + dev.zmuzy.sbc.core.GameState.pretty(e.island()) + " " + e.area(), words)) continue;
+            counts[3]++;
+            if (!q.isEmpty()) counts[0]++;
+            if (filter == 3 || filter == 0 && !q.isEmpty()) world.add(e.id());
+        }
+        world.sort(java.util.Comparator.comparingInt((String id) -> WorldIndex.order(WorldIndex.get(id).kind())).thenComparing(id -> WorldIndex.get(id).name(), String.CASE_INSENSITIVE_ORDER));
+        out.addAll(world);
         out.addAll(loose);
         shown = out;
         // prices or the repo showing up late only update numbers, scroll stays
@@ -305,7 +316,8 @@ public final class ItemList {
         ui.click(px + pw - 16, py + 1, 15, 12, ItemList::close);
         ui.textShadow("‹", px + pw - 10, py + 3, closeHover ? 0xFFFFFFFF : Modern.LABEL);
         int known = ItemRepo.ids().size(), n = shown.size();
-        String count = n == known ? "§f" + number(n) + " §7items" : Modern.fraction(number(n), number(known), 'f', '7') + " §b" + percent(known == 0 ? 0 : (double) n / known);
+        String count = filter == 3 || !query.isBlank() ? "§f" + number(n) + " §7results"
+                : n == known ? "§f" + number(n) + " §7items" : Modern.fraction(number(n), number(known), 'f', '7') + " §b" + percent(known == 0 ? 0 : (double) n / known);
         ui.textShadow(count, px + pw - 18 - ui.width(count), py + 3, Modern.LABEL);
 
         int sx = px + 8, sy = py + 18, sw = pw - 16;
@@ -344,6 +356,16 @@ public final class ItemList {
                 String id = shown.get(i);
                 boolean hv = ui.hover(x, y, COL - 1, COL - 1);
                 ui.rect(x, y, COL - 1, COL - 1, hv ? Ui.alpha(ACCENT, 0.3f) : 0x50000000);
+                WorldIndex.Entry place = WorldIndex.is(id) ? WorldIndex.get(id) : null;
+                if (place != null) {
+                    ui.rect(x, y + COL - 2, COL - 1, 1, hv ? ACCENT : Ui.alpha(WorldIndex.color(place.kind()), 0.75f));
+                    ui.icon(WorldIndex.icon(place.kind()), x + 1, y + 1, 1f);
+                    if (hv) {
+                        hoverId = id;
+                        ui.tooltip(WorldIndex.tooltip(place).toArray(new String[0]));
+                    }
+                    continue;
+                }
                 // bottom edge = rarity color, so a page of icons kinda sorts itself by eye
                 int rarity = colorOf(ItemRepo.coloredName(id));
                 ui.rect(x, y + COL - 2, COL - 1, 1, hv ? ACCENT : Ui.alpha(rarity, 0.75f));
@@ -375,12 +397,19 @@ public final class ItemList {
         }
 
         Modern.rule(ui, px + Modern.PAD, footY, pw - 2 * Modern.PAD);
-        if (hoverId != null) {
+        WorldIndex.Entry hoverPlace = WorldIndex.is(hoverId) ? WorldIndex.get(hoverId) : null;
+        if (hoverPlace != null) {
+            ui.textShadow(ui.ellipsize(hoverPlace.name(), sw), sx, footY + 3, WorldIndex.color(hoverPlace.kind()));
+            ui.textShadow(ui.ellipsize(WorldIndex.where(hoverPlace), sw), sx, footY + 13, Modern.DIM);
+        } else if (hoverId != null) {
             String marks = (ItemInfo.craftable(hoverId) ? "§aRecipe" : "") + (Store.I.favourites.contains(hoverId) ? " §6★" : "");
             int mw = ui.width(marks);
             ui.textShadow(ui.ellipsize(dev.zmuzy.sbc.core.GameState.strip(ItemRepo.name(hoverId)), sw - (mw > 0 ? mw + 4 : 0)), sx, footY + 3, colorOf(ItemRepo.coloredName(hoverId)));
             if (mw > 0) ui.textShadow(marks, sx + sw - mw, footY + 3, Modern.LABEL);
             ui.textShadow(ui.ellipsize(prices(hoverId), sw), sx, footY + 13, Modern.DIM);
+        } else if (filter == 3) {
+            ui.textShadow("§eClick§7 details  §eRight§7 guide me there", sx, footY + 3, Modern.LABEL);
+            ui.textShadow("§7NPCs, bosses, mobs, places, warps", sx, footY + 13, Modern.LABEL);
         } else {
             ui.textShadow("§eClick§7 recipe  §eRight§7 used in  §eF§7 star", sx, footY + 3, Modern.LABEL);
             ui.textShadow("§7Over any item: §eR§7 recipe  §eU§7 used in", sx, footY + 13, Modern.LABEL);
@@ -446,7 +475,8 @@ public final class ItemList {
             return true;
         }
         if (hoverId != null && ui.hover((int) x, (int) y, 1, 1) && button == 1) {
-            ItemScreen.open(hoverId, true);
+            if (WorldIndex.is(hoverId)) WorldIndex.go(WorldIndex.get(hoverId));
+            else ItemScreen.open(hoverId, true);
             return false;
         }
         for (int i = ui.hits.size() - 1; i >= 0; i--) {
@@ -456,7 +486,8 @@ public final class ItemList {
             return false;
         }
         if (hoverId != null && button == 0) {
-            ItemScreen.open(hoverId);
+            if (WorldIndex.is(hoverId)) WorldScreen.open(WorldIndex.get(hoverId));
+            else ItemScreen.open(hoverId);
         }
         return false;
     }
@@ -497,6 +528,8 @@ public final class ItemList {
             }
             return true;
         }
+        // stars and recipes are for items
+        if (WorldIndex.is(id)) return true;
         if (key == InputConstants.KEY_F) {
             if (!Store.I.favourites.remove(id)) Store.I.favourites.add(id);
             Store.markDirty();
