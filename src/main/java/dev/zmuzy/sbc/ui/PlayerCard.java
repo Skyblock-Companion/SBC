@@ -49,13 +49,19 @@ public final class PlayerCard {
         return colors[Math.max(0, Math.min(colors.length - 1, level / 40))];
     }
 
-    // xp into the level out of 100, from the api or the tab list. {-1, -1} = dont know
+    // the tab is live, the api copy only changes when the profile loads again, so a level up waits for it
+    static int level(Profile.Data d) {
+        int live = parse(GameState.sbLevel);
+        return live >= 0 ? live : d != null && d.sbXp >= 0 ? (int) (d.sbXp / 100) : -1;
+    }
+
+    // xp into the level out of 100, from the tab list or the api while its still the same level. {-1, -1} = dont know
     private static long[] sbXp(Profile.Data d) {
-        if (d != null && d.sbXp >= 0) return new long[]{(long) (d.sbXp % 100), 100};
         for (String l : GameState.tab) {
             java.util.regex.Matcher m = SB_XP.matcher(GameState.strip(l));
             if (m.find()) return new long[]{Long.parseLong(m.group(1)), Long.parseLong(m.group(2))};
         }
+        if (d != null && d.sbXp >= 0 && (int) (d.sbXp / 100) == level(d)) return new long[]{(long) (d.sbXp % 100), 100};
         return new long[]{-1, -1};
     }
 
@@ -90,7 +96,7 @@ public final class PlayerCard {
         var p = mc.player;
         boolean sample = p == null;
         Profile.Data d = sample ? null : Profile.current;
-        int level = sample ? 196 : d != null && d.sbXp >= 0 ? (int) (d.sbXp / 100) : parse(GameState.sbLevel);
+        int level = sample ? 196 : level(d);
         long[] xp = sample ? new long[]{52, 100} : sbXp(d);
         int accent = level >= 0 ? levelColor(level) : dev.zmuzy.sbc.ui.theme.Modern.AQUA;
         dev.zmuzy.sbc.ui.theme.Theme.current().panel(ui, x, y, S_W, S_H, M);
@@ -198,7 +204,7 @@ public final class PlayerCard {
         if (p == null) return;
         boolean stats = dev.zmuzy.sbc.feature.Features.on("cardstats");
         Profile.Data d = Profile.current;
-        int level = d != null && d.sbXp >= 0 ? (int) (d.sbXp / 100) : parse(GameState.sbLevel);
+        int level = level(d);
         double pct = d != null && d.sbXp >= 0 ? (d.sbXp % 100) / 100.0 : 0;
         int ph = height() - 16;
         Bling.plate(ui, x, y + 16, W, ph, 10);
