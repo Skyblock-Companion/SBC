@@ -353,7 +353,7 @@ public final class SetupScreen extends SbcScreen {
         body.child(label("You're set.", text()));
         List<String> lines = new ArrayList<>();
         lines.add(key(openKey(), "K") + " opens the settings: every helper, its options and a search.");
-        lines.add(key(hudKey(), "H") + " opens the HUD editor: move, resize and restyle each card.");
+        lines.add(key(hudKey(), "H") + " opens the HUD editor, where you can edit everything.");
         lines.add("/sbc lists the commands; /sbc setup and /sbc tutorial bring these pages back.");
         if (!skipped.isEmpty()) lines.add("Switching off: " + String.join(", ", skipped) + ".");
         for (String s : lines) body.child(label("- " + s, dim()).maxWidth(w));

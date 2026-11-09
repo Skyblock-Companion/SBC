@@ -27,7 +27,7 @@ public final class CreditsScreen extends SbcScreen {
             {"Dungeon Rooms Mod", "Copyright 2021 Quantizr(_risk) - GPL-3.0", "Many of the dungeon rooms and secret waypoints, through Skyblocker."},
             {"Secret Routes", "Copyright 2025 yourboykyle, wyannnnn (R-aMcC), with Itplays, zzyyrraa, 3ppopka and FlameOfWar - GPL-3.0", "The dungeon secret route sets and their format."},
             {"SkyBlockAPI", "SkyblockAPI, Copyright (c) 2025, no holder named in its licence - MIT", "Museum page reading."},
-            {"Modern Warp Menu", "Copyright (c) 2024 Yukkuritaku - MIT", "The picture warp menu and its layouts."},
+            {"Modern Warp Menu", "Copyright (c) 2024 Yukkuritaku - MIT", "The warp menu and its layouts."},
             {"Fancy Warp Menu", "Copyright (c) 2023 TirelessTraveler - MIT", "The original of that menu: its logo, notification dot and menu button pictures."},
             {"SkyblockAddons", "Copyright (c) 2023 Biscuit Development - MIT", "The portal picture, and the origin of the enchant parser."},
             {"owo-lib", "glisco and wisp-forest, Copyright (c) 2021, no holder named in its licence - MIT", "Our screen layout code is ported from it and trimmed, and the menu's click sound is its own. Not a dependency."},

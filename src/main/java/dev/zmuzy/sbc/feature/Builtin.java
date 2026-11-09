@@ -195,7 +195,7 @@ public final class Builtin {
                 .when(SKYBLOCK)
                 .option(Option.text("customtext.text", "Text", "Lines separated by |; &6 etc. for colours.", ""))
                 .option(Option.bool("customtext.only_menus", "Only while a menu is open", "", false)));
-        Features.add(new Feature("warp_menu", "Navigation", "Picture warp menu", "The Fast Travel menu as a map of island pictures with a portal on every warp: click a portal, or an island for its first warp. Tab shows Hypixel's own menu.", "")
+        Features.add(new Feature("warp_menu", "Navigation", "Warp menu", "The Fast Travel menu as a map of island pictures with a portal on every warp: click a portal, or an island for its first warp. Tab shows Hypixel's own menu.", "")
                 .when(SKYBLOCK)
                 .option(Option.bool("showIslandLabels", "Island names", "", true))
                 .option(Option.bool("hideWarpLabelsUntilIslandHovered", "Warp names only on the hovered island", "", false))

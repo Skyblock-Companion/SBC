@@ -38,7 +38,7 @@ public final class TutorialScreen extends SbcScreen {
             new Step("key.sbcompanion.market", false, "Y", "Market search",
                     "Search the Bazaar and the Auction House as you type, with prices.", Demo.ALWAYS, "That was the market search."),
             new Step("key.sbcompanion.hudedit", false, "H", "The HUD editor",
-                    "Move, resize and restyle every card on your screen, grouped by activity.", Demo.IN_WORLD, "That was the HUD editor."),
+                    "Edit everything on your screen, grouped by activity.", Demo.IN_WORLD, "That was the HUD editor."),
             new Step("key.sbcompanion.map", false, "N", "The island map",
                     "A map of the island you are on, with warps and points of interest.", Demo.IN_WORLD, "That was the island map."),
             new Step("key.sbcompanion.zoom_in", false, "Numpad +", "Minimap: closer",

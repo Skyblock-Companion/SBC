@@ -3,7 +3,7 @@
   "id": "sbcompanion",
   "version": "${version}",
   "name": "SkyBlock Companion",
-  "description": "One mod for all of Hypixel SkyBlock: tooltips and prices, a picture warp menu, a minimap, 30+ trackers, Garden, Mining, Crimson Isle, Rift, Dungeon and Slayer helpers, a profile viewer and more. One look, one settings menu. It shows you the information and leaves the playing to you.\n\nPress K in game for everything, H to move the HUD.\n\nDiscord: discord.gg/QrqX3pgVW2\nReport issues: github.com/Skyblock-Companion/SBC/issues\nSponsor: github.com/sponsors/Skyblock-Companion",
+  "description": "One mod for all of Hypixel SkyBlock: tooltips and prices, a warp menu, a minimap, 30+ trackers, Garden, Mining, Crimson Isle, Rift, Dungeon and Slayer helpers, a profile viewer and more. One look, one settings menu.\n\nPress K in game for everything, H to move the HUD.\n\nDiscord: discord.gg/QrqX3pgVW2\nReport issues: github.com/Skyblock-Companion/SBC/issues\nSponsor: github.com/sponsors/Skyblock-Companion",
   "authors": ["zMuzy"],
   "license": "GPL-3.0-only",
   "icon": "assets/sbcompanion/icon.png",
