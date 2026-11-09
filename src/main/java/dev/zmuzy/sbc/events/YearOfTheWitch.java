@@ -358,12 +358,17 @@ public final class YearOfTheWitch {
     private static final Panel SHOP = new Panel(false, "Ingredients", "Items"), STEWS = new Panel(true, "Ingredients"), SACK = new Panel(false, "Ingredients");
 
     private static SideHelper.Content panel(Screen s) {
-        if (!Features.on(ID) || !opt("witch_stew.panel", true) || !(s instanceof AbstractContainerScreen<?>)) return null;
+        if (!opt("witch_stew.panel", true) || !(s instanceof AbstractContainerScreen<?>)) return null;
         String title = GameState.strip(s.getTitle().getString()).trim();
+        // her sack opens from any island: what you hold and which mob drops each thing. the feature itself
+        // only runs in the hub, so here its switch is enough
+        if (title.equals("Witch's Sack")) {
+            var f = Features.get(ID);
+            return f != null && f.enabled() && (GameState.inSkyBlock || dev.zmuzy.sbc.SbcMod.DEV) ? SACK : null;
+        }
+        if (!Features.on(ID)) return null;
         if (title.equals(SHOP_TITLE)) return SHOP;
         if (STEW_MENU.matcher(title).matches()) return STEWS;
-        // her sack: what you hold, for a look before you walk to her
-        if (title.equals("Witch's Sack")) return SACK;
         return null;
     }
 
