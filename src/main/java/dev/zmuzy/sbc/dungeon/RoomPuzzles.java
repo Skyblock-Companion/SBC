@@ -34,45 +34,54 @@ public final class RoomPuzzles {
     // ---- three weirdos (from skyblocker ThreeWeirdos) ----
 
     private static final dev.zmuzy.sbc.core.Patterns.P WEIRDO = dev.zmuzy.sbc.core.Patterns.p("RoomPuzzles.WEIRDO");
-    // from skyblocker checkForNPC: the 3 npc armor stands in room coords, the chest is one block +x of each
-    private static final BlockPos[] NPCS = {new BlockPos(13, 69, 24), new BlockPos(15, 69, 25), new BlockPos(17, 69, 24)};
 
     private static BlockPos notLyingChest;
     private static String weirdoName = "";
-
-    private static boolean inRoom(String idPrefix) {
-        var r = Dungeon.current();
-        return r != null && r.def.id().startsWith(idPrefix);
-    }
+    private static Object weirdoLevel;
 
     private static BlockPos actual(Dungeon.Placed room, BlockPos relative) {
         Vec3 a = room.toActual(relative.getX(), relative.getY(), relative.getZ());
         return BlockPos.containing(Math.floor(a.x), Math.floor(a.y), Math.floor(a.z));
     }
 
+    // like odin WeirdosSolver: the speaker by name wherever it stands, so the room doesnt have to be known yet.
+    // each of the three has one chest touching its block on a side (the middle one stands a block back)
     private static ChatBus.Result onWeirdo(ChatBus.Line line) {
         Matcher m = WEIRDO.matcher(line.plain().trim());
         if (!m.matches()) return ChatBus.PASS;
         var mc = Minecraft.getInstance();
-        var room = Dungeon.current();
-        if (mc.level == null || mc.player == null || room == null) return ChatBus.PASS;
+        if (mc.level == null || mc.player == null) return ChatBus.PASS;
         String name = m.group(1);
-        for (BlockPos rel : NPCS) {
-            BlockPos npc = actual(room, rel);
-            var stands = mc.level.getEntitiesOfClass(ArmorStand.class, AABB.encapsulatingFullBlocks(npc, npc), e -> GameState.strip(e.getName().getString()).equals(name));
-            if (stands.isEmpty()) continue;
-            notLyingChest = actual(room, rel.offset(1, 0, 0));
+        for (var e : mc.level.entitiesForRendering()) {
+            if (!(e instanceof ArmorStand) || e.distanceToSqr(mc.player) > 40 * 40 || !GameState.strip(e.getName().getString()).equals(name)) continue;
+            BlockPos chest = chestBeside(mc, BlockPos.containing(e.getX(), e.getY(), e.getZ()));
+            if (chest == null) continue;
+            notLyingChest = chest;
             weirdoName = name;
+            weirdoLevel = mc.level;
+            break;
         }
         return ChatBus.PASS;
     }
 
+    private static BlockPos chestBeside(Minecraft mc, BlockPos npc) {
+        for (int dy = 0; dy >= -1; dy--) {
+            for (var dir : Direction.Plane.HORIZONTAL) {
+                BlockPos p = npc.offset(0, dy, 0).relative(dir);
+                if (mc.level.getBlockState(p).getBlock() instanceof net.minecraft.world.level.block.ChestBlock) return p;
+            }
+        }
+        return null;
+    }
+
     private static void drawWeirdo(WorldDraw w) {
-        if (!inRoom("three-chests")) {
+        var mc = Minecraft.getInstance();
+        if (notLyingChest == null) return;
+        // a new run or a room away: the old mark goes
+        if (mc.level != weirdoLevel || mc.player == null || mc.player.distanceToSqr(Vec3.atCenterOf(notLyingChest)) > 48 * 48) {
             notLyingChest = null;
             return;
         }
-        if (notLyingChest == null) return;
         w.box(new AABB(notLyingChest), 0x8000FF00, true, false);
         w.label("§a" + weirdoName, Vec3.atCenterOf(notLyingChest).add(0, 1.2, 0), true);
     }
