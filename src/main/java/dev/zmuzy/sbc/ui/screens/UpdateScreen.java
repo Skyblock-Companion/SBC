@@ -20,6 +20,7 @@ import net.minecraft.network.chat.Component;
 public final class UpdateScreen extends SbcScreen {
     public static final String RELEASES = "https://github.com/Skyblock-Companion/SBC/releases";
     public static final String MODRINTH = "https://modrinth.com/mod/skyblockcompanion";
+    public static final String CURSEFORGE = "https://www.curseforge.com/minecraft/mc-mods/sbc-hypixel-skyblock-companion";
     private static boolean shown;
 
     private final ProfileServer.Update update;
@@ -55,12 +56,13 @@ public final class UpdateScreen extends SbcScreen {
         panel.child(new Showcase.BigText("UPDATE AVAILABLE", 1.5f, 0xFFE082, 0xFFB300));
         panel.child(label(update.message(), text()).maxWidth(w - 20));
         panel.child(label("You have " + ProfileServer.VERSION + (update.latest().isEmpty() ? "" : ", the newest is " + update.latest()) + ".", dim()).maxWidth(w - 20));
-        int half = (w - 20 - 6) / 2;
+        int third = (w - 20 - 12) / 3;
         FlowLayout links = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
         links.gap(6);
         links.margins(Insets.top(4));
-        links.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("GitHub releases"), b -> openLink(RELEASES))).horizontalSizing(Sizing.fixed(half)));
-        links.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Modrinth"), b -> openLink(MODRINTH))).horizontalSizing(Sizing.fixed(half)));
+        links.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("CurseForge"), b -> openLink(CURSEFORGE))).horizontalSizing(Sizing.fixed(third)));
+        links.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Modrinth"), b -> openLink(MODRINTH))).horizontalSizing(Sizing.fixed(third)));
+        links.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("GitHub"), b -> openLink(RELEASES))).horizontalSizing(Sizing.fixed(third)));
         panel.child(links);
         panel.child(SettingsScreen.ui(SbcWidgets.button(Component.literal("Later"), b -> onClose())).horizontalSizing(Sizing.fill(100)));
         root.child(panel);
