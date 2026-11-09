@@ -63,6 +63,8 @@ public final class SetupScreen extends SbcScreen {
     private int groupAt;
     // helpers switched by hand on those pages. only these are applied, so they never undo an answer
     private final java.util.Map<String, Boolean> changed = new java.util.LinkedHashMap<>();
+    // helpers whose options and card are unfolded on a detailed page
+    private final Set<String> unfolded = new java.util.HashSet<>();
     private FlowLayout body;
 
     public SetupScreen(Screen parent) {
@@ -89,6 +91,7 @@ public final class SetupScreen extends SbcScreen {
             }
             return;
         }
+        if (WhatsNewScreen.maybeShow(mc, s)) return;
         UpdateScreen.maybeShow(mc, s);
     }
 
@@ -271,6 +274,7 @@ public final class SetupScreen extends SbcScreen {
         HudGroups.Group g = detailGroups().get(groupAt);
         body.child(label(g == HudGroups.GENERAL ? "The helpers every island has: chat, items, menus, the map and more. Switch off what you don't want."
                 : "Every helper for " + g.name() + ". Switch off what you don't want.", text()).maxWidth(textWidth()));
+        body.child(label("Options change as soon as you set them. The switches apply when you finish.", dim()).maxWidth(textWidth()));
         FlowLayout list = UIContainers.verticalFlow(Sizing.fill(100), Sizing.content());
         list.gap(3);
         String module = null;
@@ -280,9 +284,23 @@ public final class SetupScreen extends SbcScreen {
                 list.child(label(module, Color.ofArgb(Modern.AQUA)).margins(Insets.top(3)));
             }
             String id = f.id;
-            list.child(SettingsScreen.ui(SbcWidgets.toggle(Component.literal(f.title)).checked(willBeOn(f)).onChanged(on -> changed.put(id, on)))
-                    .horizontalSizing(Sizing.fill(100)));
+            CardPreview card = CardPreview.of(f, textWidth() - 24);
+            boolean extra = !f.options.isEmpty() || card != null;
+            FlowLayout line = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
+            line.gap(4);
+            line.verticalAlignment(VerticalAlignment.CENTER);
+            line.child(SettingsScreen.ui(SbcWidgets.toggle(Component.literal(f.title)).checked(willBeOn(f)).onChanged(on -> changed.put(id, on)))
+                    .horizontalSizing(Sizing.expand()));
+            boolean open = unfolded.contains(id);
+            if (extra) line.child(SettingsScreen.ui(SbcWidgets.button(Component.literal(open ? "Hide" : "Options"), b -> {
+                if (!unfolded.remove(id)) unfolded.add(id);
+                fill();
+            })).horizontalSizing(Sizing.fixed(54)));
+            list.child(line);
             if (!f.description.isEmpty()) list.child(label(f.description, dim()).maxWidth(textWidth() - 12).margins(Insets.left(4)));
+            if (!open) continue;
+            for (dev.zmuzy.sbc.feature.Option o : f.options) list.child(SettingsPanel.optionRow(o, this::fill).margins(Insets.left(8)));
+            if (card != null) list.child(card.margins(Insets.of(2, 0, 2, 8)));
         }
         body.child(SbcWidgets.scroll(Sizing.fill(100), Sizing.fixed(Math.max(120, Math.min(260, height - 170))), list));
         body.child(nav());
@@ -534,6 +552,7 @@ public final class SetupScreen extends SbcScreen {
         applyPreferences(rotate, throughWalls, viewmodel, briefing);
         applyHandSwitches(changed);
         Config.I.setupDone = true;
+        Config.I.lastVersion = dev.zmuzy.sbc.feature.Releases.current();
         Config.save();
         minecraft.gui.setScreen(new TutorialScreen(parent));
     }
@@ -541,6 +560,7 @@ public final class SetupScreen extends SbcScreen {
     // skip keeps every default, and the keys still come next
     private void skip() {
         Config.I.setupDone = true;
+        Config.I.lastVersion = dev.zmuzy.sbc.feature.Releases.current();
         Config.save();
         minecraft.gui.setScreen(new TutorialScreen(parent));
     }
@@ -549,6 +569,7 @@ public final class SetupScreen extends SbcScreen {
     @Override
     public void onClose() {
         Config.I.setupDone = true;
+        Config.I.lastVersion = dev.zmuzy.sbc.feature.Releases.current();
         Config.save();
         super.onClose();
     }

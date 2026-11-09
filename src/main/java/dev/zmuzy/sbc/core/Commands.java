@@ -45,6 +45,7 @@ public final class Commands {
         describe("credits", "Who this mod learned from and what it reuses");
         describe("setup", "The first-run setup page: what you play and how it looks");
         describe("tutorial", "The keys worth knowing, one at a time");
+        describe("whatsnew", "What came with this version, and its new helpers to switch on");
         describe("discord", "The link to the mod's Discord, to copy");
         describe("reset", "Every feature and the HUD back to how they start");
         describe("pv", "Open the profile page of the menu");
@@ -83,7 +84,7 @@ public final class Commands {
     }
 
     static {
-        group("Open", "config settings hudedit storage lastopened wiki wikithis pv profile pets museum waypoints rules shortcuts todos colors credits setup tutorial discord help");
+        group("Open", "config settings hudedit storage lastopened wiki wikithis pv profile pets museum waypoints rules shortcuts todos colors credits setup tutorial whatsnew discord help");
         group("Set up", "rule downloadtodo remind speed dye custom nightvision mouselock sensreduce protectitem preventsell supercraftpreset importshards import coopmembers skills cropstartlocation sethoelevel bingotoggle disableall");
         group("Find your way", "nav stop route wp navall navclipboard ordered crystalwaypoints relics relicsfoundall relicsreset soulsfoundall soulsreset found rescueboard tpinfested enigma greenhouse lanedetection");
         group("Work out", "calc calccrop calccroptime cropsin croptime blockstrength ping tps gardenuptime hoppitystats slayers addusedgifts carry copyunderbid copy refreshprices bingoupdate bingoreload fixminions dungeonsound learn");

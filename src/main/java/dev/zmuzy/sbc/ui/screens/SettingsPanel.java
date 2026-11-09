@@ -636,6 +636,11 @@ public final class SettingsPanel {
     }
 
     private FlowLayout optionRow(Option o) {
+        return optionRow(o, this::rebuild);
+    }
+
+    // one option with its control, as the settings show it. changes are saved right away; rebuild runs after a reset
+    static FlowLayout optionRow(Option o, Runnable rebuild) {
         FlowLayout row = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
         row.gap(4);
         row.verticalAlignment(VerticalAlignment.CENTER);
@@ -700,7 +705,7 @@ public final class SettingsPanel {
             UIComponent reset = ui(SbcWidgets.button(Component.literal("↺"), b -> {
                 o.reset();
                 Config.save();
-                rebuild();
+                rebuild.run();
             }));
             reset.tooltip(Component.literal("Back to the default: " + o.def));
             row.child(reset);

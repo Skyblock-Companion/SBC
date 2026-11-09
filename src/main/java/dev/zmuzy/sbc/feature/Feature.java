@@ -133,6 +133,11 @@ public final class Feature {
         return Config.I.features.getOrDefault(id, !defaultOff);
     }
 
+    // the switch lives in a field of its own, so the settings cannot tell a stored choice from the default
+    public boolean ownField() {
+        return getter != null;
+    }
+
     public void setEnabled(boolean v) {
         if (dev.zmuzy.sbc.core.data.RemoteSwitch.keepChoice(id, v)) {
             // held off remotely: the choice gets stored and comes back with the field

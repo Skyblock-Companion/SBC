@@ -271,6 +271,10 @@ public class SbcMod implements ClientModInitializer {
                     Minecraft.getInstance().execute(() -> dev.zmuzy.sbc.ui.screens.SetupScreen.open(null));
                     return 1;
                 }))
+                .then(literal("whatsnew").executes(c -> {
+                    Minecraft.getInstance().execute(() -> dev.zmuzy.sbc.ui.screens.WhatsNewScreen.openLatest(null));
+                    return 1;
+                }))
                 .then(literal("tutorial").executes(c -> {
                     Minecraft.getInstance().execute(() -> dev.zmuzy.sbc.ui.screens.TutorialScreen.open(null));
                     return 1;

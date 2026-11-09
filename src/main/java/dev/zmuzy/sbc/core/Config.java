@@ -101,6 +101,8 @@ public final class Config {
     public boolean loginBriefing = true;
     // setup page was shown + closed, doesnt open by itself again
     public boolean setupDone = false;
+    // the version this player last saw what's new for. empty with setupDone = they came from the first beta
+    public String lastVersion = "";
     // hud editor setup note, "don't show again" ticked. reset layout clears it
     public boolean hudSetupNoteOff = false;
     // start the guided routine by itself the first time you join skyblock each day
