@@ -123,7 +123,7 @@ public final class SbTime {
     @SuppressWarnings("unchecked")
     public static List<Event> events(long now, long horizonMs) {
         Object[] c = eventCache.get(horizonMs);
-        if (c != null && now - (long) c[0] < 1000) return (List<Event>) c[1];
+        if (c != null && Math.abs(now - (long) c[0]) < 1000) return (List<Event>) c[1];
         List<Event> out = compute(now, horizonMs);
         eventCache.put(horizonMs, new Object[]{now, out});
         return out;
