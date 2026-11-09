@@ -144,6 +144,8 @@ public final class WitchIngredients {
     }
 
     static void register() {
+        // a session is one connection: logging in again starts the + counts from nothing, lobbies and islands dont
+        dev.zmuzy.sbc.core.Safe.join("WitchIngredients.newSession", (handler, sender, client) -> GAINED.clear());
         Features.add(new Feature(ID, "Events", "Witch ingredients", "During the Year of the Witch, a card with the ingredients in your sacks and what your kills added this session, so you don't have to open the Witch's Sack.", "")
                 .when(() -> (GameState.inSkyBlock || SbcMod.DEV) && active())
                 .option(Option.bool("witch_ingredients.all", "Every ingredient", "Also the ones you have none of.", false))
