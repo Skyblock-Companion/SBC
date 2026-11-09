@@ -61,6 +61,7 @@ public final class SideHelper {
     private static final int TAB_H = 16, WIDE = 196, NARROWEST = 130, ROW = 22;
     private static final Ui ui = new Ui();
     private static final Accessories ACCESSORIES = new Accessories();
+    private static final Sacks SACKS = new Sacks();
     private static final Pets PETS = new Pets();
     private static final List<java.util.function.Function<Screen, Content>> EXTRA = new ArrayList<>();
 
@@ -88,6 +89,7 @@ public final class SideHelper {
         Content market = MarketPanel.of(title);
         if (market != null) return market;
         if (Features.on("accessory_helper") && Patterns.get("SH.api.accessory.bag.inventory.name").matcher(title.replaceFirst("^\\(\\d+/\\d+\\)\\s*", "")).matches()) return ACCESSORIES;
+        if (Features.on("sack_helper") && title.replaceFirst("^\\(\\d+/\\d+\\)\\s*", "").equals("Sack of Sacks")) return SACKS;
         if (Features.on("pet_helper") && PetMenu.isPetsTitle(title)) return PETS;
         if (Features.on("museum_helper") && dev.zmuzy.sbc.ui.panels.MuseumPanel.isMuseum(title)) return dev.zmuzy.sbc.ui.panels.MuseumPanel.I;
         // the buy list follows you to every other menu while it holds something
@@ -483,6 +485,179 @@ public final class SideHelper {
             if (y == y0) y += emptyText(ui, tab == 0 ? "You have every accessory at its top tier." : "Open your bag once.", x, y, w);
             return y - y0;
         }
+    }
+
+    // --- sack of sacks ---
+
+    // every sack the repo knows, id -> name. built once
+    private static Map<String, String> sackCatalog;
+
+    static Map<String, String> sackCatalog() {
+        if (sackCatalog != null && !sackCatalog.isEmpty()) return sackCatalog;
+        Map<String, String> out = new HashMap<>();
+        for (String id : ItemRepo.ids()) if (dev.zmuzy.sbc.plan.SackHelper.isSack(id, ItemRepo.lore(id))) out.put(id, ItemRepo.name(id));
+        return sackCatalog = out;
+    }
+
+    private static int sackColor(String id) {
+        return ItemList.colorOf(ItemRepo.coloredName(id));
+    }
+
+    // "Capacity: 20,160 of each item" from the sacks lore, "" if it has none
+    private static String capacity(String id) {
+        for (String l : ItemRepo.lore(id)) {
+            String plain = GameState.strip(l);
+            if (plain.startsWith("Capacity")) return plain;
+        }
+        return "";
+    }
+
+    // the api sack of sacks + every sack seen in it, like the accessory bag
+    private static final class Sacks implements Content {
+        private List<dev.zmuzy.sbc.plan.SackHelper.Family> missing = List.of(), owned = List.of();
+        private int families;
+        private double toFinish;
+        private boolean loaded;
+
+        void set(List<dev.zmuzy.sbc.plan.SackHelper.Family> all) {
+            families = all.size();
+            List<dev.zmuzy.sbc.plan.SackHelper.Family> lacking = new ArrayList<>(), have = new ArrayList<>();
+            double cost = 0;
+            for (var f : all) {
+                if (!f.done()) {
+                    lacking.add(f);
+                    cost += accessoryCost(f.top().id());
+                }
+                if (f.owned() >= 0) have.add(f);
+            }
+            // cheapest to finish first, no price at the end
+            lacking.sort(Comparator.<dev.zmuzy.sbc.plan.SackHelper.Family>comparingDouble(f -> {
+                double c = accessoryCost(f.top().id());
+                return c > 0 ? c : Double.MAX_VALUE;
+            }).thenComparing(dev.zmuzy.sbc.plan.SackHelper.Family::name));
+            have.sort(Comparator.<dev.zmuzy.sbc.plan.SackHelper.Family, Boolean>comparing(f -> !f.done()).thenComparing(dev.zmuzy.sbc.plan.SackHelper.Family::name));
+            missing = lacking;
+            owned = have;
+            toFinish = cost;
+            loaded = !all.isEmpty();
+        }
+
+        @Override
+        public String title() {
+            return "Sack Helper";
+        }
+
+        @Override
+        public ItemStack icon() {
+            return ItemInfo.stack("LARGE_AGRONOMY_SACK");
+        }
+
+        @Override
+        public int accent() {
+            return 0xFFD7B98E;
+        }
+
+        @Override
+        public String[] tabs() {
+            return new String[]{"Missing " + missing.size(), "Owned " + owned.size()};
+        }
+
+        @Override
+        public void refresh(AbstractContainerScreen<?> screen) {
+            Map<String, String> known = sackCatalog();
+            boolean grew = false;
+            var inventory = Minecraft.getInstance().player == null ? null : Minecraft.getInstance().player.getInventory();
+            for (var slot : screen.getMenu().slots) {
+                if (slot.container == inventory) continue;
+                String id = Gain.sbId(slot.getItem());
+                if (id.isEmpty() || !known.containsKey(id)) continue;
+                if (Store.I.sacksSeen.add(id)) grew = true;
+            }
+            if (grew) Store.markDirty();
+            set(dev.zmuzy.sbc.plan.SackHelper.families(known, dev.zmuzy.sbc.core.game.GameProfile.ownedSacks(Profile.current)));
+        }
+
+        @Override
+        public int summary(Ui ui, int x, int y, int w) {
+            int half = (w - 3) / 2;
+            long top = owned.stream().filter(dev.zmuzy.sbc.plan.SackHelper.Family::done).count();
+            tile(ui, x, y, half, "Sacks", owned.size() + "/" + families, "", 0xFFD7B98E);
+            tile(ui, x + half + 3, y, w - half - 3, "Biggest size", top + "/" + families, "", Modern.INK);
+            Modern.row(ui, "To finish", missing.isEmpty() ? "§aNothing left" : "§6" + Prices.coins(toFinish), x, y + 26, w, Modern.LABEL, Modern.INK);
+            return 36;
+        }
+
+        private Links links(dev.zmuzy.sbc.plan.SackHelper.Family f) {
+            return new Links() {
+                @Override
+                public int count() {
+                    return f.tiers().size();
+                }
+
+                @Override
+                public ItemStack icon(int i) {
+                    return ItemInfo.stack(f.tiers().get(i).id());
+                }
+
+                @Override
+                public String card(int i) {
+                    return f.tiers().get(i).id();
+                }
+
+                @Override
+                public int color(int i) {
+                    return sackColor(f.tiers().get(i).id());
+                }
+
+                @Override
+                public boolean have(int i) {
+                    return i <= f.owned();
+                }
+
+                @Override
+                public int held() {
+                    return f.owned();
+                }
+
+                @Override
+                public String[] tip(int i) {
+                    var t = f.tiers().get(i);
+                    String head = "§f" + t.name(), size = "§7" + capacity(t.id());
+                    if (i == f.owned()) return new String[]{head, size, "§aYou have this."};
+                    if (i < f.owned()) return new String[]{head, size, "§7You have a bigger one."};
+                    double cost = accessoryCost(t.id());
+                    String tag = market(t.id());
+                    return new String[]{head, size, "§cMissing.", cost > 0 ? "§7Costs §6" + Prices.coins(cost) + (tag.isEmpty() ? "" : " §7" + tag) : "§7No price right now."};
+                }
+            };
+        }
+
+        private int missingRow(Ui ui, dev.zmuzy.sbc.plan.SackHelper.Family f, int x, int y, int w) {
+            var next = f.top();
+            int color = sackColor(next.id());
+            double cost = accessoryCost(next.id());
+            return chain(ui, next.name(), color, cost > 0 ? "§6" + Prices.coins(cost) : "§7no price", color, links(f), x, y, w);
+        }
+
+        private int ownedRow(Ui ui, dev.zmuzy.sbc.plan.SackHelper.Family f, int x, int y, int w) {
+            var best = f.tiers().get(f.owned());
+            int color = sackColor(best.id());
+            return chain(ui, best.name(), color, f.done() ? "§aBiggest" : "§7" + (f.owned() + 1) + "/" + f.tiers().size(), color, links(f), x, y, w);
+        }
+
+        @Override
+        public int list(Ui ui, int tab, int x, int y, int w) {
+            int y0 = y;
+            if (!loaded) return emptyText(ui, "The sack list is still loading.", x, y, w);
+            for (var f : tab == 0 ? missing : owned) y += tab == 0 ? missingRow(ui, f, x, y, w) : ownedRow(ui, f, x, y, w);
+            if (y == y0) y += emptyText(ui, tab == 0 ? "You have every sack at its biggest size." : "Open your Sack of Sacks once.", x, y, w);
+            return y - y0;
+        }
+    }
+
+    static Content sacksFor(List<dev.zmuzy.sbc.plan.SackHelper.Family> all) {
+        SACKS.set(all);
+        return SACKS;
     }
 
     // --- pets menu ---

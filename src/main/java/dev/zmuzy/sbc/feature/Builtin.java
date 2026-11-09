@@ -182,6 +182,8 @@ public final class Builtin {
                 .when(SKYBLOCK));
         Features.add(new Feature("accessory_helper", "Menus", "Accessory helper", "Beside your Accessory Bag, on the other side from the Item List: what to get next for the most Magical Power per coin, and how far your purse gets you. The bag itself stays as it is.", "")
                 .when(SKYBLOCK));
+        Features.add(new Feature("sack_helper", "Menus", "Sack helper", "Beside your Sack of Sacks, on the other side from the Item List: which sacks you are missing, the bigger size of the ones you have, and what finishing them costs. The menu itself stays as it is.", "")
+                .when(SKYBLOCK));
         Features.add(new Feature("pet_helper", "Pets", "Pet helper", "Beside Hypixel's Pets menu, on the other side from the Item List: your Pet Score, the cheapest way to the next Magic Find, which pets to level, and what you are missing. The menu itself stays as it is.", "")
                 .when(SKYBLOCK));
         Features.add(new Feature("inv_search", "Menus", "Inventory search (Ctrl+F)", "Ctrl+F in any chest or inventory opens a search; items that do not match are dimmed, matches get a green edge.", "")

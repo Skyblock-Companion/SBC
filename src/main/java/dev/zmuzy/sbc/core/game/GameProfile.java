@@ -348,6 +348,14 @@ public final class GameProfile {
         return have;
     }
 
+    // the sack of sacks from the api + every sack seen in it
+    public static Set<String> ownedSacks(Profile.Data d) {
+        Set<String> have = new java.util.HashSet<>(Store.I.sacksSeen);
+        List<Profile.Item> bag = d == null ? null : d.inventories.get("Sacks");
+        if (bag != null) for (Profile.Item it : bag) if (it != null && it.sbId() != null && !it.sbId().isEmpty()) have.add(it.sbId());
+        return have;
+    }
+
     private static long powder(Seen s, Live l, String type) {
         long[] heart = s.powder.get(type);
         if (heart != null && heart[0] >= 0 && heart[1] >= 0) return heart[0] + heart[1];

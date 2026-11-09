@@ -495,6 +495,7 @@ public final class Profile {
         decode(d, "Wardrobe", obj(inv, "wardrobe_contents"));
         JsonObject bags = obj(inv, "bag_contents");
         decode(d, "Accessories", obj(bags, "talisman_bag"));
+        decode(d, "Sacks", obj(bags, "sacks_bag"));
         decode(d, "Fishing Bag", obj(bags, "fishing_bag"));
         decode(d, "Quiver", obj(bags, "quiver"));
         decode(d, "Personal Vault", obj(inv, "personal_vault_contents"));

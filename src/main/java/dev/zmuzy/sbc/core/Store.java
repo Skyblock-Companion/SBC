@@ -59,6 +59,8 @@ public final class Store {
     public Map<String, Long> islandTime = new HashMap<>();
     // what the acc bag pages showed, for playing without an api key
     public java.util.Set<String> accessoriesSeen = new java.util.HashSet<>();
+    // every sack seen in the Sack of Sacks, like accessoriesSeen
+    public java.util.Set<String> sacksSeen = new java.util.HashSet<>();
     // maxwell tuning as last seen, one entry per stat with color + icon
     public List<String> statTunings = new ArrayList<>();
     // the stat of each of those, when the menu said it
