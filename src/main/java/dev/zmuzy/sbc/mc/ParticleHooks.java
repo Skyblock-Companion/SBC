@@ -67,11 +67,11 @@ public final class ParticleHooks {
         try {
             Minecraft mc = Minecraft.getInstance();
             if (mc == null || !mc.isSameThread() || mc.player == null) return;
-            var type = p.getParticle().getType();
+            var type = p.particle().getType();
             if (LISTENERS.isEmpty()) return;
             var key = BuiltInRegistries.PARTICLE_TYPE.getKey(type);
-            Particle ev = new Particle(p.getParticle(), key == null ? "" : key.toString(), p.getX(), p.getY(), p.getZ(), p.getCount(), p.getMaxSpeed(),
-                    p.getXDist(), p.getYDist(), p.getZDist(), p.isOverrideLimiter());
+            Particle ev = new Particle(p.particle(), key == null ? "" : key.toString(), p.x(), p.y(), p.z(), p.count(), p.xMaxSpeed(),
+                    p.xDist(), p.yDist(), p.zDist(), p.overrideLimiter());
             for (Named l : LISTENERS) {
                 if (Safe.resting(l.name)) continue;
                 try {

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.item;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.feature.Features;
 import dev.zmuzy.sbc.mc.mixin.ContainerAccess;
@@ -16,7 +17,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -149,37 +149,37 @@ public final class InventorySearch {
     // keys while a container is open. false = eat the key
     public static boolean key(Screen s, int key, int modifiers) {
         if (!applies(s)) return true;
-        boolean ctrl = (modifiers & GLFW.GLFW_MOD_CONTROL) != 0;
-        if (ctrl && key == (optOn("inv_search.ctrlK") ? GLFW.GLFW_KEY_K : GLFW.GLFW_KEY_F)) {
+        boolean ctrl = (modifiers & InputConstants.MOD_CONTROL) != 0;
+        if (ctrl && key == (optOn("inv_search.ctrlK") ? InputConstants.KEY_K : InputConstants.KEY_F)) {
             open = !open;
             if (open) histPos = -1;
             return false;
         }
         if (!open) return true;
         switch (key) {
-            case GLFW.GLFW_KEY_ESCAPE -> {
+            case InputConstants.KEY_ESCAPE -> {
                 open = false;
                 return false;
             }
-            case GLFW.GLFW_KEY_BACKSPACE -> {
+            case InputConstants.KEY_BACKSPACE -> {
                 if (!query.isEmpty()) query = query.substring(0, query.length() - 1);
                 return false;
             }
-            case GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER -> {
+            case InputConstants.KEY_RETURN, InputConstants.KEY_NUMPADENTER -> {
                 if (!query.isBlank() && !query.equals(history.peekFirst())) {
                     history.addFirst(query);
                     while (history.size() > 20) history.removeLast();
                 }
                 return false;
             }
-            case GLFW.GLFW_KEY_UP, GLFW.GLFW_KEY_DOWN -> {
+            case InputConstants.KEY_UP, InputConstants.KEY_DOWN -> {
                 if (history.isEmpty()) return false;
-                histPos = Math.max(0, Math.min(history.size() - 1, histPos + (key == GLFW.GLFW_KEY_UP ? 1 : -1)));
+                histPos = Math.max(0, Math.min(history.size() - 1, histPos + (key == InputConstants.KEY_UP ? 1 : -1)));
                 query = (String) history.toArray()[histPos];
                 return false;
             }
             default -> {
-                return key == GLFW.GLFW_KEY_LEFT_SHIFT || key == GLFW.GLFW_KEY_RIGHT_SHIFT || key == GLFW.GLFW_KEY_LEFT_CONTROL;
+                return key == InputConstants.KEY_LSHIFT || key == InputConstants.KEY_RSHIFT || key == InputConstants.KEY_LCONTROL;
             }
         }
     }

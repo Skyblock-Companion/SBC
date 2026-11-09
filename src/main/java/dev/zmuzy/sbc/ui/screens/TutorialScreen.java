@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.ui.screens;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.ui.KeyNames;
 import dev.zmuzy.sbc.ui.Ui;
 import dev.zmuzy.sbc.ui.layout.Color;
@@ -17,7 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
@@ -211,14 +211,14 @@ public final class TutorialScreen extends SbcScreen {
 
     @Override
     public boolean keyPressed(KeyEvent e) {
-        if (e.key() == GLFW.GLFW_KEY_ESCAPE) {
+        if (e.key() == InputConstants.KEY_ESCAPE) {
             onClose();
             return true;
         }
         if (step >= STEPS.size()) return super.keyPressed(e);
         int k = e.key();
-        if (k == GLFW.GLFW_KEY_LEFT_ALT || k == GLFW.GLFW_KEY_RIGHT_ALT || k == GLFW.GLFW_KEY_LEFT_SHIFT || k == GLFW.GLFW_KEY_RIGHT_SHIFT
-                || k == GLFW.GLFW_KEY_LEFT_CONTROL || k == GLFW.GLFW_KEY_RIGHT_CONTROL) return true;
+        if (k == InputConstants.KEY_LALT || k == InputConstants.KEY_RALT || k == InputConstants.KEY_LSHIFT || k == InputConstants.KEY_RSHIFT
+                || k == InputConstants.KEY_LCONTROL || k == InputConstants.KEY_RCONTROL) return true;
         Step s = STEPS.get(step);
         if (!pressed(s, KeyNames.binding(s.binding()), e)) {
             note = "Not that one: press " + keyName(s) + ".";

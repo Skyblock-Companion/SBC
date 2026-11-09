@@ -25,8 +25,8 @@ public abstract class WorldHideBlockBreakMixin {
         }
     }
 
-    @Inject(method = "addBreakingBlockEffect", at = @At("HEAD"), cancellable = true, require = 0)
-    private void sbc$breaking(BlockPos pos, Direction direction, CallbackInfo ci) {
+    @Inject(method = "addBreakingBlockEffects", at = @At("HEAD"), cancellable = true, require = 0)
+    private void sbc$breaking(BlockPos pos, Direction direction, boolean sound, CallbackInfo ci) {
         if (Safe.resting("WorldHideBlockBreakMixin.breaking")) return;
         try {
             if (dev.zmuzy.sbc.world.WorldHiders.hideBlockBreak()) ci.cancel();

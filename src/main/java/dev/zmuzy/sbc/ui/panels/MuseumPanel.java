@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni, Skyblocker; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.ui.panels;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.core.ItemInfo;
 import dev.zmuzy.sbc.core.ItemRepo;
@@ -21,7 +22,6 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -283,9 +283,9 @@ public final class MuseumPanel implements SideHelper.Content {
     // false = swallow the key
     static boolean key(AbstractContainerScreen<?> s, KeyEvent event) {
         if (focused) {
-            if (event.key() == GLFW.GLFW_KEY_BACKSPACE) {
+            if (event.key() == InputConstants.KEY_BACKSPACE) {
                 if (!query.isEmpty()) query = query.substring(0, query.length() - 1);
-            } else if (event.key() == GLFW.GLFW_KEY_ESCAPE || event.key() == GLFW.GLFW_KEY_ENTER) focused = false;
+            } else if (event.key() == InputConstants.KEY_ESCAPE || event.key() == InputConstants.KEY_RETURN) focused = false;
             return false;
         }
         return hovered == null || System.currentTimeMillis() - hoveredAt > 200 || !dev.zmuzy.sbc.ui.UiFeatures.keyOver(s, hovered, event);

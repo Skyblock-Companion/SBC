@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of Modern Warp Menu; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.ui.screens;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.feature.Features;
 import dev.zmuzy.sbc.ui.layout.FlowLayout;
@@ -25,7 +26,6 @@ import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix3x2fStack;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -418,7 +418,7 @@ public final class WarpScreen extends SbcScreen {
 
         @Override
         public boolean onMouseDown(MouseButtonEvent e, boolean doubleClick) {
-            if (e.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return true;
+            if (e.button() != InputConstants.MOUSE_BUTTON_LEFT) return true;
             for (ScaleButton b : children.reversed()) {
                 if (b.isMouseOver(e.x(), e.y())) {
                     SbcWidgets.clickSound();
@@ -445,7 +445,7 @@ public final class WarpScreen extends SbcScreen {
         if (Util.getMillis() <= warpFailTooltipExpiryTime && warpFailMessage != null) {
             List<ClientTooltipComponent> tooltip = List.of(ClientTooltipComponent.create(Component.literal(warpFailMessage).withStyle(ChatFormatting.RED).getVisualOrderText()));
             g.nextStratum();
-            g.tooltip(font, tooltip, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+            g.tooltip(font, tooltip, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null, true);
         }
     }
 
@@ -470,11 +470,11 @@ public final class WarpScreen extends SbcScreen {
 
     @Override
     public boolean keyPressed(KeyEvent e) {
-        if (e.key() == GLFW.GLFW_KEY_ESCAPE || minecraft.options.keyInventory.matches(e)) {
+        if (e.key() == InputConstants.KEY_ESCAPE || minecraft.options.keyInventory.matches(e)) {
             onClose();
             return true;
         }
-        if (e.key() == GLFW.GLFW_KEY_TAB) {
+        if (e.key() == InputConstants.KEY_TAB) {
             showChest();
             return true;
         }

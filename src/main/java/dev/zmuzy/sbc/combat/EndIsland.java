@@ -23,7 +23,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -234,7 +234,7 @@ public final class EndIsland {
         }
     }
 
-    private static boolean isZealot(EnderMan e) {
+    private static boolean isZealot(Enderman e) {
         var level = Minecraft.getInstance().level;
         return level != null && !level.getEntitiesOfClass(ArmorStand.class, e.getBoundingBox().inflate(1), a -> a.getName().getString().toLowerCase(Locale.ROOT).contains("zealot")).isEmpty();
     }
@@ -243,7 +243,7 @@ public final class EndIsland {
         if (mc.player == null || mc.level == null) return;
         if (mc.player.tickCount % 10 == 0) readFight(mc);
         if (mc.player.tickCount % 2 == 0 && !hitZealots.isEmpty()) {
-            for (EnderMan e : mc.level.getEntitiesOfClass(EnderMan.class, mc.player.getBoundingBox().inflate(16), x -> hitZealots.contains(x.getUUID()))) {
+            for (Enderman e : mc.level.getEntitiesOfClass(Enderman.class, mc.player.getBoundingBox().inflate(16), x -> hitZealots.contains(x.getUUID()))) {
                 if (e.getHealth() > 0 && e.isAlive()) continue;
                 hitZealots.remove(e.getUUID());
                 CombatData d = CombatData.get();
@@ -256,7 +256,7 @@ public final class EndIsland {
     }
 
     private static void onAttack(net.minecraft.world.entity.Entity e) {
-        if (Combat.island("THE_END") && e instanceof EnderMan m && isZealot(m)) hitZealots.add(m.getUUID());
+        if (Combat.island("THE_END") && e instanceof Enderman m && isZealot(m)) hitZealots.add(m.getUUID());
     }
 
     // from skyblocker EndStatsBestiaryUpdater

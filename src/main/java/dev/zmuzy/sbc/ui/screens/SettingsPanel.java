@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.ui.screens;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.Config;
 import dev.zmuzy.sbc.core.LegacyItems;
 import dev.zmuzy.sbc.feature.Feature;
@@ -30,7 +31,6 @@ import dev.zmuzy.sbc.ui.layout.UIComponent;
 import dev.zmuzy.sbc.ui.layout.VerticalAlignment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -281,7 +281,7 @@ public final class SettingsPanel {
             }
         });
         row.mouseDown().subscribe((click, doubled) -> {
-            if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return false;
+            if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return false;
             SbcWidgets.clickSound();
             section = module;
             buildSections();

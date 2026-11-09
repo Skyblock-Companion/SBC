@@ -88,7 +88,7 @@ public abstract class TooltipMixin extends Screen {
                 for (ClientTooltipComponent c : comps) w = Math.max(w, c.getWidth(f));
                 TooltipScroll.lastWidth = w + 8;
                 // drawn at the very end of the frame like vanilla tooltips, over the item list, buttons, everything
-                ((GuiGraphicsAccessor) g).sbc$tooltipLast(f, comps, mouseX + dx, mouseY, TooltipScroll.positioner(dy), FancyTooltip.style(), true);
+                ((GuiGraphicsAccessor) g).sbc$tooltipLast(f, comps, mouseX + dx, mouseY, TooltipScroll.positioner(dy), FancyTooltip.style(), true, true);
                 ci.cancel();
                 return;
             }
@@ -106,7 +106,7 @@ public abstract class TooltipMixin extends Screen {
                 TooltipScroll.lastWidth = w + 8;
                 // taller than the screen: vanilla would pin the bottom to the screen and drop the scroll, so we place it here
                 if (dy != 0 || dx != 0 || TooltipScroll.tall(g.guiHeight())) {
-                    ((GuiGraphicsAccessor) g).sbc$tooltipLast(f, plain, mouseX + dx, mouseY, TooltipScroll.positioner(dy), st.get(DataComponents.TOOLTIP_STYLE), true);
+                    ((GuiGraphicsAccessor) g).sbc$tooltipLast(f, plain, mouseX + dx, mouseY, TooltipScroll.positioner(dy), st.get(DataComponents.TOOLTIP_STYLE), true, true);
                     ci.cancel();
                 }
             }

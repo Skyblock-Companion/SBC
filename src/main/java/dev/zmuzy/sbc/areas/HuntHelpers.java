@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni and Skyblocker; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.areas;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.SbcMod;
 import dev.zmuzy.sbc.chat.ChatBus;
 import dev.zmuzy.sbc.core.Gain;
@@ -645,7 +646,7 @@ public final class HuntHelpers {
     }
 
     private static KeyMapping key(String name, KeyMapping.Category category) {
-        return KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion." + name, com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, org.lwjgl.glfw.GLFW.GLFW_KEY_UNKNOWN, category));
+        return KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion." + name, InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
     }
 
     public static void register() {

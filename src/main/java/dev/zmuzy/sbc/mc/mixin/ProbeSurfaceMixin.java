@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.mojang.blaze3d.systems.GpuSurface;
+import com.mojang.renderpearl.frontend.FrontendGpuSurface;
 
 // /sbc perf record: the frame handed to the graphics card
-@Mixin(GpuSurface.class)
+@Mixin(FrontendGpuSurface.class)
 public abstract class ProbeSurfaceMixin {
     @Inject(method = "present", at = @At("HEAD"), require = 0)
     private void sbc$presentIn(CallbackInfo ci) {

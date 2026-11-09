@@ -17,14 +17,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 // there, each channel inverted lol. off unless asked
 @Mixin(ClientboundLevelParticlesPacket.class)
 public abstract class ParticleColorMixin {
-    @Inject(method = "getParticle", at = @At("RETURN"), cancellable = true, require = 0)
+    @Inject(method = "particle", at = @At("RETURN"), cancellable = true, require = 0)
     @SuppressWarnings("unchecked")
     private void sbc$colour(CallbackInfoReturnable<ParticleOptions> cir) {
         if (Safe.resting("ParticleColorMixin.colour")) return;
         try {
             if (!(cir.getReturnValue() instanceof ColorParticleOption option) || !dev.zmuzy.sbc.misc.SmallMisc.fixParticles()) return;
             ClientboundLevelParticlesPacket self = (ClientboundLevelParticlesPacket) (Object) this;
-            cir.setReturnValue(ColorParticleOption.create((ParticleType<ColorParticleOption>) option.getType(), ARGB.colorFromFloat(option.getAlpha(), 1 - self.getXDist(), 1 - self.getYDist(), 1 - self.getZDist())));
+            cir.setReturnValue(ColorParticleOption.create((ParticleType<ColorParticleOption>) option.getType(), ARGB.colorFromFloat(option.getAlpha(), 1 - self.xDist(), 1 - self.yDist(), 1 - self.zDist())));
         } catch (Throwable t) {
             Safe.caught("ParticleColorMixin.colour", t);
         }

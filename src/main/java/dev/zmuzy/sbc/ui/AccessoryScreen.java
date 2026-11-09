@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.ui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.AuctionPrices;
 import dev.zmuzy.sbc.core.ItemInfo;
 import dev.zmuzy.sbc.core.ItemRepo;
@@ -14,7 +15,6 @@ import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -210,7 +210,7 @@ public final class AccessoryScreen extends Screen {
 
     private boolean hasShiftDown() {
         long win = minecraft.getWindow().handle();
-        return GLFW.glfwGetKey(win, GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS || GLFW.glfwGetKey(win, GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS;
+        return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT) || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
     }
 
     private void clickSlot(int slot, int button) {
@@ -314,7 +314,7 @@ public final class AccessoryScreen extends Screen {
         for (int i = ui.hits.size() - 1; i >= 0; i--) {
             Ui.Hit hit = ui.hits.get(i);
             if (mx < hit.x() || my < hit.y() || mx >= hit.x() + hit.w() || my >= hit.y() + hit.h()) continue;
-            Runnable r = e.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && hit.right() != null ? hit.right() : hit.click();
+            Runnable r = e.button() == InputConstants.MOUSE_BUTTON_RIGHT && hit.right() != null ? hit.right() : hit.click();
             if (r == null) continue;
             typing = false;
             r.run();
@@ -341,11 +341,11 @@ public final class AccessoryScreen extends Screen {
     @Override
     public boolean keyPressed(KeyEvent e) {
         if (typing) {
-            if (e.key() == GLFW.GLFW_KEY_BACKSPACE && !query.isEmpty()) query = query.substring(0, query.length() - 1);
-            else if (e.key() == GLFW.GLFW_KEY_ENTER || e.key() == GLFW.GLFW_KEY_ESCAPE) typing = false;
+            if (e.key() == InputConstants.KEY_BACKSPACE && !query.isEmpty()) query = query.substring(0, query.length() - 1);
+            else if (e.key() == InputConstants.KEY_RETURN || e.key() == InputConstants.KEY_ESCAPE) typing = false;
             return true;
         }
-        if (e.key() == GLFW.GLFW_KEY_TAB) {
+        if (e.key() == InputConstants.KEY_TAB) {
             classic();
             return true;
         }

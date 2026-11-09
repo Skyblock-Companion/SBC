@@ -579,8 +579,8 @@ public final class FishCards {
     };
 
     private static boolean totemParticle(net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket p) {
-        if (allTotems.isEmpty() || !on(TOTEM, "hide_particles") || p.getParticle().getType() != net.minecraft.core.particles.ParticleTypes.WITCH || p.getMaxSpeed() != 0f) return false;
-        Vec3 at = new Vec3(p.getX(), p.getY(), p.getZ());
+        if (allTotems.isEmpty() || !on(TOTEM, "hide_particles") || p.particle().getType() != net.minecraft.core.particles.ParticleTypes.WITCH || p.xMaxSpeed() != 0f) return false;
+        Vec3 at = new Vec3(p.x(), p.y(), p.z());
         for (Totem t : allTotems) if (t.at().distanceTo(at) < 4) return true;
         return false;
     }

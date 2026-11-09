@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityHideMixin {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true, require = 0)
-    private void sbc$hide(Entity entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
+    private void sbc$hide(Entity entity, Frustum frustum, double x, double y, double z, float partialTick, CallbackInfoReturnable<Boolean> cir) {
         if (Safe.resting("EntityHideMixin.hide")) return;
         try {
             if (dev.zmuzy.sbc.mc.EntityTickCache.test(dev.zmuzy.sbc.mc.EntityTickCache.HIDE, entity, e -> dev.zmuzy.sbc.mc.EmptyStands.hidden(e) || dev.zmuzy.sbc.misc.FireFreeze.hidden(e) || dev.zmuzy.sbc.dungeon.DungeonObjects.hidden(e)

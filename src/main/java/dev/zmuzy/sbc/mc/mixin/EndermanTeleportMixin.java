@@ -3,7 +3,7 @@
 package dev.zmuzy.sbc.mc.mixin;
 
 import dev.zmuzy.sbc.core.Safe;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 // from skyhanni MixinEnderMan + MiscFeatures.onEndermanTeleport: the clients own guess of an enderman
 // teleporting. optional, if it fails they jump around like normal
-@Mixin(EnderMan.class)
+@Mixin(Enderman.class)
 public abstract class EndermanTeleportMixin {
     @Inject(method = "teleport(DDD)Z", at = @At("HEAD"), cancellable = true, require = 0)
     private void sbc$teleport(double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {

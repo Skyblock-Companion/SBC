@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.ui.panels;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.authlib.GameProfile;
 import dev.zmuzy.sbc.SbcMod;
 import dev.zmuzy.sbc.core.Config;
@@ -86,7 +87,7 @@ public final class CustomWardrobe {
     private CustomWardrobe() {}
 
     static void register(KeyMapping.Category cat) {
-        tooltipKey = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.wardrobe_tooltip", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT, cat));
+        tooltipKey = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.wardrobe_tooltip", InputConstants.Type.KEYBOARD, InputConstants.KEY_LSHIFT, cat));
         Features.add(new Feature(ID, "Menus", "Custom Wardrobe", "All your wardrobe sets on one screen, each a player wearing it, in place of Hypixel's Armor Sets menu. Click one to wear it, or to go to its page. Favourites and hiding of empty or locked slots. It replaces the menu, so it starts off.", "SkyHanni: custom wardrobe")
                 .defaultOff().when(() -> GameState.inSkyBlock || SbcMod.DEV)
                 .option(Option.bool("custom_wardrobe.hideEmptySlots", "Hide empty slots", "Hide wardrobe slots with no armor.", false))
@@ -516,7 +517,7 @@ public final class CustomWardrobe {
 
         @Override
         public boolean mouseClicked(MouseButtonEvent e, boolean doubled) {
-            if (e.button() != 0) return true;
+            if (e.button() != com.mojang.blaze3d.platform.InputConstants.MOUSE_BUTTON_LEFT) return true;
             for (int i = ui.hits.size() - 1; i >= 0; i--) {
                 Ui.Hit hit = ui.hits.get(i);
                 if (e.x() < hit.x() || e.y() < hit.y() || e.x() >= hit.x() + hit.w() || e.y() >= hit.y() + hit.h() || hit.click() == null) continue;

@@ -15,15 +15,15 @@ public class CursorAdapter {
 
     // the one line to the window. tests put a listener here, the game is the default
     interface Window {
-        long createCursor(int glfwShape);
+        long createCursor(int shape);
 
         void setCursor(long cursor);
     }
 
     private static final Window GAME_WINDOW = new Window() {
         @Override
-        public long createCursor(int glfwShape) {
-            return GameLink.createCursor(glfwShape);
+        public long createCursor(int shape) {
+            return GameLink.createCursor(shape);
         }
 
         @Override
@@ -54,7 +54,7 @@ public class CursorAdapter {
         if (style == CursorStyle.NONE) {
             this.window.setCursor(0);
         } else {
-            this.window.setCursor(this.cursors.computeIfAbsent(style, s -> this.window.createCursor(s.glfw)));
+            this.window.setCursor(this.cursors.computeIfAbsent(style, s -> this.window.createCursor(s.shape)));
         }
         this.lastCursorStyle = style;
     }

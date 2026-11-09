@@ -291,7 +291,7 @@ public final class GardenPlotInfo {
     }
 
     public static void keys(KeyMapping.Category category) {
-        borderKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.plot_border", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), category));
+        borderKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.plot_border", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
     }
 
     public static void register() {

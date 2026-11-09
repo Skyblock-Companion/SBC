@@ -92,7 +92,7 @@ public class UIGraphics extends GuiGraphicsExtractor {
     }
 
     public void drawTooltip(Font textRenderer, int x, int y, List<ClientTooltipComponent> components) {
-        this.tooltip(textRenderer, components, x, y, DefaultTooltipPositioner.INSTANCE, null);
+        this.tooltip(textRenderer, components, x, y, DefaultTooltipPositioner.INSTANCE, null, true);
     }
 
     @Override

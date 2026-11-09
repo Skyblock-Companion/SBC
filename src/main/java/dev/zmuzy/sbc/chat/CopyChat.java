@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.chat;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.core.LegacyText;
 import dev.zmuzy.sbc.core.Safe;
@@ -20,7 +21,6 @@ import net.minecraft.client.renderer.state.gui.GuiTextRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import org.joml.Matrix3x2f;
-import org.lwjgl.glfw.GLFW;
 
 // from skyhanni CopyChat: right click a chat line to copy it. ctrl = only the row under the mouse, alt = with
 // colour codes
@@ -34,7 +34,7 @@ public final class CopyChat {
         Safe.afterInit("CopyChat.afterInit", (client, screen, w, h) -> {
             if (!(screen instanceof ChatScreen)) return;
             Safe.allowMouseClick("CopyChat.allowMouseClick", screen, (s, event) -> {
-                if (event.button() != GLFW.GLFW_MOUSE_BUTTON_RIGHT || !Features.on("chat_copy")) return true;
+                if (event.button() != InputConstants.MOUSE_BUTTON_RIGHT || !Features.on("chat_copy")) return true;
                 copyAt(event);
                 return true;
             });

@@ -62,9 +62,9 @@ public final class AreaHooks {
         if (!inRift && !inCrimson) return false;
         if (!Minecraft.getInstance().isSameThread()) return false;
         if (inCrimson) return Ashfang.hidesParticles();
-        var key = BuiltInRegistries.PARTICLE_TYPE.getKey(p.getParticle().getType());
+        var key = BuiltInRegistries.PARTICLE_TYPE.getKey(p.particle().getType());
         String type = key == null ? "" : key.getPath();
-        double x = p.getX(), y = p.getY(), z = p.getZ();
+        double x = p.x(), y = p.y(), z = p.z();
         return RiftMotesOrb.hides(type, x, y, z) || RiftDreadfarm.hidesParticle(type, x, y, z) || RiftLivingCave.hidesParticle(type, x, y, z);
     }
 

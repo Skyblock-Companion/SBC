@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -33,14 +33,14 @@ public final class EndermanSlayer {
     public static final String BEACONS = "void_beacons", NUKEKUBI = "void_nukekubi", PARTICLES = "void_hide_particles";
     private static final long BEACON_MS = 5000;
 
-    private static final List<EnderMan> carrying = new ArrayList<>();
+    private static final List<Enderman> carrying = new ArrayList<>();
     private static final Map<ArmorStand, List<Vec3>> flying = new HashMap<>();
     private static final Map<BlockPos, Long> sitting = new HashMap<>();
     private static final Set<ArmorStand> skulls = new HashSet<>();
 
     private EndermanSlayer() {}
 
-    private static boolean hasBeacon(EnderMan e) {
+    private static boolean hasBeacon(Enderman e) {
         var b = e.getCarriedBlock();
         return b != null && b.is(Blocks.BEACON);
     }
@@ -57,7 +57,7 @@ public final class EndermanSlayer {
         AABB around = mc.player.getBoundingBox().inflate(32);
         if (mc.player.tickCount % 2 == 0) {
             if (beacons) {
-                for (EnderMan e : mc.level.getEntitiesOfClass(EnderMan.class, around, EndermanSlayer::hasBeacon))
+                for (Enderman e : mc.level.getEntitiesOfClass(Enderman.class, around, EndermanSlayer::hasBeacon))
                     if (!carrying.contains(e) && nearEnough(e)) carrying.add(e);
                 carrying.removeIf(e -> !e.isAlive() || !hasBeacon(e));
             }
@@ -118,7 +118,7 @@ public final class EndermanSlayer {
         boolean highlight = Combat.opt(BEACONS, "highlight"), line = Combat.opt(BEACONS, "line");
         int color = Combat.color(BEACONS, "color", 0xFFFF0058), lineColor = Combat.color(BEACONS, "line_color", 0xFFFF0058);
         float width = Combat.integer(BEACONS, "line_width", 3);
-        if (highlight) for (EnderMan e : carrying) w.filledBox(new AABB(BlockPos.containing(e.position().add(-0.5, 0.2, -0.5))), color & 0xFFFFFF, 0.5f, true);
+        if (highlight) for (Enderman e : carrying) w.filledBox(new AABB(BlockPos.containing(e.position().add(-0.5, 0.2, -0.5))), color & 0xFFFFFF, 0.5f, true);
         long now = System.currentTimeMillis();
         for (var e : sitting.entrySet()) {
             Vec3 at = Vec3.atLowerCornerOf(e.getKey());
@@ -172,7 +172,7 @@ public final class EndermanSlayer {
         CombatMarks.particles(() -> Features.on(PARTICLES), (type, x, y, z) -> {
             if (!type.equals("large_smoke") && !type.equals("flame") && !type.equals("witch")) return false;
             var level = Minecraft.getInstance().level;
-            return level != null && !level.getEntitiesOfClass(EnderMan.class, new AABB(x - 3, y - 3, z - 3, x + 3, y + 3, z + 3)).isEmpty();
+            return level != null && !level.getEntitiesOfClass(Enderman.class, new AABB(x - 3, y - 3, z - 3, x + 3, y + 3, z + 3)).isEmpty();
         });
     }
 }

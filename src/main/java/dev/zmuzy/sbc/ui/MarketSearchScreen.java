@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.ui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.AuctionPrices;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.core.ItemIcons;
@@ -17,7 +18,6 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -52,7 +52,8 @@ public final class MarketSearchScreen extends Screen {
     private boolean wheeled;
     // the sign hypixel opened behind the Search button, it gets the answer instead of a command
     private net.minecraft.world.level.block.entity.SignBlockEntity sign;
-    private boolean signFront, museum;
+    private net.minecraft.world.level.block.entity.SignTextSlot signFront = net.minecraft.world.level.block.entity.SignTextSlot.FRONT;
+    private boolean museum;
     private boolean maxPetLevel;
     private int dungeonStars;
     private List<Cand> history = List.of();
@@ -81,11 +82,11 @@ public final class MarketSearchScreen extends Screen {
     }
 
     // a search sign over ah / bz / museum opens this instead
-    public static boolean onSign(net.minecraft.world.level.block.entity.SignBlockEntity sign, boolean front) {
+    public static boolean onSign(net.minecraft.world.level.block.entity.SignBlockEntity sign, net.minecraft.world.level.block.entity.SignTextSlot front) {
         Minecraft mc = Minecraft.getInstance();
         Screen open = mc.gui.screen();
         if (open == null || !dev.zmuzy.sbc.feature.Features.on("market_search")) return false;
-        if (!sign.getText(front).getMessage(3, false).getString().equalsIgnoreCase("enter query")) return false;
+        if (!sign.getText(front).getMessages(false).get(3).getString().equalsIgnoreCase("enter query")) return false;
         String title = open.getTitle().getString();
         int mode;
         boolean museum = false;
@@ -100,9 +101,9 @@ public final class MarketSearchScreen extends Screen {
         s.signFront = front;
         s.museum = museum;
         if (on("market_search.keepPrevious", false)) {
-            net.minecraft.network.chat.Component[] messages = sign.getText(front).getMessages(mc.isTextFilteringEnabled());
-            String search = messages[0].getString();
-            if (!messages[1].getString().isEmpty()) search += (search.endsWith(" ") ? "" : " ") + messages[1].getString();
+            java.util.List<net.minecraft.network.chat.Component> messages = sign.getText(front).getMessages(mc.isTextFilteringEnabled());
+            String search = messages.get(0).getString();
+            if (!messages.get(1).getString().isEmpty()) search += (search.endsWith(" ") ? "" : " ") + messages.get(1).getString();
             s.query.append(search);
         }
         mc.gui.setScreen(s);
@@ -170,8 +171,8 @@ public final class MarketSearchScreen extends Screen {
         String[] split = splitString(text);
         var net = mc.getConnection();
         if (net != null && sign != null) {
-            net.minecraft.network.chat.Component[] messages = sign.getText(signFront).getMessages(mc.isTextFilteringEnabled());
-            net.send(new net.minecraft.network.protocol.game.ServerboundSignUpdatePacket(sign.getBlockPos(), signFront, split[0], split[1], messages[2].getString(), messages[3].getString()));
+            java.util.List<net.minecraft.network.chat.Component> messages = sign.getText(signFront).getMessages(mc.isTextFilteringEnabled());
+            net.send(new net.minecraft.network.protocol.game.ServerboundSignUpdatePacket(sign.getBlockPos(), java.util.List.of(split[0], split[1], messages.get(2).getString(), messages.get(3).getString()), signFront));
         }
         sign = null;
         mc.gui.setScreen(null);
@@ -575,7 +576,7 @@ public final class MarketSearchScreen extends Screen {
         for (int i = ui.hits.size() - 1; i >= 0; i--) {
             Ui.Hit h = ui.hits.get(i);
             if (e.x() < h.x() || e.y() < h.y() || e.x() >= h.x() + h.w() || e.y() >= h.y() + h.h()) continue;
-            Runnable r = e.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && h.right() != null ? h.right() : h.click();
+            Runnable r = e.button() == InputConstants.MOUSE_BUTTON_RIGHT && h.right() != null ? h.right() : h.click();
             if (r != null) {
                 r.run();
                 return true;
@@ -602,28 +603,28 @@ public final class MarketSearchScreen extends Screen {
     @Override
     public boolean keyPressed(KeyEvent e) {
         int k = e.key();
-        if (k == GLFW.GLFW_KEY_ESCAPE) {
+        if (k == InputConstants.KEY_ESCAPE) {
             onClose();
             return true;
         }
-        if (k == GLFW.GLFW_KEY_BACKSPACE && query.length() > 0) {
+        if (k == InputConstants.KEY_BACKSPACE && query.length() > 0) {
             query.setLength(query.length() - 1);
             return true;
         }
-        if (k == GLFW.GLFW_KEY_DOWN) {
+        if (k == InputConstants.KEY_DOWN) {
             sel = Math.max(0, Math.min((results.size()) - 1, sel + 1));
             return true;
         }
-        if (k == GLFW.GLFW_KEY_UP) {
+        if (k == InputConstants.KEY_UP) {
             sel = Math.max(0, sel - 1);
             return true;
         }
-        if (k == GLFW.GLFW_KEY_TAB) {
+        if (k == InputConstants.KEY_TAB) {
             mode = (mode + 1) % 3;
             shownFor = null;
             return true;
         }
-        if (k == GLFW.GLFW_KEY_ENTER || k == GLFW.GLFW_KEY_KP_ENTER) {
+        if (k == InputConstants.KEY_RETURN || k == InputConstants.KEY_NUMPADENTER) {
             if (!results.isEmpty() && sel < results.size()) run(results.get(sel), false);
             else if (query.length() > 0) answer(query.toString(), mode == 1);
             return true;

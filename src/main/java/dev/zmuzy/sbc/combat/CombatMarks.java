@@ -96,10 +96,10 @@ public final class CombatMarks {
     public static boolean hidesParticle(ClientboundLevelParticlesPacket p) {
         if (!anyParticle) return false;
         try {
-            var key = BuiltInRegistries.PARTICLE_TYPE.getKey(p.getParticle().getType());
+            var key = BuiltInRegistries.PARTICLE_TYPE.getKey(p.particle().getType());
             if (key == null) return false;
             String type = key.getPath();
-            for (ParticleEntry e : PARTICLES) if (e.active().getAsBoolean() && e.rule().hides(type, p.getX(), p.getY(), p.getZ())) return true;
+            for (ParticleEntry e : PARTICLES) if (e.active().getAsBoolean() && e.rule().hides(type, p.x(), p.y(), p.z())) return true;
         } catch (Throwable ignored) {
         }
         return false;

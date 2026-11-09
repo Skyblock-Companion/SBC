@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.ui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.Config;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.core.Store;
@@ -13,7 +14,6 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
@@ -212,7 +212,7 @@ public final class MissionScreen extends Screen {
 
     @Override
     public boolean keyPressed(net.minecraft.client.input.KeyEvent e) {
-        if (e.key() == GLFW.GLFW_KEY_K) {
+        if (e.key() == InputConstants.KEY_K) {
             onClose();
             return true;
         }

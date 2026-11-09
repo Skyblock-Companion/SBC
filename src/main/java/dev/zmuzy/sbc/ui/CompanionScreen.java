@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.ui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.SbcMod;
 import dev.zmuzy.sbc.core.Config;
 import dev.zmuzy.sbc.core.GameState;
@@ -44,7 +45,6 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -224,7 +224,7 @@ public final class CompanionScreen extends SbcScreen {
             if (open) g.fill(x, y, x + 2, y + h, accent);
         });
         row.mouseDown().subscribe((click, doubled) -> {
-            if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return false;
+            if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return false;
             UISounds.playInteractionSound();
             goTo(index);
             return true;
@@ -265,7 +265,7 @@ public final class CompanionScreen extends SbcScreen {
             if (c.isInBoundingBox(mouseOnCanvasX(), mouseOnCanvasY())) g.fill(c.x(), c.y(), c.x() + c.width(), c.y() + c.height(), 0x14FFFFFF);
         });
         row.mouseDown().subscribe((click, doubled) -> {
-            if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return false;
+            if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return false;
             UISounds.playInteractionSound();
             dev.zmuzy.sbc.ui.screens.CreditsScreen.open(this);
             return true;
@@ -668,7 +668,7 @@ public final class CompanionScreen extends SbcScreen {
             screenUi.flushTooltip();
         } else if (tipped != null) {
             g.nextStratum();
-            g.tooltip(minecraft.font, tipped.tooltip(), mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+            g.tooltip(minecraft.font, tipped.tooltip(), mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null, true);
         }
     }
 
@@ -730,8 +730,8 @@ public final class CompanionScreen extends SbcScreen {
             return true;
         }
         if (this.uiAdapter.keyPressed(e)) return true;
-        if (!typing && (e.key() == GLFW.GLFW_KEY_DOWN || e.key() == GLFW.GLFW_KEY_UP)) {
-            int step = e.key() == GLFW.GLFW_KEY_DOWN ? 1 : -1;
+        if (!typing && (e.key() == InputConstants.KEY_DOWN || e.key() == InputConstants.KEY_UP)) {
+            int step = e.key() == InputConstants.KEY_DOWN ? 1 : -1;
             // same order as the sidebar
             int at = 0;
             for (int i = 0; i < TAB_ORDER.length; i++) if (TAB_ORDER[i] == page) at = i;

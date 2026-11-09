@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.ui.screens;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.Config;
 import dev.zmuzy.sbc.ui.Ui;
 import dev.zmuzy.sbc.ui.layout.BaseUIComponent;
 import dev.zmuzy.sbc.ui.layout.UIGraphics;
 import dev.zmuzy.sbc.ui.layout.Sizing;
 import net.minecraft.client.input.MouseButtonEvent;
-import org.lwjgl.glfw.GLFW;
 
 // component painted by our own Ui renderer. thats how the old pages (routine, planner, maps, profile...) live
 // inside the component screens: tree does layout, Ui paints
@@ -64,7 +64,7 @@ public class UiComponent extends BaseUIComponent {
                 dragging.at(mx, my);
                 return true;
             }
-            Runnable r = e.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && h.right() != null ? h.right() : h.click();
+            Runnable r = e.button() == InputConstants.MOUSE_BUTTON_RIGHT && h.right() != null ? h.right() : h.click();
             if (r != null) {
                 r.run();
                 Config.save();

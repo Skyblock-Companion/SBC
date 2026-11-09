@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.pets;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.zmuzy.sbc.combat.Combat;
@@ -167,8 +168,8 @@ public final class PetExtras {
     private static void expTooltip(ItemStack stack, List<Component> tip) {
         Feature f = Features.get(TOOLTIP);
         Minecraft mc = Minecraft.getInstance();
-        boolean shift = com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT)
-                || com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_SHIFT);
+        boolean shift = InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)
+                || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
         if (!shift && !f.option("pet_xp_tooltip.always").bool()) return;
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         if (data == null) return;

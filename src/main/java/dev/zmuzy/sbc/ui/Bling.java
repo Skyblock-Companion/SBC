@@ -2,7 +2,7 @@
 package dev.zmuzy.sbc.ui;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.DynamicTexture;

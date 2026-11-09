@@ -54,7 +54,7 @@ public final class MoreCommands {
     private static int wiki(String search) {
         Minecraft mc = Minecraft.getInstance();
         String url = search.isBlank() ? dev.zmuzy.sbc.web.WebPage.WIKI : searchUrl(search);
-        mc.execute(() -> net.minecraft.util.Util.getPlatform().openUri(java.net.URI.create(url)));
+        mc.execute(() -> com.mojang.blaze3d.Blaze3D.openUri(java.net.URI.create(url)));
         return 1;
     }
 

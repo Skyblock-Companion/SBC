@@ -39,7 +39,7 @@ public final class UpdateScreen extends SbcScreen {
 
     // opens a link in the browser, they pressed the button for it
     public static void openLink(String url) {
-        net.minecraft.util.Util.getPlatform().openUri(java.net.URI.create(url));
+        com.mojang.blaze3d.Blaze3D.openUri(java.net.URI.create(url));
     }
 
     @Override

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.ui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.ui.theme.Modern;
 import dev.zmuzy.sbc.ui.theme.Theme;
@@ -14,7 +15,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.ItemStack;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -230,7 +230,7 @@ public final class RadialScreen extends Screen {
             if ((e.x() - s.x) * (e.x() - s.x) + (e.y() - s.y) * (e.y() - s.y) >= (TILE / 2) * (TILE / 2)) continue;
             if (minecraft.gameMode == null || minecraft.player == null) return true;
             minecraft.player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.35f, 1.25f);
-            minecraft.gameMode.handleContainerInput(menu.containerId, s.slot, e.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT ? 1 : 0, ContainerInput.PICKUP, minecraft.player);
+            minecraft.gameMode.handleContainerInput(menu.containerId, s.slot, e.button() == InputConstants.MOUSE_BUTTON_RIGHT ? 1 : 0, ContainerInput.PICKUP, minecraft.player);
             return true;
         }
         return super.mouseClicked(e, doubleClick);
@@ -238,7 +238,7 @@ public final class RadialScreen extends Screen {
 
     @Override
     public boolean keyPressed(KeyEvent e) {
-        if (e.key() == GLFW.GLFW_KEY_ESCAPE || (dev.zmuzy.sbc.SbcMod.radialKey != null && dev.zmuzy.sbc.SbcMod.radialKey.matches(e))) {
+        if (e.key() == InputConstants.KEY_ESCAPE || (dev.zmuzy.sbc.SbcMod.radialKey != null && dev.zmuzy.sbc.SbcMod.radialKey.matches(e))) {
             minecraft.gui.setScreen(parent);
             return true;
         }

@@ -4,15 +4,14 @@ package dev.zmuzy.sbc.item.menus;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.glfw.GLFW;
 
 // is a key down rn, also with a screen open where KeyMapping state doesnt move
 final class Keys {
     private Keys() {}
 
-    static boolean down(int glfwKey) {
+    static boolean down(int key) {
         try {
-            return glfwKey > 0 && InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), glfwKey);
+            return key > 0 && InputConstants.isKeyDown(key);
         } catch (Throwable t) {
             return false;
         }
@@ -25,9 +24,9 @@ final class Keys {
     // a setting that names a modifier
     static boolean modifier(String name) {
         return switch (name) {
-            case "Ctrl" -> down(GLFW.GLFW_KEY_LEFT_CONTROL) || down(GLFW.GLFW_KEY_RIGHT_CONTROL);
-            case "Alt" -> down(GLFW.GLFW_KEY_LEFT_ALT) || down(GLFW.GLFW_KEY_RIGHT_ALT);
-            default -> down(GLFW.GLFW_KEY_LEFT_SHIFT) || down(GLFW.GLFW_KEY_RIGHT_SHIFT);
+            case "Ctrl" -> down(InputConstants.KEY_LCONTROL) || down(InputConstants.KEY_RCONTROL);
+            case "Alt" -> down(InputConstants.KEY_LALT) || down(InputConstants.KEY_RALT);
+            default -> down(InputConstants.KEY_LSHIFT) || down(InputConstants.KEY_RSHIFT);
         };
     }
 }

@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni, Skyblocker; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.item;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.feature.Features;
 import dev.zmuzy.sbc.ui.Ui;
@@ -13,7 +14,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.ItemStack;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -29,7 +29,7 @@ public final class WardrobeKeys {
     private static final Pattern WARDROBE = Pattern.compile("^(?:\\(\\d+/\\d+\\) )?(Armor Sets|Equipment Sets)$");
     private static final Pattern LOADOUTS = Pattern.compile("^(?:\\(\\d+/\\d+\\) )?(Loadouts)$");
     private static final Ui ui = new Ui();
-    private static final int[] DEFAULTS = {GLFW.GLFW_KEY_1, GLFW.GLFW_KEY_2, GLFW.GLFW_KEY_3, GLFW.GLFW_KEY_4, GLFW.GLFW_KEY_5, GLFW.GLFW_KEY_6, GLFW.GLFW_KEY_7, GLFW.GLFW_KEY_8, GLFW.GLFW_KEY_9, GLFW.GLFW_KEY_0, GLFW.GLFW_KEY_MINUS, GLFW.GLFW_KEY_EQUAL};
+    private static final int[] DEFAULTS = {InputConstants.KEY_1, InputConstants.KEY_2, InputConstants.KEY_3, InputConstants.KEY_4, InputConstants.KEY_5, InputConstants.KEY_6, InputConstants.KEY_7, InputConstants.KEY_8, InputConstants.KEY_9, InputConstants.KEY_0, InputConstants.KEY_MINUS, InputConstants.KEY_EQUALS};
     private static final net.minecraft.client.KeyMapping[] KEYS = new net.minecraft.client.KeyMapping[12];
     private static long lastClick;
     private WardrobeKeys() {}
@@ -37,7 +37,7 @@ public final class WardrobeKeys {
     // 12 keys like skyblockers: 1-9, 0, minus, equals. only do anything inside these menus
     public static void registerKeys(net.minecraft.client.KeyMapping.Category cat) {
         for (int i = 0; i < KEYS.length; i++)
-            KEYS[i] = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping(new net.minecraft.client.KeyMapping(String.format(Locale.ROOT, "key.sbcompanion.loadout_%02d", i + 1), com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, DEFAULTS[i], cat));
+            KEYS[i] = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping(new net.minecraft.client.KeyMapping(String.format(Locale.ROOT, "key.sbcompanion.loadout_%02d", i + 1), InputConstants.Type.KEYBOARD, DEFAULTS[i], cat));
     }
 
     private static String title(Screen s) {

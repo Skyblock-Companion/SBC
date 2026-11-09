@@ -127,7 +127,7 @@ public final class PestTraps {
     }
 
     public static void keys(KeyMapping.Category category) {
-        releaseKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.pest_trap_release", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), category));
+        releaseKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.pest_trap_release", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
     }
 
     // PestTrapApi.inventoryNames

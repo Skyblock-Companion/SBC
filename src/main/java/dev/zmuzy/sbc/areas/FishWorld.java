@@ -280,10 +280,10 @@ public final class FishWorld {
 
     private static boolean geyserParticle(ClientboundLevelParticlesPacket p) {
         if (!Features.on(GEYSER) || !"CRIMSON_ISLE".equals(GameState.island) || !"Blazing Volcano".equals(GameState.area)) return false;
-        if (p.getParticle().getType() != ParticleTypes.CLOUD || p.getCount() != 15 || p.getMaxSpeed() != 0.05f) return false;
-        if (p.getXDist() != 0.1f || p.getYDist() != 0.6f || p.getZDist() != 0.1f) return false;
-        geyser = new Vec3(p.getX(), p.getY(), p.getZ());
-        geyserBox = new AABB(p.getX() - 2, 118 - 0.1, p.getZ() - 2, p.getX() + 2, 118 - 0.09, p.getZ() + 2);
+        if (p.particle().getType() != ParticleTypes.CLOUD || p.count() != 15 || p.xMaxSpeed() != 0.05f) return false;
+        if (p.xDist() != 0.1f || p.yDist() != 0.6f || p.zDist() != 0.1f) return false;
+        geyser = new Vec3(p.x(), p.y(), p.z());
+        geyserBox = new AABB(p.x() - 2, 118 - 0.1, p.z() - 2, p.x() + 2, 118 - 0.09, p.z() + 2);
         Minecraft mc = Minecraft.getInstance();
         if (!opt(GEYSER, "hide_particles") || mc.player == null || mc.player.fishing == null) return false;
         return mc.player.fishing.position().distanceTo(geyser) < 3;
@@ -334,12 +334,12 @@ public final class FishWorld {
     // --- skyhanni FlamingFlayHider ---
 
     private static boolean flayParticle(ClientboundLevelParticlesPacket p) {
-        if (!Features.on("fishing_flay") || p.getParticle().getType() != ParticleTypes.DUST || p.getCount() != 0 || p.getMaxSpeed() != 1f) return false;
+        if (!Features.on("fishing_flay") || p.particle().getType() != ParticleTypes.DUST || p.count() != 0 || p.xMaxSpeed() != 1f) return false;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return false;
         double max = Features.get("fishing_flay").option("fishing_flay.distance").number();
-        if (mc.player.position().distanceToSqr(p.getX(), p.getY(), p.getZ()) > max * max) return false;
-        double x = p.getXDist(), y = p.getYDist(), z = p.getZDist();
+        if (mc.player.position().distanceToSqr(p.x(), p.y(), p.z()) > max * max) return false;
+        double x = p.xDist(), y = p.yDist(), z = p.zDist();
         return (x == 1 && y == 1 && z == 0) || (x == 1 && y == 0 && z == 0)
                 || (x == 0.23137255012989044 && y == 0.05098039284348488 && z == 0.0313725508749485)
                 || (x == 0.003921568859368563 && y == 0.003921568859368563 && z == 0.003921568859368563);

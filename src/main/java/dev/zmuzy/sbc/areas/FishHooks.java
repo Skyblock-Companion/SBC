@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.areas;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.GameState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -173,10 +174,10 @@ public final class FishHooks {
     public static boolean held(net.minecraft.client.KeyMapping key) {
         if (key == null) return false;
         Minecraft mc = Minecraft.getInstance();
-        com.mojang.blaze3d.platform.InputConstants.Key k = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.getBoundKeyOf(key);
-        if (k.getValue() == com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue()) return false;
-        if (k.getType() == com.mojang.blaze3d.platform.InputConstants.Type.MOUSE) return org.lwjgl.glfw.GLFW.glfwGetMouseButton(mc.getWindow().handle(), k.getValue()) == org.lwjgl.glfw.GLFW.GLFW_PRESS;
-        return com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), k.getValue());
+        InputConstants.Key k = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.getBoundKeyOf(key);
+        if (k.getValue() == InputConstants.UNKNOWN.getValue()) return false;
+        if (k.getType() == InputConstants.Type.MOUSE) return dev.zmuzy.sbc.mc.KeyHeld.mouseDown(k.getValue());
+        return InputConstants.isKeyDown(k.getValue());
     }
 
     // from skyhanni TitleManager.sendTitle

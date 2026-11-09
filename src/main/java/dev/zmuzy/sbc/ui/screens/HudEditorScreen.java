@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.ui.screens;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.Config;
 import dev.zmuzy.sbc.ui.HudGroups;
 import dev.zmuzy.sbc.ui.HudLayout;
@@ -25,7 +26,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 import java.util.Locale;
@@ -76,12 +76,12 @@ public final class HudEditorScreen extends SbcScreen {
 
     private static boolean shift() {
         long w = Minecraft.getInstance().getWindow().handle();
-        return GLFW.glfwGetKey(w, GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS || GLFW.glfwGetKey(w, GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS;
+        return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT) || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
     }
 
     private static boolean ctrl() {
         long w = Minecraft.getInstance().getWindow().handle();
-        return GLFW.glfwGetKey(w, GLFW.GLFW_KEY_LEFT_CONTROL) == GLFW.GLFW_PRESS || GLFW.glfwGetKey(w, GLFW.GLFW_KEY_RIGHT_CONTROL) == GLFW.GLFW_PRESS;
+        return InputConstants.isKeyDown(InputConstants.KEY_LCONTROL) || InputConstants.isKeyDown(InputConstants.KEY_RCONTROL);
     }
 
     static UIComponent ui(Object vanillaBased) {
@@ -120,7 +120,7 @@ public final class HudEditorScreen extends SbcScreen {
             for (int i = all.size() - 1; i >= 0; i--) {
                 HudLayout.Placed p = all.get(i);
                 if (!p.contains(e.x(), e.y())) continue;
-                if (e.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+                if (e.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
                     menuFor = p.id;
                     menuX = (int) e.x();
                     menuY = (int) e.y();
@@ -982,7 +982,7 @@ public final class HudEditorScreen extends SbcScreen {
     @Override
     public boolean keyPressed(KeyEvent e) {
         int k = e.key();
-        if (k == GLFW.GLFW_KEY_ESCAPE) {
+        if (k == InputConstants.KEY_ESCAPE) {
             if (!menuFor.isEmpty()) {
                 closeMenu();
                 return true;
@@ -990,11 +990,11 @@ public final class HudEditorScreen extends SbcScreen {
             onClose();
             return true;
         }
-        if (k == GLFW.GLFW_KEY_P && !typing()) {
+        if (k == InputConstants.KEY_P && !typing()) {
             togglePanel();
             return true;
         }
-        if (ctrl() && k == GLFW.GLFW_KEY_Z) {
+        if (ctrl() && k == InputConstants.KEY_Z) {
             if (shift()) HudPresets.redo();
             else HudPresets.undo();
             rebuildSide();
@@ -1005,16 +1005,16 @@ public final class HudEditorScreen extends SbcScreen {
             int step = shift() ? 5 : 1;
             boolean handled = true;
             switch (k) {
-                case GLFW.GLFW_KEY_LEFT -> HudLayout.pin(p.id, p.x - step, p.y);
-                case GLFW.GLFW_KEY_RIGHT -> HudLayout.pin(p.id, p.x + step, p.y);
-                case GLFW.GLFW_KEY_UP -> HudLayout.pin(p.id, p.x, p.y - step);
-                case GLFW.GLFW_KEY_DOWN -> HudLayout.pin(p.id, p.x, p.y + step);
-                case GLFW.GLFW_KEY_DELETE, GLFW.GLFW_KEY_R -> {
+                case InputConstants.KEY_LEFT -> HudLayout.pin(p.id, p.x - step, p.y);
+                case InputConstants.KEY_RIGHT -> HudLayout.pin(p.id, p.x + step, p.y);
+                case InputConstants.KEY_UP -> HudLayout.pin(p.id, p.x, p.y - step);
+                case InputConstants.KEY_DOWN -> HudLayout.pin(p.id, p.x, p.y + step);
+                case InputConstants.KEY_DELETE, InputConstants.KEY_R -> {
                     HudLayout.reset(p.id);
                     ElementStyle.reset(p.id);
                 }
-                case GLFW.GLFW_KEY_EQUAL, GLFW.GLFW_KEY_KP_ADD -> HudLayout.setScale(p.id, HudLayout.scaleOf(p.id) + 0.05f);
-                case GLFW.GLFW_KEY_MINUS, GLFW.GLFW_KEY_KP_SUBTRACT -> HudLayout.setScale(p.id, HudLayout.scaleOf(p.id) - 0.05f);
+                case InputConstants.KEY_EQUALS, InputConstants.KEY_ADD -> HudLayout.setScale(p.id, HudLayout.scaleOf(p.id) + 0.05f);
+                case InputConstants.KEY_MINUS, org.lwjgl.sdl.SDLScancode.SDL_SCANCODE_KP_MINUS -> HudLayout.setScale(p.id, HudLayout.scaleOf(p.id) - 0.05f);
                 default -> handled = false;
             }
             if (handled) {

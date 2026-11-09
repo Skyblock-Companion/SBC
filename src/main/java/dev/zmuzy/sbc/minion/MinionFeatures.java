@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.minion;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.google.gson.JsonObject;
 import dev.zmuzy.sbc.chat.ChatBus;
 import dev.zmuzy.sbc.combat.Combat;
@@ -500,8 +501,8 @@ public final class MinionFeatures {
 
     private static boolean ctrl() {
         Minecraft mc = Minecraft.getInstance();
-        return com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL)
-                || com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_CONTROL);
+        return InputConstants.isKeyDown(InputConstants.KEY_LCONTROL)
+                || InputConstants.isKeyDown(InputConstants.KEY_RCONTROL);
     }
 
     private static boolean infernoClick(AbstractContainerScreen<?> screen, Slot slot, int slotId, int button) {

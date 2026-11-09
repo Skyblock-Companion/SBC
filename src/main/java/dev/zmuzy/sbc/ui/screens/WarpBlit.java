@@ -2,10 +2,10 @@
 // Changed in 2026 from code or data of Modern Warp Menu; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.ui.screens;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.FilterMode;
-import com.mojang.blaze3d.textures.GpuTextureView;
+import com.mojang.renderpearl.api.textures.FilterMode;
+import com.mojang.renderpearl.api.textures.GpuTextureView;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.zmuzy.sbc.mc.mixin.GuiGraphicsAccessor;
 import net.minecraft.client.Minecraft;

@@ -23,7 +23,7 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.monster.Blaze;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.Giant;
 import net.minecraft.world.entity.monster.Guardian;
@@ -403,7 +403,7 @@ public final class DamageIndicator {
             return null;
         }
         if (e instanceof MagmaCube) return n.equals("Magma Boss") ? new Found(BossType.NETHER_MAGMA_BOSS, true, 0, false) : null;
-        if (e instanceof EnderMan) {
+        if (e instanceof Enderman) {
             if (!n.equals("Voidgloom Seraph")) return null;
             return switch (tier) {
                 case 1 -> new Found(BossType.SLAYER_ENDERMAN_1);

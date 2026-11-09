@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of Skyblocker; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.ui.panels;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.Config;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.core.LegacyItems;
@@ -20,7 +21,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
@@ -133,7 +133,7 @@ public final class GardenPlotsPanel {
             dragging = false;
             return;
         }
-        if (GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().handle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) != GLFW.GLFW_PRESS) {
+        if (!dev.zmuzy.sbc.mc.KeyHeld.mouseDown(InputConstants.MOUSE_BUTTON_LEFT)) {
             dragging = false;
             Config.save();
             return;

@@ -172,17 +172,17 @@ public final class WorldHiders {
         if (!anyPacket) return false;
         Minecraft mc = Minecraft.getInstance();
         if (!mc.isSameThread() || mc.player == null || mc.level == null) return false;
-        var type = p.getParticle().getType();
-        double dx = p.getX() - mc.player.getX(), dy = p.getY() - mc.player.getY(), dz = p.getZ() - mc.player.getZ();
+        var type = p.particle().getType();
+        double dx = p.x() - mc.player.getX(), dy = p.y() - mc.player.getY(), dz = p.z() - mc.player.getZ();
         double d2 = dx * dx + dy * dy + dz * dz;
         if (farParticles && d2 > 40 * 40 && !m7Boss()) return true;
         if (redstone && type == ParticleTypes.DUST && d2 < 2 * 2) return true;
         boolean smokes = type == ParticleTypes.SMOKE || type == ParticleTypes.LARGE_SMOKE;
         if (smoke && smokes) return true;
-        if (fireball && smokes && !mc.level.getEntitiesOfClass(SmallFireball.class, new AABB(p.getX() - 5, p.getY() - 5, p.getZ() - 5, p.getX() + 5, p.getY() + 5, p.getZ() + 5)).isEmpty()) return true;
+        if (fireball && smokes && !mc.level.getEntitiesOfClass(SmallFireball.class, new AABB(p.x() - 5, p.y() - 5, p.z() - 5, p.x() + 5, p.y() + 5, p.z() + 5)).isEmpty()) return true;
         if (explosions && (type == ParticleTypes.EXPLOSION || type == ParticleTypes.EXPLOSION_EMITTER || type == ParticleTypes.POOF) && !chickenRace()) return true;
         if (lesser && type == ParticleTypes.DUST) {
-            for (ArmorStand st : lesserAt) if (st.distanceToSqr(p.getX(), p.getY(), p.getZ()) < 4 * 4) return true;
+            for (ArmorStand st : lesserAt) if (st.distanceToSqr(p.x(), p.y(), p.z()) < 4 * 4) return true;
         }
         return false;
     }

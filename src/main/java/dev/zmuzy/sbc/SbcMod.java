@@ -29,7 +29,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,41 +106,42 @@ public class SbcMod implements ClientModInitializer {
         KeyMapping.Category cat = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("sbcompanion", "main"));
         dev.zmuzy.sbc.chat.PartyCommands.keys(cat);
         dev.zmuzy.sbc.commands.CommandPack.keys(cat);
-        openKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.open", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, cat));
-        zoomIn = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.zoom_in", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_KP_ADD, cat));
-        zoomOut = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.zoom_out", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_KP_SUBTRACT, cat));
-        warpKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.warp", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, cat));
-        mapKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.map", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_N, cat));
-        lockKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.lock", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_L, cat));
-        protectKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.protect", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, cat));
-        sackKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.sack", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, cat));
-        storageKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.storage", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, cat));
-        hudEditKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.hudedit", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, cat));
-        marketKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.market", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Y, cat));
+        openKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.open", InputConstants.Type.KEYBOARD, InputConstants.KEY_K, cat));
+        zoomIn = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.zoom_in", InputConstants.Type.KEYBOARD, InputConstants.KEY_ADD, cat));
+        zoomOut = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.zoom_out", InputConstants.Type.KEYBOARD, org.lwjgl.sdl.SDLScancode.SDL_SCANCODE_KP_MINUS, cat));
+        warpKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.warp", InputConstants.Type.KEYBOARD, InputConstants.KEY_J, cat));
+        mapKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.map", InputConstants.Type.KEYBOARD, InputConstants.KEY_N, cat));
+        lockKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.lock", InputConstants.Type.KEYBOARD, InputConstants.KEY_L, cat));
+        protectKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.protect", InputConstants.Type.KEYBOARD, InputConstants.KEY_V, cat));
+        sackKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.sack", InputConstants.Type.KEYBOARD, InputConstants.KEY_G, cat));
+        storageKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.storage", InputConstants.Type.KEYBOARD, InputConstants.KEY_B, cat));
+        hudEditKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.hudedit", InputConstants.Type.KEYBOARD, InputConstants.KEY_H, cat));
+        marketKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.market", InputConstants.Type.KEYBOARD, InputConstants.KEY_Y, cat));
         dev.zmuzy.sbc.item.market.BuyKey.keys(cat);
-        peekKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.peek", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_GRAVE_ACCENT, cat));
-        radialKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.radial", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_U, cat));
+        peekKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.peek", InputConstants.Type.KEYBOARD, InputConstants.KEY_GRAVE, cat));
+        radialKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.radial", InputConstants.Type.KEYBOARD, InputConstants.KEY_U, cat));
         int unbound = InputConstants.UNKNOWN.getValue();
-        dianaWarpKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.diana_warp", InputConstants.Type.KEYSYM, unbound, cat));
-        hoppityLiveKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.hoppity_live", InputConstants.Type.KEYSYM, unbound, cat));
-        corpseShareKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_corpse", InputConstants.Type.KEYSYM, unbound, cat));
-        rareMobShareKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_rare_mob", InputConstants.Type.KEYSYM, unbound, cat));
-        vanquisherShareKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_vanquisher", InputConstants.Type.KEYSYM, unbound, cat));
-        mineshaftTypeKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_mineshaft", InputConstants.Type.KEYSYM, unbound, cat));
-        underbidKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.copy_underbid", InputConstants.Type.KEYSYM, unbound, cat));
-        dev.zmuzy.sbc.dungeon.DungeonChests.favoriteKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.chest_favorite", InputConstants.Type.KEYSYM, unbound, cat));
+        dianaWarpKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.diana_warp", InputConstants.Type.KEYBOARD, unbound, cat));
+        hoppityLiveKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.hoppity_live", InputConstants.Type.KEYBOARD, unbound, cat));
+        corpseShareKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_corpse", InputConstants.Type.KEYBOARD, unbound, cat));
+        rareMobShareKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_rare_mob", InputConstants.Type.KEYBOARD, unbound, cat));
+        vanquisherShareKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_vanquisher", InputConstants.Type.KEYBOARD, unbound, cat));
+        mineshaftTypeKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_mineshaft", InputConstants.Type.KEYBOARD, unbound, cat));
+        underbidKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.copy_underbid", InputConstants.Type.KEYBOARD, unbound, cat));
+        dev.zmuzy.sbc.dungeon.DungeonChests.favoriteKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.chest_favorite", InputConstants.Type.KEYBOARD, unbound, cat));
         dev.zmuzy.sbc.item.menus.Menus.keys(cat);
         dev.zmuzy.sbc.garden.GardenHelpers.keys(cat);
         dev.zmuzy.sbc.garden.GardenPack.keys(cat);
         dev.zmuzy.sbc.crimson.Crimson.keys(cat);
         dev.zmuzy.sbc.misc.MiscPack.keys(cat);
-        dev.zmuzy.sbc.ui.UiFeatures.wikiKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.wiki_lookup", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F1, cat));
-        dev.zmuzy.sbc.ui.UiFeatures.priceKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.price_lookup", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F6, cat));
-        dev.zmuzy.sbc.item.tooltip.FancyTooltip.plainKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.plain_tooltip", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, cat));
+        dev.zmuzy.sbc.ui.UiFeatures.wikiKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.wiki_lookup", InputConstants.Type.KEYBOARD, InputConstants.KEY_F1, cat));
+        dev.zmuzy.sbc.ui.UiFeatures.priceKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.price_lookup", InputConstants.Type.KEYBOARD, InputConstants.KEY_F6, cat));
+        dev.zmuzy.sbc.item.tooltip.FancyTooltip.plainKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.plain_tooltip", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), cat));
 
 
         Safe.endTick("SbcMod.tick", this::tick);
         Safe.startTick("KeyClashes.settle", mc -> dev.zmuzy.sbc.mc.KeyClashes.settle(mc, lockKey));
+        dev.zmuzy.sbc.mc.TextInput.register();
         // extra tooltip lines from any feature show in vanilla inventories and our own pages the same
         Safe.tooltip("SbcMod.tooltip", (stack, ctx, flag, lines) -> dev.zmuzy.sbc.feature.Features.tooltip(stack, lines));
         // our pages open inside a host screen (host owns the window, the page is one component)
@@ -180,7 +180,7 @@ public class SbcMod implements ClientModInitializer {
                 overlaysDrawn = false;
             });
             Safe.allowMouseClick("SbcMod.allowMouseClick", screen, (s, event) ->
-                    dev.zmuzy.sbc.ui.ItemList.click(s, event.x(), event.y(), event.button()) && dev.zmuzy.sbc.ui.panels.Panels.click(s, event) && dev.zmuzy.sbc.ui.SideHelper.click(s, event.x(), event.y(), event.button()) && dev.zmuzy.sbc.item.QuickNav.click(s, event.x(), event.y(), event.button()));
+                    dev.zmuzy.sbc.ui.ItemList.click(s, event.x(), event.y(), dev.zmuzy.sbc.mc.KeyHeld.clickButton(event.button())) && dev.zmuzy.sbc.ui.panels.Panels.click(s, event) && dev.zmuzy.sbc.ui.SideHelper.click(s, event.x(), event.y(), dev.zmuzy.sbc.mc.KeyHeld.clickButton(event.button())) && dev.zmuzy.sbc.item.QuickNav.click(s, event.x(), event.y(), dev.zmuzy.sbc.mc.KeyHeld.clickButton(event.button())));
             Safe.allowMouseScroll("SbcMod.allowMouseScroll", screen, (s, smx, smy, sh, sv) ->
                     dev.zmuzy.sbc.ui.SideHelper.scroll(s, smx, smy, sv) && dev.zmuzy.sbc.ui.ItemList.scroll(s, smx, smy, sv) && !dev.zmuzy.sbc.item.menus.MenuExtras.scroll(s, sv));
             Safe.allowCharType("SbcMod.allowCharType", screen, (s, event) ->
@@ -197,7 +197,7 @@ public class SbcMod implements ClientModInitializer {
                 if (!dev.zmuzy.sbc.garden.pests.PestTraps.key(s, event)) return false;
                 if (dev.zmuzy.sbc.ui.UiFeatures.key(cs, event)) return false;
                 if (!dev.zmuzy.sbc.item.market.BuyKey.key(s, event)) return false;
-                if (!dev.zmuzy.sbc.ui.ItemList.key(s, event.key(), (event.modifiers() & GLFW.GLFW_MOD_SHIFT) != 0)) return false;
+                if (!dev.zmuzy.sbc.ui.ItemList.key(s, event.key(), (event.modifiers() & InputConstants.MOD_SHIFT) != 0)) return false;
                 if (dev.zmuzy.sbc.feature.Features.on("market_search") && marketKey.matches(event) && dev.zmuzy.sbc.ui.MarketSearchScreen.isMarketTitle(cs.getTitle().getString())) {
                     Minecraft.getInstance().gui.setScreen(new dev.zmuzy.sbc.ui.MarketSearchScreen(cs, dev.zmuzy.sbc.ui.MarketSearchScreen.modeFor(cs.getTitle().getString())));
                     return false;
@@ -209,7 +209,7 @@ public class SbcMod implements ClientModInitializer {
                 if (dev.zmuzy.sbc.feature.Features.on("gfs_key") && sackKey.matches(event)) {
                     var hovered = ((dev.zmuzy.sbc.mc.mixin.ContainerAccess) cs).sbc$hovered();
                     if (hovered != null) {
-                        dev.zmuzy.sbc.item.GetFromSack.press(hovered, (event.modifiers() & GLFW.GLFW_MOD_SHIFT) != 0);
+                        dev.zmuzy.sbc.item.GetFromSack.press(hovered, (event.modifiers() & InputConstants.MOD_SHIFT) != 0);
                         return false;
                     }
                 }
@@ -241,8 +241,8 @@ public class SbcMod implements ClientModInitializer {
             dev.zmuzy.sbc.item.tooltip.TooltipScroll.reset();
             Safe.allowMouseScroll("SbcMod.allowMouseScroll#2", screen, (s, mx, my, hAmount, vAmount) -> {
                 long win = client.getWindow().handle();
-                boolean shift = org.lwjgl.glfw.GLFW.glfwGetKey(win, org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT) == org.lwjgl.glfw.GLFW.GLFW_PRESS
-                        || org.lwjgl.glfw.GLFW.glfwGetKey(win, org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_SHIFT) == org.lwjgl.glfw.GLFW.GLFW_PRESS;
+                boolean shift = InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)
+                        || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
                 return dev.zmuzy.sbc.item.tooltip.TooltipScroll.onScroll(s, vAmount, shift);
             });
         });
@@ -348,7 +348,7 @@ public class SbcMod implements ClientModInitializer {
                     }
                     String url = dev.zmuzy.sbc.web.WebPage.WIKI + "/w/" + name.trim().replace(' ', '_');
                     // the in game browser takes over here when its on (OpenUriMixin)
-                    mc.execute(() -> net.minecraft.util.Util.getPlatform().openUri(java.net.URI.create(url)));
+                    mc.execute(() -> com.mojang.blaze3d.Blaze3D.openUri(java.net.URI.create(url)));
                     return 1;
                 }))
                 .then(literal("perf").then(literal("record").executes(c -> record(60))
@@ -547,8 +547,8 @@ public class SbcMod implements ClientModInitializer {
         while (openKey.consumeClick()) {
             if (mc.gui.screen() != null) continue;
             // alt+K opens the small mission card, K alone the full menu
-            boolean alt = com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), GLFW.GLFW_KEY_LEFT_ALT)
-                    || com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), GLFW.GLFW_KEY_RIGHT_ALT);
+            boolean alt = InputConstants.isKeyDown(InputConstants.KEY_LALT)
+                    || InputConstants.isKeyDown(InputConstants.KEY_RALT);
             mc.gui.setScreen(alt ? new dev.zmuzy.sbc.ui.MissionScreen() : new CompanionScreen());
         }
         if (openNextTick && mc.gui.screen() == null) {
@@ -588,7 +588,7 @@ public class SbcMod implements ClientModInitializer {
             Config.keysToMove = false;
             // protection has V now, the radial menu moves off it if thats where it was saved
             if (radialKey.saveString().equals("key.keyboard.v")) {
-                radialKey.setKey(InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_U));
+                radialKey.setKey(InputConstants.Type.KEYBOARD.getOrCreate(InputConstants.KEY_U));
                 KeyMapping.resetMapping();
                 mc.options.save();
             }

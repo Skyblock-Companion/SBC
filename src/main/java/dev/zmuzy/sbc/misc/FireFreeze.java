@@ -131,12 +131,12 @@ public final class FireFreeze {
     // ParticleMixin calls this: hypixels dust ring under a custom circle + the fire veil flames
     public static boolean hidesParticle(ClientboundLevelParticlesPacket p) {
         if (!GameState.inSkyBlock) return false;
-        if (veilLine() && System.currentTimeMillis() - lastVeil <= 5500 && p.getParticle().getType() == ParticleTypes.FLAME && p.getMaxSpeed() == 0.55f) return true;
+        if (veilLine() && System.currentTimeMillis() - lastVeil <= 5500 && p.particle().getType() == ParticleTypes.FLAME && p.xMaxSpeed() == 0.55f) return true;
         if (AREAS.isEmpty() || !customCircle()) return false;
-        if (p.getParticle().getType() != ParticleTypes.DUST || p.getCount() != 0 || p.getMaxSpeed() != 1.0f) return false;
-        if (p.getXDist() != (float) PARTICLE_OFFSET || p.getYDist() != (float) PARTICLE_OFFSET || p.getZDist() != (float) PARTICLE_OFFSET) return false;
+        if (p.particle().getType() != ParticleTypes.DUST || p.count() != 0 || p.xMaxSpeed() != 1.0f) return false;
+        if (p.xDist() != (float) PARTICLE_OFFSET || p.yDist() != (float) PARTICLE_OFFSET || p.zDist() != (float) PARTICLE_OFFSET) return false;
         long now = System.currentTimeMillis();
-        Vec3 at = new Vec3(p.getX(), p.getY(), p.getZ());
+        Vec3 at = new Vec3(p.x(), p.y(), p.z());
         for (Area a : AREAS.values()) if (!a.finished(now) && a.inside(at, 0.5)) return true;
         return false;
     }

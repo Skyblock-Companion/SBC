@@ -31,7 +31,7 @@ public final class ItemTips {
         if (FancyTooltip.active()) {
             List<ClientTooltipComponent> comps = FancyTooltip.build(stack, lines);
             if (comps != null) {
-                ((GuiGraphicsAccessor) g).sbc$tooltipLast(mc.font, comps, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, FancyTooltip.style(), true);
+                ((GuiGraphicsAccessor) g).sbc$tooltipLast(mc.font, comps, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, FancyTooltip.style(), true, true);
                 return;
             }
         }

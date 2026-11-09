@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.ui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.Config;
 import dev.zmuzy.sbc.web.Html;
 import dev.zmuzy.sbc.web.WebPage;
@@ -14,7 +15,6 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -575,7 +575,7 @@ public final class BrowserScreen extends Screen {
 
     private boolean ctrlDown() {
         long window = minecraft.getWindow().handle();
-        return GLFW.glfwGetKey(window, GLFW.GLFW_KEY_LEFT_CONTROL) == GLFW.GLFW_PRESS || GLFW.glfwGetKey(window, GLFW.GLFW_KEY_RIGHT_CONTROL) == GLFW.GLFW_PRESS;
+        return InputConstants.isKeyDown(InputConstants.KEY_LCONTROL) || InputConstants.isKeyDown(InputConstants.KEY_RCONTROL);
     }
 
     @Override
@@ -623,23 +623,23 @@ public final class BrowserScreen extends Screen {
     @Override
     public boolean keyPressed(KeyEvent e) {
         int k = e.key();
-        boolean ctrl = (e.modifiers() & GLFW.GLFW_MOD_CONTROL) != 0, shift = (e.modifiers() & GLFW.GLFW_MOD_SHIFT) != 0, alt = (e.modifiers() & GLFW.GLFW_MOD_ALT) != 0;
+        boolean ctrl = (e.modifiers() & InputConstants.MOD_CONTROL) != 0, shift = (e.modifiers() & InputConstants.MOD_SHIFT) != 0, alt = (e.modifiers() & InputConstants.MOD_ALT) != 0;
         Tab t = current();
-        if (ctrl && k == GLFW.GLFW_KEY_T) {
+        if (ctrl && k == InputConstants.KEY_T) {
             newTab(null);
             return true;
         }
-        if (ctrl && k == GLFW.GLFW_KEY_W) {
+        if (ctrl && k == InputConstants.KEY_W) {
             closeTab(cur);
             return true;
         }
-        if (ctrl && k == GLFW.GLFW_KEY_TAB) {
+        if (ctrl && k == InputConstants.KEY_TAB) {
             cur = (cur + (shift ? tabs.size() - 1 : 1)) % tabs.size();
             editing = false;
             address = current().url();
             return true;
         }
-        if (ctrl && k == GLFW.GLFW_KEY_L) {
+        if (ctrl && k == InputConstants.KEY_L) {
             editing = true;
             finding = false;
             address = t.url();
@@ -647,98 +647,98 @@ public final class BrowserScreen extends Screen {
             updateSuggestions();
             return true;
         }
-        if (ctrl && k == GLFW.GLFW_KEY_F) {
+        if (ctrl && k == InputConstants.KEY_F) {
             finding = true;
             editing = false;
             countMatches();
             return true;
         }
-        if (ctrl && k == GLFW.GLFW_KEY_D) {
+        if (ctrl && k == InputConstants.KEY_D) {
             toggleBookmark();
             return true;
         }
-        if (ctrl && (k == GLFW.GLFW_KEY_EQUAL || k == GLFW.GLFW_KEY_KP_ADD)) {
+        if (ctrl && (k == InputConstants.KEY_EQUALS || k == InputConstants.KEY_ADD)) {
             setZoom(zoom + 0.1f);
             return true;
         }
-        if (ctrl && (k == GLFW.GLFW_KEY_MINUS || k == GLFW.GLFW_KEY_KP_SUBTRACT)) {
+        if (ctrl && (k == InputConstants.KEY_MINUS || k == org.lwjgl.sdl.SDLScancode.SDL_SCANCODE_KP_MINUS)) {
             setZoom(zoom - 0.1f);
             return true;
         }
-        if (ctrl && (k == GLFW.GLFW_KEY_0 || k == GLFW.GLFW_KEY_KP_0)) {
+        if (ctrl && (k == InputConstants.KEY_0 || k == InputConstants.KEY_NUMPAD0)) {
             setZoom(1f);
             return true;
         }
         if (editing) {
-            if (k == GLFW.GLFW_KEY_BACKSPACE && !address.isEmpty()) {
+            if (k == InputConstants.KEY_BACKSPACE && !address.isEmpty()) {
                 address = ctrl ? address.replaceFirst("\\S*\\s*$", "") : address.substring(0, address.length() - 1);
                 updateSuggestions();
-            } else if (k == GLFW.GLFW_KEY_ENTER || k == GLFW.GLFW_KEY_KP_ENTER) {
+            } else if (k == InputConstants.KEY_RETURN || k == InputConstants.KEY_NUMPADENTER) {
                 if (suggestionSel >= 0 && suggestionSel < suggestions.size()) go(suggestions.get(suggestionSel)[0]);
                 else if (!address.isBlank()) go(address);
-            } else if (k == GLFW.GLFW_KEY_ESCAPE) {
+            } else if (k == InputConstants.KEY_ESCAPE) {
                 editing = false;
                 address = t.url();
-            } else if (k == GLFW.GLFW_KEY_DOWN) {
+            } else if (k == InputConstants.KEY_DOWN) {
                 suggestionSel = suggestions.isEmpty() ? -1 : (suggestionSel + 1) % suggestions.size();
-            } else if (k == GLFW.GLFW_KEY_UP) {
+            } else if (k == InputConstants.KEY_UP) {
                 suggestionSel = suggestions.isEmpty() ? -1 : (suggestionSel - 1 + suggestions.size()) % suggestions.size();
-            } else if (k == GLFW.GLFW_KEY_V && ctrl) {
+            } else if (k == InputConstants.KEY_V && ctrl) {
                 address += minecraft.keyboardHandler.getClipboard().replaceAll("[\\r\\n]", "");
                 updateSuggestions();
             }
             return true;
         }
         if (finding) {
-            if (k == GLFW.GLFW_KEY_BACKSPACE && !find.isEmpty()) {
+            if (k == InputConstants.KEY_BACKSPACE && !find.isEmpty()) {
                 find = find.substring(0, find.length() - 1);
                 countMatches();
-            } else if (k == GLFW.GLFW_KEY_ENTER || k == GLFW.GLFW_KEY_KP_ENTER) {
+            } else if (k == InputConstants.KEY_RETURN || k == InputConstants.KEY_NUMPADENTER) {
                 if (findCount > 0) {
                     findIndex = (findIndex + (shift ? findCount - 1 : 1)) % findCount;
                     jumpToMatch();
                 }
-            } else if (k == GLFW.GLFW_KEY_ESCAPE) {
+            } else if (k == InputConstants.KEY_ESCAPE) {
                 finding = false;
-            } else if (k == GLFW.GLFW_KEY_V && ctrl) {
+            } else if (k == InputConstants.KEY_V && ctrl) {
                 find += minecraft.keyboardHandler.getClipboard().replaceAll("[\\r\\n]", "");
                 countMatches();
             }
             return true;
         }
-        if (k == GLFW.GLFW_KEY_BACKSPACE || (alt && k == GLFW.GLFW_KEY_LEFT)) {
+        if (k == InputConstants.KEY_BACKSPACE || (alt && k == InputConstants.KEY_LEFT)) {
             t.step(-1);
             return true;
         }
-        if (alt && k == GLFW.GLFW_KEY_RIGHT) {
+        if (alt && k == InputConstants.KEY_RIGHT) {
             t.step(1);
             return true;
         }
-        if (k == GLFW.GLFW_KEY_F5 || (ctrl && k == GLFW.GLFW_KEY_R)) {
+        if (k == InputConstants.KEY_F5 || (ctrl && k == InputConstants.KEY_R)) {
             if (!t.url().isEmpty()) t.open(t.url(), false);
             return true;
         }
-        if (k == GLFW.GLFW_KEY_PAGE_DOWN || k == GLFW.GLFW_KEY_SPACE) {
+        if (k == InputConstants.KEY_PAGEDOWN || k == InputConstants.KEY_SPACE) {
             t.scrollTarget += pageH * 0.8f / zoom;
             return true;
         }
-        if (k == GLFW.GLFW_KEY_PAGE_UP) {
+        if (k == InputConstants.KEY_PAGEUP) {
             t.scrollTarget -= pageH * 0.8f / zoom;
             return true;
         }
-        if (k == GLFW.GLFW_KEY_HOME) {
+        if (k == InputConstants.KEY_HOME) {
             t.scrollTarget = 0;
             return true;
         }
-        if (k == GLFW.GLFW_KEY_END) {
+        if (k == InputConstants.KEY_END) {
             t.scrollTarget = t.layout == null ? 0 : t.layout.height;
             return true;
         }
-        if (k == GLFW.GLFW_KEY_DOWN) {
+        if (k == InputConstants.KEY_DOWN) {
             t.scrollTarget += 40;
             return true;
         }
-        if (k == GLFW.GLFW_KEY_UP) {
+        if (k == InputConstants.KEY_UP) {
             t.scrollTarget -= 40;
             return true;
         }

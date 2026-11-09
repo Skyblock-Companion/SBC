@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package dev.zmuzy.sbc.ui.screens;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.ui.Ui;
 import dev.zmuzy.sbc.ui.theme.Theme;
 import dev.zmuzy.sbc.ui.layout.BaseUIComponent;
@@ -16,7 +17,6 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +123,7 @@ public final class SbcWidgets {
 
         @Override
         public boolean onMouseDown(MouseButtonEvent click, boolean doubled) {
-            if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
             clickSound();
             this.onPress.accept(this);
             return true;
@@ -187,7 +187,7 @@ public final class SbcWidgets {
 
         @Override
         public boolean onMouseDown(MouseButtonEvent click, boolean doubled) {
-            if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
             clickSound();
             this.on = !this.on;
             for (Consumer<Boolean> l : List.copyOf(this.listeners)) l.accept(this.on);
@@ -290,7 +290,7 @@ public final class SbcWidgets {
 
         @Override
         public boolean onMouseDown(MouseButtonEvent click, boolean doubled) {
-            if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
             var focus = focusHandler();
             if (focus != null) focus.focus(this, FocusSource.MOUSE_CLICK);
             setFrom(click.x());
@@ -429,7 +429,7 @@ public final class SbcWidgets {
 
         @Override
         public boolean onMouseDown(MouseButtonEvent click, boolean doubled) {
-            if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
             var focus = focusHandler();
             if (focus != null) focus.focus(this, FocusSource.MOUSE_CLICK);
             String s = shown(this.get.get());
@@ -456,21 +456,21 @@ public final class SbcWidgets {
             String v = this.get.get();
             int k = e.key();
             int c = Math.min(this.cursor, v.length());
-            if (k == GLFW.GLFW_KEY_ENTER || k == GLFW.GLFW_KEY_KP_ENTER) {
+            if (k == InputConstants.KEY_RETURN || k == InputConstants.KEY_NUMPADENTER) {
                 if (this.onEnter != null) this.onEnter.run();
                 return true;
             }
             if (e.hasControlDown()) {
                 switch (k) {
-                    case GLFW.GLFW_KEY_A -> this.allSelected = !v.isEmpty();
-                    case GLFW.GLFW_KEY_C -> Minecraft.getInstance().keyboardHandler.setClipboard(this.allSelected ? v : "");
-                    case GLFW.GLFW_KEY_X -> {
+                    case InputConstants.KEY_A -> this.allSelected = !v.isEmpty();
+                    case InputConstants.KEY_C -> Minecraft.getInstance().keyboardHandler.setClipboard(this.allSelected ? v : "");
+                    case InputConstants.KEY_X -> {
                         if (this.allSelected) {
                             Minecraft.getInstance().keyboardHandler.setClipboard(v);
                             change("", 0);
                         }
                     }
-                    case GLFW.GLFW_KEY_V -> insert(Minecraft.getInstance().keyboardHandler.getClipboard().replaceAll("[\\r\\n]", ""));
+                    case InputConstants.KEY_V -> insert(Minecraft.getInstance().keyboardHandler.getClipboard().replaceAll("[\\r\\n]", ""));
                     default -> {
                         return false;
                     }
@@ -478,31 +478,31 @@ public final class SbcWidgets {
                 return true;
             }
             switch (k) {
-                case GLFW.GLFW_KEY_BACKSPACE -> {
+                case InputConstants.KEY_BACKSPACE -> {
                     if (this.allSelected) change("", 0);
                     else if (c > 0) change(v.substring(0, c - 1) + v.substring(c), c - 1);
                 }
-                case GLFW.GLFW_KEY_DELETE -> {
+                case InputConstants.KEY_DELETE -> {
                     if (this.allSelected) change("", 0);
                     else if (c < v.length()) change(v.substring(0, c) + v.substring(c + 1), c);
                 }
-                case GLFW.GLFW_KEY_LEFT -> {
+                case InputConstants.KEY_LEFT -> {
                     this.cursor = Math.max(0, c - 1);
                     this.allSelected = false;
                 }
-                case GLFW.GLFW_KEY_RIGHT -> {
+                case InputConstants.KEY_RIGHT -> {
                     this.cursor = Math.min(v.length(), c + 1);
                     this.allSelected = false;
                 }
-                case GLFW.GLFW_KEY_HOME -> {
+                case InputConstants.KEY_HOME -> {
                     this.cursor = 0;
                     this.allSelected = false;
                 }
-                case GLFW.GLFW_KEY_END -> {
+                case InputConstants.KEY_END -> {
                     this.cursor = v.length();
                     this.allSelected = false;
                 }
-                case GLFW.GLFW_KEY_UP, GLFW.GLFW_KEY_DOWN -> {
+                case InputConstants.KEY_UP, InputConstants.KEY_DOWN -> {
                 }
                 default -> {
                     return false;

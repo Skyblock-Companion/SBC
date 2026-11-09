@@ -4,7 +4,7 @@ package dev.zmuzy.sbc.ui;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.renderpearl.api.textures.FilterMode;
 import dev.zmuzy.sbc.core.Safe;
 import dev.zmuzy.sbc.feature.Features;
 import dev.zmuzy.sbc.mc.mixin.GameRendererAccess;
@@ -83,7 +83,7 @@ public final class HudTexture {
             p.target.destroyBuffers();
             p.target = null;
         }
-        if (p.target == null) p.target = new TextureTarget("sbc " + name, w, h, true, com.mojang.blaze3d.GpuFormat.RGBA8_UNORM);
+        if (p.target == null) p.target = new TextureTarget("sbc " + name, w, h, com.mojang.renderpearl.api.GpuFormat.RGBA8_UNORM, com.mojang.renderpearl.api.GpuFormat.D32_FLOAT);
         if (p.renderer == null) {
             p.state = new GuiRenderState();
             GuiRenderer own = ((GameRendererAccess) mc.gameRenderer).sbc$guiRenderer();

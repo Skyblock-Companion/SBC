@@ -20,5 +20,6 @@ public interface GuiGraphicsAccessor {
     GuiRenderState sbc$guiRenderState();
 
     @Invoker("setTooltipForNextFrameInternal")
-    void sbc$tooltipLast(Font font, List<ClientTooltipComponent> lines, int x, int y, ClientTooltipPositioner positioner, Identifier style, boolean focused);
+    // the last flag is the gap under the first line, always there before 26.3
+    void sbc$tooltipLast(Font font, List<ClientTooltipComponent> lines, int x, int y, ClientTooltipPositioner positioner, Identifier style, boolean focused, boolean gap);
 }

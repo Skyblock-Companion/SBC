@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.garden.farming;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.Safe;
 import dev.zmuzy.sbc.feature.Features;
 import dev.zmuzy.sbc.feature.Option;
@@ -10,7 +11,7 @@ import dev.zmuzy.sbc.garden.GardenPack;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.glfw.GLFW;
+import org.lwjgl.sdl.SDLVideo;
 
 // from skyhanni SeeThroughWindow: a key makes the game window see-through so you can watch something behind
 // it while farming
@@ -28,9 +29,7 @@ public final class SeeThrough {
         float target = active ? Math.max(0.05f, Math.min(1f, GardenPack.number(ID, "percent", 50) / 100f)) : 1f;
         if (current == target) return;
         long handle = mc.getWindow().handle();
-        GLFW.glfwGetError(null);
-        GLFW.glfwSetWindowOpacity(handle, target);
-        if (GLFW.glfwGetError(null) == GLFW.GLFW_NO_ERROR) current = target;
+        if (SDLVideo.SDL_SetWindowOpacity(handle, target)) current = target;
         else {
             unsupported = true;
             GardenPack.chat("§cYour window system does not support a see-through window.");
@@ -52,7 +51,7 @@ public final class SeeThrough {
     }
 
     public static void keys(KeyMapping.Category category) {
-        key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.see_through", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.see_through", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
     }
 
     public static void register() {

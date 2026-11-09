@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.garden.pests;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.chat.ChatBus;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.core.LegacyText;
@@ -212,7 +213,7 @@ public final class PestAlerts {
     }
 
     public static void keys(KeyMapping.Category category) {
-        teleportKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.pest_teleport", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        teleportKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.pest_teleport", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
     }
 
     public static void register() {

@@ -12,7 +12,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.inventory.ContainerInput;
-import org.lwjgl.glfw.GLFW;
 
 // dungeon keys in the game controls: one that lets a click through in a terminal (ours) + skyhannis 4 spirit
 // leap keys (SpiritLeapKeybindConfig, DungeonSpiritLeapOverlay)
@@ -23,10 +22,10 @@ public final class DungeonKeys {
     private DungeonKeys() {}
 
     public static void registerKeys(KeyMapping.Category cat) {
-        override = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.terminal_override", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, cat));
-        int[] keys = {GLFW.GLFW_KEY_1, GLFW.GLFW_KEY_2, GLFW.GLFW_KEY_3, GLFW.GLFW_KEY_4};
+        override = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.terminal_override", InputConstants.Type.KEYBOARD, InputConstants.KEY_LALT, cat));
+        int[] keys = {InputConstants.KEY_1, InputConstants.KEY_2, InputConstants.KEY_3, InputConstants.KEY_4};
         for (int i = 0; i < LEAP.length; i++)
-            LEAP[i] = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.leap_" + (i + 1), InputConstants.Type.KEYSYM, keys[i], cat));
+            LEAP[i] = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.leap_" + (i + 1), InputConstants.Type.KEYBOARD, keys[i], cat));
     }
 
     public static boolean overrideDown() {

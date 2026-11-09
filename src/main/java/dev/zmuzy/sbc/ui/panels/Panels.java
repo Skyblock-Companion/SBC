@@ -40,7 +40,7 @@ public final class Panels {
     }
 
     static boolean shiftDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LSHIFT) || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RSHIFT);
+        return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT) || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
     }
 
     public static void register() {
@@ -112,7 +112,7 @@ public final class Panels {
             dev.zmuzy.sbc.ui.ItemList.pressTaken();
             return false;
         }
-        return GardenPlotsPanel.click(s, e.x(), e.y(), e.button()) && EquipmentSlots.click(s, e.x(), e.y());
+        return GardenPlotsPanel.click(s, e.x(), e.y(), dev.zmuzy.sbc.mc.KeyHeld.clickButton(e.button())) && EquipmentSlots.click(s, e.x(), e.y());
     }
 
     // false = swallow the key

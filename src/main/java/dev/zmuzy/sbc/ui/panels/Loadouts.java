@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.ui.panels;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.Gain;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.core.LegacyText;
@@ -22,7 +23,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +138,7 @@ public final class Loadouts {
 
     // middle click a loadout = favourite (when favourites are on), nothing goes to the server. false = swallow
     static boolean click(Screen s, MouseButtonEvent e) {
-        if (e.button() != GLFW.GLFW_MOUSE_BUTTON_MIDDLE || !(s instanceof ContainerScreen cs) || !isLoadouts(GameState.strip(cs.getTitle().getString()).trim())) return true;
+        if (e.button() != InputConstants.MOUSE_BUTTON_MIDDLE || !(s instanceof ContainerScreen cs) || !isLoadouts(GameState.strip(cs.getTitle().getString()).trim())) return true;
         Option favourites = option("favorites");
         if (!Features.on("loadout_highlight") || favourites == null || !favourites.bool()) return true;
         Slot hovered = ((ContainerAccess) cs).sbc$hovered();

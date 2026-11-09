@@ -2,6 +2,7 @@
 // Changed in 2026 from code or data of SkyHanni, Skyblocker; see THIRD_PARTY_NOTICES.md.
 package dev.zmuzy.sbc.item.menus;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.core.Patterns;
 import dev.zmuzy.sbc.feature.Feature;
@@ -86,9 +87,9 @@ public final class Menus {
 
     // from SbcMod, where the keys get made
     public static void keys(KeyMapping.Category category) {
-        AttributeShards.trackKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.track_shard", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
-        SlotTexts.key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.slot_text", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        AttributeShards.trackKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.track_shard", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        SlotTexts.key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.slot_text", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
         dev.zmuzy.sbc.areas.HuntHelpers.keys(category);
-        MenuExtras.focusKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.focus_mode", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        MenuExtras.focusKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.focus_mode", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
     }
 }

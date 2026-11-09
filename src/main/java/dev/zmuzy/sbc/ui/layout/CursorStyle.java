@@ -13,9 +13,9 @@ public enum CursorStyle {
     HAND(GameLink.HAND_CURSOR),
     MOVE(GameLink.MOVE_CURSOR);
 
-    public final int glfw;
+    public final int shape;
 
-    CursorStyle(int glfw) {
-        this.glfw = glfw;
+    CursorStyle(int shape) {
+        this.shape = shape;
     }
 }
