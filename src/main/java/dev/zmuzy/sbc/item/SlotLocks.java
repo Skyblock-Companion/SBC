@@ -18,7 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerInput;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -200,43 +199,53 @@ public final class SlotLocks {
     }
 
     // true when this click must not go through
+    // a locked slot never changes. a protected item moves freely, it just never leaves you: like skyblocker
+    // ItemProtection, no throwing, salvaging, trading, auctioning, dungeon chest swap or npc selling
     public static boolean blocks(int slotNum, int button, ContainerInput input, Player p) {
         if (!on() || p == null) return false;
         var menu = p.containerMenu;
+        // picked up and clicked outside the window = dropped
+        if (slotNum == -999 && isProtected(menu.getCarried())) {
+            warn("That item is protected");
+            return true;
+        }
         Slot slot = slotNum >= 0 && slotNum < menu.slots.size() ? menu.slots.get(slotNum) : null;
         if (slot == null) return false;
-        ItemStack st = slot.getItem();
-        boolean otherWindow = !(menu instanceof InventoryMenu);
-        switch (input) {
-            case THROW -> {
-                if (isLocked(slot) || isProtected(st)) {
-                    warn(isLocked(slot) ? "That slot is locked" : "That item is protected");
-                    return true;
-                }
-            }
-            case QUICK_MOVE -> {
-                if (isLocked(slot) || isProtected(st)) {
-                    warn(isLocked(slot) ? "That slot is locked" : "That item is protected");
-                    return true;
-                }
-            }
-            case SWAP -> {
-                boolean hotbarLocked = button >= 0 && button < 9 && lockedIndex(button);
-                ItemStack hb = button >= 0 && button < 9 ? p.getInventory().getItem(button) : ItemStack.EMPTY;
-                if (isLocked(slot) || hotbarLocked || isProtected(st) || isProtected(hb)) {
-                    warn("A locked or protected item is in the way");
-                    return true;
-                }
-            }
-            case PICKUP, PICKUP_ALL, QUICK_CRAFT -> {
-                if (isLocked(slot) || (otherWindow && slot.container == p.getInventory() && isProtected(st))) {
-                    warn(isLocked(slot) ? "That slot is locked" : "That item is protected");
-                    return true;
-                }
-            }
-            default -> {
-            }
+        boolean hotbarLocked = input == ContainerInput.SWAP && button >= 0 && button < 9 && lockedIndex(button);
+        if (isLocked(slot) || hotbarLocked) {
+            warn(isLocked(slot) ? "That slot is locked" : "A locked slot is in the way");
+            return true;
         }
+        ItemStack st = slot.getItem();
+        ItemStack hb = input == ContainerInput.SWAP && button >= 0 && button < 9 ? p.getInventory().getItem(button) : ItemStack.EMPTY;
+        if (input == ContainerInput.THROW && isProtected(st) || (isProtected(st) || isProtected(hb)) && losesIt(menu, slot)) {
+            warn("That item is protected");
+            return true;
+        }
+        return false;
+    }
+
+    // menus where a click gives the item away
+    private static boolean losesIt(net.minecraft.world.inventory.AbstractContainerMenu menu, Slot slot) {
+        var screen = net.minecraft.client.Minecraft.getInstance().gui.screen();
+        String title = screen == null ? "" : dev.zmuzy.sbc.core.GameState.strip(screen.getTitle().getString());
+        if (title.equals("Salvage Items") || title.startsWith("You  ")) return true;
+        if (title.endsWith("Auction House") || title.equals("Create Auction") || title.equals("Create BIN Auction")) return true;
+        // a dungeon chest drops what you swapped in if you close it first
+        if (dev.zmuzy.sbc.dungeon.DungeonRun.inDungeon() && title.equals("Chest")) return true;
+        return menu instanceof net.minecraft.world.inventory.ChestMenu && npcSellMenu(menu) && !npcSellButton(slot.getItem());
+    }
+
+    private static boolean npcSellButton(ItemStack st) {
+        if (st.isEmpty()) return false;
+        String name = dev.zmuzy.sbc.core.GameState.strip(st.getHoverName().getString());
+        if (name.equals("Sell Item") || name.equals("Sell Inventory")) return true;
+        for (String l : dev.zmuzy.sbc.core.LegacyText.lore(st)) if (l.contains("buyback")) return true;
+        return false;
+    }
+
+    static boolean npcSellMenu(net.minecraft.world.inventory.AbstractContainerMenu menu) {
+        for (Slot s : menu.slots) if (npcSellButton(s.getItem())) return true;
         return false;
     }
 
