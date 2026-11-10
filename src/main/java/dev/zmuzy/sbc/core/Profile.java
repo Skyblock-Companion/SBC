@@ -308,7 +308,18 @@ public final class Profile {
     static final long REFRESH_MS = 5 * 60_000L;
     private static long refreshTried;
 
+    private static int liveTicks;
+
     public static void refreshTick() {
+        // once a second your own loaded profile takes the skills the game shows further along
+        if (++liveTicks % 20 == 0) {
+            Data mine = current;
+            if (mine != null && !mine.fromGame && mine.profileName.equalsIgnoreCase(GameState.profileName == null ? "" : GameState.profileName)) {
+                dev.zmuzy.sbc.core.game.GameProfile.liveSkills(mine);
+                Data v = viewed;
+                if (v != null && v != mine && v.uuid.equalsIgnoreCase(mine.uuid) && v.profileId.equals(mine.profileId)) dev.zmuzy.sbc.core.game.GameProfile.liveSkills(v);
+            }
+        }
         long now = System.currentTimeMillis();
         Data d = current;
         if (d == null || d.fromGame || loading || !serverUp() || now - d.loadedAt < REFRESH_MS || now - refreshTried < 60_000) return;

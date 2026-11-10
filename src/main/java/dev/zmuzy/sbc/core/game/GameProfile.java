@@ -410,6 +410,29 @@ public final class GameProfile {
 
     private GameProfile() {}
 
+    // your own profile from the api lags behind the game by minutes. a skill the game showed further along (the
+    // action bar, the tab, the skills menu) wins over the api's number
+    public static boolean liveSkills(Profile.Data d) {
+        Seen s = current();
+        if (d == null || s == null) return false;
+        boolean changed = false;
+        for (Map.Entry<String, Seen.Skill> e : s.skills.entrySet()) {
+            Profile.Level live = level(e.getValue(), Profile.SKILL_XP, skillCap(e.getKey()), GameRead.ownTable(e.getKey()));
+            if (ahead(live, d.skills.get(e.getKey()))) {
+                d.skills.put(e.getKey(), live);
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    // pure, for tests: the live level is further than the api's
+    static boolean ahead(Profile.Level live, Profile.Level api) {
+        if (live == null || live.level() <= 0) return false;
+        if (api == null || live.level() > api.level()) return true;
+        return live.level() == api.level() && live.progress() > api.progress() + 0.001;
+    }
+
     // store of the profile youre on, null till a profile name was read
     public static Seen current() {
         String name = GameState.profileName;
