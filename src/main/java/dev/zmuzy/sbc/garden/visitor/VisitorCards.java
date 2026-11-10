@@ -83,9 +83,15 @@ public final class VisitorCards {
 
     // the buy list: what is wanted minus what the sacks hold, only what the market sells
     static List<dev.zmuzy.sbc.item.market.MoreMarket.Material> toBuy(List<Need> needs) {
+        return toBuy(needs, GardenItems::inInventory);
+    }
+
+    // what is still missing: the visitors' amount minus what is in your sacks and your inventory, so what you just
+    // bought comes off the list
+    static List<dev.zmuzy.sbc.item.market.MoreMarket.Material> toBuy(List<Need> needs, java.util.function.ToIntFunction<String> inInventory) {
         List<dev.zmuzy.sbc.item.market.MoreMarket.Material> out = new ArrayList<>();
         for (Need n : needs) {
-            int left = n.amount() - (n.inSacks() == null ? 0 : n.inSacks());
+            int left = n.amount() - (n.inSacks() == null ? 0 : n.inSacks()) - inInventory.applyAsInt(n.id());
             if (left > 0) out.add(new dev.zmuzy.sbc.item.market.MoreMarket.Material(n.id(), left));
         }
         return out;
@@ -111,6 +117,16 @@ public final class VisitorCards {
             out.add(new Need(id, names.getOrDefault(id, ItemRepo.name(id)), e.getValue(), GardenItems.price(id) * e.getValue(), sacks, leftToCraft(id, e.getValue(), sacks == null ? 0 : sacks)));
         }
         return out;
+    }
+
+    // for /sbc dump: each visitor, what it wants, and what the buy list holds
+    public static String describe() {
+        StringBuilder sb = new StringBuilder();
+        for (Visitors.Visitor v : Visitors.all())
+            sb.append(v.name).append(" status=").append(v.status).append(" wants=").append(v.offer == null ? "(menu not read)" : v.offer.shopping).append('\n');
+        for (Need n : needs()) sb.append("need ").append(n.id()).append(" x").append(n.amount()).append(" sacks=").append(n.inSacks()).append('\n');
+        sb.append(dev.zmuzy.sbc.item.market.MoreMarket.describe());
+        return sb.toString();
     }
 
     static String stacks(int amount) {

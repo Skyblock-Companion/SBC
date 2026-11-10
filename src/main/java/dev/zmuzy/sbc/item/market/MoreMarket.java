@@ -134,6 +134,11 @@ public final class MoreMarket {
     private static List<Material> base = List.of();
     private static final Map<String, Integer> manual = new LinkedHashMap<>();
 
+    // for /sbc dump
+    public static String describe() {
+        return "buy list: base=" + base + " manual=" + manual + " removed=" + removed + " fromVisitors=" + fromVisitors + "\n";
+    }
+
     private static void rebuild() {
         Map<String, Integer> all = new LinkedHashMap<>();
         for (Material m : base) all.merge(m.id(), m.amount(), Integer::sum);

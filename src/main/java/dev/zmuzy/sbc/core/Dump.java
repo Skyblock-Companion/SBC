@@ -153,6 +153,13 @@ public final class Dump {
         if (mc.player != null) sb.append(String.format(java.util.Locale.ROOT, "pos=%.1f %.1f %.1f", mc.player.getX(), mc.player.getY(), mc.player.getZ())).append('\n');
         sb.append("guiScale=").append(mc.getWindow().getGuiScale()).append(" screen=").append(mc.getWindow().getGuiScaledWidth()).append('x').append(mc.getWindow().getGuiScaledHeight()).append('\n');
 
+        section(sb, "VISITORS");
+        try {
+            sb.append(dev.zmuzy.sbc.garden.visitor.VisitorCards.describe());
+        } catch (RuntimeException e) {
+            sb.append("(could not read: ").append(e).append(")\n");
+        }
+
         section(sb, "FEATURES");
         int on = 0, off = 0;
         StringBuilder offs = new StringBuilder();

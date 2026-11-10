@@ -279,9 +279,11 @@ public final class SackApi {
                 sackData.put(e.getKey(), new Stored(newAmount, newAmount, SackStatus.OUTDATED));
             }
         }
+        // "and other items": the ones not listed may have changed. after a removal (a Sell Sacks, say) their old amount
+        // can be gone, so it is not known any more; after an addition it is at least what it was
         if (otherItemsAdded || otherItemsRemoved) for (var e : new ArrayList<>(sackData.entrySet())) {
             if (justChanged.containsKey(e.getKey())) continue;
-            sackData.put(e.getKey(), new Stored(e.getValue().amount(), 0, SackStatus.ALRIGHT));
+            sackData.put(e.getKey(), new Stored(e.getValue().amount(), 0, otherItemsRemoved ? SackStatus.OUTDATED : SackStatus.ALRIGHT));
         }
         onSaved.run();
     }
