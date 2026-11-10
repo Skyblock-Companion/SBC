@@ -341,6 +341,39 @@ public final class Routes {
 
     // ---- in the world ----
 
+    // the room's secrets name a chest and the lever that opens it by number: "1 - Lever behind Crypt" opens
+    // "1 - Chest", "2/3 - Lever" opens chests 2 and 3 (the Dungeon Rooms and Secret Routes data). null = no lever
+    static Dungeon.Secret leverFor(List<Dungeon.Secret> secrets, Vec3 chest) {
+        String number = null;
+        for (Dungeon.Secret s : secrets)
+            if (s.category().equalsIgnoreCase("chest") && s.x() == (int) chest.x && s.y() == (int) chest.y && s.z() == (int) chest.z) number = lead(s.name());
+        if (number == null) return null;
+        List<String> wanted = List.of(number.split("/"));
+        for (Dungeon.Secret s : secrets) {
+            if (!s.category().equalsIgnoreCase("lever")) continue;
+            for (String n : lead(s.name()).split("/")) if (wanted.contains(n)) return s;
+        }
+        return null;
+    }
+
+    // "1/2 - Entrance" -> "1/2"
+    private static String lead(String name) {
+        int dash = name.indexOf(" - ");
+        return (dash < 0 ? name.split(" ")[0] : name.substring(0, dash)).trim();
+    }
+
+    // levers pulled in a room this run, room coords
+    private static final Map<Dungeon.Placed, Set<Vec3>> LEVERS_PULLED = new java.util.WeakHashMap<>();
+
+    // the lever the current step's chest needs and that is not pulled yet, room coords. null = none
+    static Vec3 leverNeeded(Dungeon.Placed r, Step s) {
+        if (s == null || s.secret() == null || !s.type().equals("interact")) return null;
+        Dungeon.Secret lever = leverFor(r.def.secrets(), s.secret());
+        if (lever == null) return null;
+        Vec3 at = new Vec3(lever.x(), lever.y(), lever.z());
+        return LEVERS_PULLED.getOrDefault(r, Set.of()).contains(at) ? null : at;
+    }
+
     private static Vec3 block(Dungeon.Placed r, Vec3 rel) {
         Vec3 c = r.toActual(rel.x, rel.y, rel.z);
         return new Vec3(Math.floor(c.x), Math.floor(c.y), Math.floor(c.z));
@@ -418,6 +451,11 @@ public final class Routes {
         var mc = Minecraft.getInstance();
         if (r == null || mc.player == null) return;
         Step s = current(r);
+        for (Dungeon.Secret sec : r.def.secrets()) {
+            if (!sec.category().equalsIgnoreCase("lever")) continue;
+            Vec3 rel = new Vec3(sec.x(), sec.y(), sec.z());
+            if (block(r, rel).distanceTo(pos) < 0.5) LEVERS_PULLED.computeIfAbsent(r, k -> new HashSet<>()).add(rel);
+        }
         if (s != null) click(s, progress(r), pos, rel -> block(r, rel), mc.player.tickCount);
     }
 
@@ -436,7 +474,11 @@ public final class Routes {
             } else locked(p);
         } else if (LEVER_LINE.equals(t)) {
             Step s = current(r);
-            if (s != null) leverPulled(s, progress(r));
+            if (s != null) {
+                leverPulled(s, progress(r));
+                Vec3 need = leverNeeded(r, s);
+                if (need != null) LEVERS_PULLED.computeIfAbsent(r, k -> new HashSet<>()).add(need);
+            }
         }
         return ChatBus.PASS;
     }
@@ -542,7 +584,8 @@ public final class Routes {
         if (r.step >= steps.size()) return true;
         Step s = steps.get(r.step);
         Progress p = progress(r);
-        walkLine(w, r, s);
+        // while a lever is needed the line goes to it, not along the path to the chest
+        if (leverNeeded(r, s) == null) walkLine(w, r, s);
         List<Action> acts = actionsOf(s);
         List<Action> labelled = new ArrayList<>();
         boolean leverLeft = false;
@@ -559,6 +602,15 @@ public final class Routes {
             if (labelled.stream().anyMatch(l -> l.kind() == a.kind() && l.at().distanceTo(b) < 2.5)) continue;
             labelled.add(new Action(a.kind(), b));
             w.label(a.kind().label, b.add(0.5, a.kind() == Kind.ETHERWARP ? 1.9 : 1.4, 0.5), true);
+        }
+        // a chest that opens with a lever: the way goes to the lever first
+        Vec3 need = leverNeeded(r, s);
+        if (need != null) {
+            Vec3 lb = block(r, need);
+            if (!leverLeft) w.line(io.github.zmuzy.sbc.combat.Combat.fromCrosshair(w), lb.add(0.5, 0.5, 0.5), Kind.LEVER.color, 2f, false);
+            box(w, lb, Kind.LEVER.color, false);
+            w.label("Pull lever", lb.add(0.5, 1.4, 0.5), true);
+            leverLeft = true;
         }
         if (s.secret() != null) {
             Vec3 at = block(r, s.secret());
