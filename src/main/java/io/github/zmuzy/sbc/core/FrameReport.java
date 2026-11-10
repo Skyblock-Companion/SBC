@@ -57,6 +57,10 @@ public final class FrameReport {
         List<String> out = new ArrayList<>();
         Minecraft mc = Minecraft.getInstance();
         var o = mc.options;
+        // where it was recorded, so a report says it by itself
+        int players = mc.getConnection() == null ? 0 : mc.getConnection().getOnlinePlayers().size();
+        out.add("where: island " + GameState.island + ", area " + GameState.area + ", players in the tab list " + players
+                + (mc.player == null ? "" : String.format(Locale.ROOT, ", position %.0f %.0f %.0f facing %.0f %.0f", mc.player.getX(), mc.player.getY(), mc.player.getZ(), mc.player.getYRot(), mc.player.getXRot())));
         int cap = o.framerateLimit().get();
         out.add("frame cap: " + (cap >= 260 ? "unlimited (judged against 240)" : cap) + "   budget a frame: " + String.format(Locale.ROOT, "%.2f ms", budget));
         out.add("vsync: " + o.enableVsync().get() + "   refresh rate: " + refreshRate(mc) + " Hz   fullscreen: " + mc.getWindow().isExclusiveFullscreen()
