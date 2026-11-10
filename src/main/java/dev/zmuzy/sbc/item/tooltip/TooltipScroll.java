@@ -67,6 +67,9 @@ public final class TooltipScroll {
     // top on screen and the wheel moves it
     public static net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner positioner(int dy) {
         return (sw, sh, mouseX, mouseY, w, h) -> {
+            // the size the game really draws, so the wheel's range ends where the tooltip does
+            lastHeight = h + 8;
+            lastWidth = w + 8;
             org.joml.Vector2i v = new org.joml.Vector2i(mouseX, mouseY).add(12, -12);
             if (v.x + w > sw) v.x = Math.max(v.x - 24 - w, 4);
             if (h + 8 > sh) v.y = 4 + dy;
