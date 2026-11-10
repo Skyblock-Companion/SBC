@@ -523,12 +523,25 @@ final class PagesMore {
         ui.meter(x + 6, y + 12, w - 12, 2, l.toNext() <= 0 ? 1 : l.progress(), accent);
     }
 
+    // a maxed level: a warm gold card, a gold edge, and a soft light that runs across it every few seconds
+    static void maxedBackground(MenuUi ui, int x, int y, int w, int h) {
+        ui.hoverRound(x, y, w, h, 6, 0x2EFFB833, 0x40FFB833);
+        ui.rect(x + 2, y, w - 4, 1, 0x66FFD27A);
+        ui.rect(x + 2, y + h - 1, w - 4, 1, 0x40FFD27A);
+        long t = System.currentTimeMillis() % 3200;
+        if (t > 1400) return;
+        int band = 12, at = x - band + (int) ((w + band) * t / 1400);
+        int from = Math.max(x + 2, at), to = Math.min(x + w - 2, at + band);
+        if (to > from) ui.rect(from, y + 1, to - from, h - 2, 0x1CFFF1C4);
+    }
+
     // name, how far into the level (numbers + %), whats left
     static void levelTile(MenuUi ui, int x, int y, int w, String name, Profile.Level l, int cap, String icon, int accent) {
         boolean unread = l.progress() < 0; // from the game: we got the level but not how far into it
         boolean maxed = l.toNext() <= 0 && !unread;
-        ui.hoverRound(x, y, w, 32, 6, 0x12FFFFFF, 0x22FFFFFF);
-        ui.rect(x, y, 2, 32, MenuUi.tone(accent));
+        if (maxed) maxedBackground(ui, x, y, w, 32);
+        else ui.hoverRound(x, y, w, 32, 6, 0x12FFFFFF, 0x22FFFFFF);
+        ui.rect(x, y, 2, 32, maxed ? 0xFFFFC14D : MenuUi.tone(accent));
         ui.icon(icon, x + 5, y + 4, 1f);
         ui.text(name, x + 24, y + 3, Ui.TEXT);
         String levelText = l.level() + (cap > 0 ? "/" + cap : "");

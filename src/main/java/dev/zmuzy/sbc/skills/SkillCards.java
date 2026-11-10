@@ -449,7 +449,7 @@ public final class SkillCards {
                 .option(Option.bool("skill_goals.all", "On the All skills card", "", true))
                 .option(Option.bool("skill_goals.tooltip", "In Your Skills", "On each skill's tooltip.", true))
                 .option(Option.bool("skill_goals.chat", "Line when you reach it", "", true)));
-        Features.add(new Feature(OVERFLOW, "Skills", "Levels past the cap", "A maxed skill keeps counting from what its XP would be worth, as the levels Hypixel stops showing.", "SkyHanni: Skill Overflow")
+        Features.add(new Feature(OVERFLOW, "Skills", "Levels past the cap", "A maxed skill keeps counting from what its XP would be worth, as the levels Hypixel stops showing.", "SkyHanni: Skill Overflow").defaultOff()
                 .when(() -> GameState.inSkyBlock).tooltip(SkillCards::overflowTooltip)
                 .option(Option.bool("skill_overflow.cards", "On the bar and the cards", "", true))
                 .option(Option.bool("skill_overflow.tooltip", "In Your Skills", "On each skill's tooltip.", true))
