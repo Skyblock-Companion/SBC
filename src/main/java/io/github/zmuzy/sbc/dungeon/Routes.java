@@ -64,9 +64,12 @@ public final class Routes {
     public static final List<String> SETS = List.of(FASTEST, "fow", "3ppopka", "pearl", "normal");
     // what a spot costs vs walking, in blocks: aiming at it + the moment it takes
     private static final double TELEPORT_COST = 3, PEARL_COST = 4, MINE_COST = 1.5, TNT_COST = 4;
-    // a chest click waits this many ticks for "That chest is locked!" before it counts
-    static final int CLICK_WAIT = 8;
-    private static final String LOCKED_LINE = "That chest is locked!";
+    // a chest click waits this many ticks for "That chest is locked!" before it counts. the line can take a moment
+    // on a normal ping, and if it comes later still the step goes back (LATE_LOCK)
+    static final int CLICK_WAIT = 30, LATE_LOCK = 80;
+    private static final String LOCKED_LINE = "That chest is locked!", LEVER_LINE = "You hear the sound of something opening...";
+    // a room whose step moved on from a chest click: the step it was on, and when
+    private static final java.util.Map<Dungeon.Placed, int[]> CLICKED_ON = new java.util.WeakHashMap<>();
 
     private static final Map<String, Map<String, List<Step>>> LOADED = new HashMap<>();
     private static final Map<String, List<Step>> BEST = new HashMap<>();
@@ -389,7 +392,11 @@ public final class Routes {
             Vec3 mid = sec.add(0.5, 0.5, 0.5);
             boolean standingOn = mid.distanceTo(me) < 2.0;
             done = switch (s.type()) {
-                case "interact" -> clickDone(p, mc.player.tickCount);
+                case "interact" -> {
+                    boolean d = clickDone(p, mc.player.tickCount);
+                    if (d) CLICKED_ON.put(r, new int[]{r.step, mc.player.tickCount});
+                    yield d;
+                }
                 case "item" -> itemDone(p, !mc.level.getEntitiesOfClass(ItemEntity.class, new AABB(BlockPos.containing(sec)).inflate(1.5)).isEmpty(), standingOn);
                 case "bat" -> {
                     List<Integer> near = new ArrayList<>();
@@ -415,11 +422,35 @@ public final class Routes {
     }
 
     private static ChatBus.Result onChat(ChatBus.Line line) {
-        if (LOCKED_LINE.equals(line.plain().trim())) {
-            Dungeon.Placed r = Dungeon.current();
-            if (r != null) locked(progress(r));
+        String t = line.plain().trim();
+        Dungeon.Placed r = Dungeon.current();
+        var mc = Minecraft.getInstance();
+        if (r == null || mc.player == null) return ChatBus.PASS;
+        if (LOCKED_LINE.equals(t)) {
+            int[] was = CLICKED_ON.remove(r);
+            Progress p = progress(r);
+            // the chest was locked after all, but the step already moved on: back to it, asking for the lever
+            if (lateLock(p.clickedAt, was, mc.player.tickCount)) {
+                r.step = was[0];
+                progress(r).locked = true;
+            } else locked(p);
+        } else if (LEVER_LINE.equals(t)) {
+            Step s = current(r);
+            if (s != null) leverPulled(s, progress(r));
         }
         return ChatBus.PASS;
+    }
+
+    // a locked line with no click waiting, shortly after a click moved the step on. pure, for tests
+    static boolean lateLock(int clickedAt, int[] movedOn, int now) {
+        return clickedAt < 0 && movedOn != null && now - movedOn[1] <= LATE_LOCK;
+    }
+
+    // Hypixel says a lever opened something: every lever of the step counts as pulled
+    static void leverPulled(Step s, Progress p) {
+        List<Action> acts = actionsOf(s);
+        for (int i = 0; i < acts.size(); i++) if (acts.get(i).kind() == Kind.LEVER) p.pulled.add(i);
+        p.locked = false;
     }
 
     private static boolean onSound(SoundHooks.Sound snd) {
@@ -519,8 +550,10 @@ public final class Routes {
             Action a = acts.get(i);
             boolean lever = a.kind() == Kind.LEVER;
             if (lever ? p.pulled.contains(i) : p.passed.contains(i)) continue;
-            leverLeft |= lever;
             Vec3 b = block(r, a.at());
+            // the first lever left gets a line from your crosshair, so it is clear where to go before the chest
+            if (lever && !leverLeft) w.line(io.github.zmuzy.sbc.combat.Combat.fromCrosshair(w), b.add(0.5, 0.5, 0.5), a.kind().color, 2f, false);
+            leverLeft |= lever;
             box(w, b, a.kind().color, a.kind() == Kind.TNT);
             // one label per bunch of blocks to mine or blow up
             if (labelled.stream().anyMatch(l -> l.kind() == a.kind() && l.at().distanceTo(b) < 2.5)) continue;
