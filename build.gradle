@@ -13,9 +13,8 @@ repositories {
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // fabric api is a dependency the player installs next to the mod, not packed in the jar
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    // packed inside the jar so nobody has to download it. a newer copy the player already has wins
-    include "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // hypixel mod api, comes from the HypixelModAPI mod at runtime (optional)
     compileOnly files('libs/mod-api-1.0.2.jar')
     // parser tests run on real text from /sbc dump (src/test/resources/samples)
