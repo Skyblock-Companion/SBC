@@ -790,7 +790,7 @@ public final class Profit {
     private static final Card SLAYER_CARD = new Card("slayer_profit", "Slayer profit", "Slayer", 41, SLAYER) {
         @Override
         boolean relevant() {
-            return slayering() || System.currentTimeMillis() - lastSlayerAt < 120_000;
+            return slayerShows(slayering(), System.currentTimeMillis() - lastSlayerAt, java.util.Objects.equals(GameState.island, slayerIsland));
         }
 
         @Override
@@ -908,6 +908,13 @@ public final class Profit {
     // --- what feeds them ---
 
     private static long feverUntil, questStart, lastSlayerAt;
+    // the island the last slayer gain was on: away from it the card goes at once
+    private static String slayerIsland;
+
+    // shown while you slay, and half a minute after on the same island, like the quest card. pure, for tests
+    static boolean slayerShows(boolean slaying, long sinceGain, boolean sameIsland) {
+        return slaying || sinceGain < 30_000 && sameIsland;
+    }
     private static final Map<String, Set<String>> SLAYER_ITEMS = new HashMap<>();
     private static Set<String> fishingItems;
 
@@ -964,6 +971,7 @@ public final class Profit {
             if (ANY_KIND.contains(id) || slayerItems(boss).contains(id)) {
                 SLAYER.item(id, amount);
                 lastSlayerAt = System.currentTimeMillis();
+                slayerIsland = GameState.island;
             }
         }
         if (fishing() && (ANY_KIND.contains(id) || fishingItems().contains(id))) {
@@ -982,6 +990,7 @@ public final class Profit {
             if (slayering() && diff < 100_000) {
                 SLAYER.coins(diff);
                 lastSlayerAt = System.currentTimeMillis();
+                slayerIsland = GameState.island;
             }
         } else if (diff < 0 && System.currentTimeMillis() - questStart < 1500) {
             SLAYER.coins(diff);
@@ -1182,6 +1191,7 @@ public final class Profit {
         else if (t.equals("SLAYER QUEST COMPLETE!")) {
             SLAYER.count("Bosses", 1);
             lastSlayerAt = System.currentTimeMillis();
+            slayerIsland = GameState.island;
         }
         Matcher coins = Patterns.get("SH.fishing.tracker.chat.coins.colorless").matcher(clean);
         if (coins.matches()) {
