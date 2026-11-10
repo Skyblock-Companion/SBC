@@ -1030,6 +1030,7 @@ public final class HudEditorScreen extends SbcScreen {
     public void onClose() {
         Config.save();
         dev.zmuzy.sbc.ui.HudReplay.forget();
+        dev.zmuzy.sbc.ui.HudLayout.editorClosed();
         super.onClose();
     }
 

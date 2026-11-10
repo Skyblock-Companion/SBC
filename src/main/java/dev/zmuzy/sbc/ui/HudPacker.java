@@ -122,10 +122,14 @@ final class HudPacker {
     // a free spot, its still kept on screen just overlapping
     boolean pack(List<Box> boxes, Map<String, Integer> sticky) {
         boolean all = true;
+        // remembered cards first, shallow columns before deep ones, so a deeper column starts right of the final
+        // width of the one before it
+        if (sticky != null) for (int depth = 0; depth < MAX_DEPTH; depth++)
+            for (Box b : boxes) if (b.column == null && depthOf(sticky.get(b.id)) == depth) putRemembered(b, sticky);
         // overflow from the right waits for the left sides own cards, top left corner stays theirs
         List<Box> overflow = new ArrayList<>();
         for (Box b : boxes) {
-            if (putRemembered(b, sticky)) continue;
+            if (b.column != null) continue;
             if (b.right) {
                 Column own = column(true, 0);
                 int at = fit(own, b);
@@ -146,13 +150,17 @@ final class HudPacker {
         return all;
     }
 
+    // -1 = not remembered
+    private static int depthOf(Integer code) {
+        if (code == null) return -1;
+        return Math.min(code < 0 ? -code - 1 : code, MAX_DEPTH - 1);
+    }
+
     // stay in the last column if it still fits
     private boolean putRemembered(Box b, Map<String, Integer> sticky) {
         Integer last = sticky == null ? null : sticky.get(b.id);
         if (last == null) return false;
-        boolean right = last < 0;
-        int depth = right ? -last - 1 : last;
-        Column c = column(right, Math.min(depth, MAX_DEPTH - 1));
+        Column c = column(last < 0, depthOf(last));
         int at = fit(c, b);
         if (at < 0) return false;
         put(c, b, at);

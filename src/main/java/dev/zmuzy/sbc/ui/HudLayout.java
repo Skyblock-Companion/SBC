@@ -254,6 +254,10 @@ public final class HudLayout {
     private static final int BOTTOM_GAP = 2;
     private static final Map<String, Integer> COLUMNS = new HashMap<>();
     private static String columnsFor = "";
+    // the side cards last shown, and when cards last got a try at going home
+    private static String sidesShown = "";
+    private static long homeAt;
+    private static final long HOME_MS = 5000;
 
     // tests only: just these cards in the editor (whole screen pictures)
     static java.util.Set<String> previewOnly;
@@ -454,40 +458,44 @@ public final class HudLayout {
             break;
         }
         if (!sides.isEmpty()) {
-            String size = sw + "x" + sh + " " + all + " " + dev.zmuzy.sbc.core.GameState.island;
+            String size = sw + "x" + sh + " " + all + " " + Config.I.hudScale + " " + Config.I.hudX + " " + ndL[0] + "," + ndL[1] + " " + ndR[0] + "," + ndR[1] + " " + dev.zmuzy.sbc.core.GameState.island;
             if (!size.equals(columnsFor)) {
                 columnsFor = size;
                 COLUMNS.clear();
             }
             // right sides own cards first, the ones spilling over from the left go under them
             sides.sort(Comparator.comparing((Placed p) -> p.element.zone != Zone.TOP_RIGHT));
-            boolean mayShrink = !editing || previewShrink;
-            int gui = Math.max(1, guiScale());
-            float top = 0;
-            for (Placed p : sides) top = Math.max(top, p.scale * gui);
-            for (float limit = top; ; limit = nextLimit(limit)) {
-                HudPacker packer = new HudPacker(sw, sh, Config.I.hudX - 2 + ndL[0], 4 + ndL[1], sw - 4 + ndR[0], 4 + ndR[1], taken);
-                List<HudPacker.Box> boxes = new ArrayList<>();
-                for (Placed p : sides) {
-                    float k = Math.min(p.scale, limit / gui) / p.scale;
-                    boxes.add(new HudPacker.Box(p.id, p.element.zone == Zone.TOP_RIGHT, Math.round(p.w * k), Math.round(p.h * k), p.element.stretchable()));
-                }
-                boolean fits = packer.pack(boxes, editing || limit < top ? null : COLUMNS);
-                if (!fits && mayShrink && limit > 1f) continue;
-                for (int i = 0; i < sides.size(); i++) {
-                    Placed p = sides.get(i);
-                    HudPacker.Box b = boxes.get(i);
-                    p.x = b.x;
-                    p.y = b.y;
-                    p.w = b.w;
-                    p.h = b.h;
-                    p.scale = Math.min(p.scale, limit / gui);
-                    if (b.stretched || p.held) p.element.forcedWidth = Math.round(b.w / p.scale);
-                }
-                bottomL = Math.max(bottomL, packer.bottom(false));
-                bottomR = packer.bottom(true);
-                break;
+            List<Side> in = new ArrayList<>();
+            StringBuilder set = new StringBuilder();
+            for (Placed p : sides) {
+                in.add(new Side(p.id, p.element.zone == Zone.TOP_RIGHT, p.w, p.h, p.scale, p.element.stretchable()));
+                set.append(p.id).append(' ');
             }
+            // a card came or went, or a while passed: see if the ones that moved out fit back home
+            boolean home = false;
+            if (!editing) {
+                long now = System.currentTimeMillis();
+                home = !set.toString().equals(sidesShown) || now - homeAt > HOME_MS;
+                if (home) {
+                    sidesShown = set.toString();
+                    homeAt = now;
+                }
+            }
+            int gui = Math.max(1, guiScale());
+            int[] corners = {Config.I.hudX - 2 + ndL[0], 4 + ndL[1], sw - 4 + ndR[0], 4 + ndR[1]};
+            Packed packed = packSides(sw, sh, corners, taken, in, gui, !editing || previewShrink, editing ? null : COLUMNS, home);
+            for (int i = 0; i < sides.size(); i++) {
+                Placed p = sides.get(i);
+                HudPacker.Box b = packed.boxes.get(i);
+                p.x = b.x;
+                p.y = b.y;
+                p.w = b.w;
+                p.h = b.h;
+                p.scale = Math.min(p.scale, packed.limit / gui);
+                if (b.stretched || p.held) p.element.forcedWidth = Math.round(b.w / p.scale);
+            }
+            bottomL = Math.max(bottomL, packed.packer.bottom(false));
+            bottomR = packed.packer.bottom(true);
         }
         BOTTOM.clear();
         if (bottomL > 0) BOTTOM.put(Zone.TOP_LEFT, bottomL);
@@ -495,6 +503,67 @@ public final class HudLayout {
         if (anyB) BOTTOM.put(Zone.BOTTOM_LEFT, blY + GAP);
         if (anyC) BOTTOM.put(Zone.BOTTOM_CENTER, bcY + BOTTOM_GAP);
         return out;
+    }
+
+    // one corner card going into the packer, screen px at its own size
+    record Side(String id, boolean right, int w, int h, float scale, boolean stretch) {}
+
+    // the pass that got used
+    record Packed(HudPacker packer, List<HudPacker.Box> boxes, float limit, boolean fits) {}
+
+    private static Packed pass(int sw, int sh, int[] corners, List<HudPacker.Rect> taken, List<Side> sides, int gui, float limit, Map<String, Integer> cols) {
+        HudPacker packer = new HudPacker(sw, sh, corners[0], corners[1], corners[2], corners[3], taken);
+        List<HudPacker.Box> boxes = new ArrayList<>();
+        for (Side s : sides) {
+            float k = Math.min(s.scale(), limit / gui) / s.scale();
+            boxes.add(new HudPacker.Box(s.id(), s.right(), Math.round(s.w() * k), Math.round(s.h() * k), s.stretch()));
+        }
+        boolean fits = packer.pack(boxes, cols);
+        return new Packed(packer, boxes, limit, fits);
+    }
+
+    // packs the corner cards, the biggest shrink a clean step at a time when they dont fit
+    // memory = the column each card was in last time (null = not used). each pass works on a copy, only the pass
+    // that gets used is kept, so a failed one cant leave cards in odd columns. home = also try without it and take
+    // that when it fits, so cards that had to move out come back
+    static Packed packSides(int sw, int sh, int[] corners, List<HudPacker.Rect> taken, List<Side> sides, int gui, boolean mayShrink, Map<String, Integer> memory, boolean home) {
+        float top = 0;
+        for (Side s : sides) top = Math.max(top, s.scale() * gui);
+        for (float limit = top; ; limit = nextLimit(limit)) {
+            // shrunk passes start fresh, the columns were picked at full size
+            Map<String, Integer> cols = memory != null && limit == top ? new HashMap<>(memory) : null;
+            Packed p = pass(sw, sh, corners, taken, sides, gui, limit, cols);
+            if (cols != null && (home || !p.fits())) {
+                Map<String, Integer> fresh = new HashMap<>();
+                Packed f = pass(sw, sh, corners, taken, sides, gui, limit, fresh);
+                if (f.fits()) {
+                    p = f;
+                    cols = fresh;
+                }
+            }
+            if (!p.fits() && mayShrink && limit > 1f) continue;
+            if (memory != null) {
+                if (cols != null) {
+                    memory.clear();
+                    memory.putAll(cols);
+                }
+                // a card that is not shown now starts fresh when it comes back
+                java.util.Set<String> shown = new java.util.HashSet<>();
+                for (Side s : sides) shown.add(s.id());
+                memory.keySet().retainAll(shown);
+            }
+            return p;
+        }
+    }
+
+    // the editors demo sizes and columns shouldnt outlive it
+    public static void editorClosed() {
+        MEAS.clear();
+        HELD.clear();
+        COLUMNS.clear();
+        columnsFor = "";
+        sidesShown = "";
+        lastLayout = null;
     }
 
     public static void render(Ui ui, GuiGraphicsExtractor g, int sw) {
