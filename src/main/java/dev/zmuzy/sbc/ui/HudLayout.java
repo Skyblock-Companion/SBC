@@ -441,6 +441,18 @@ public final class HudLayout {
             }
         }
         int bottomL = 0, bottomR = 0;
+        // the player card keeps the top left corner at its own size: the other cards pack around it, so it never moves
+        // when one comes or goes
+        for (java.util.Iterator<Placed> it = sides.iterator(); it.hasNext(); ) {
+            Placed p = it.next();
+            if (!p.id.equals("playercard") || p.element.zone != Zone.TOP_LEFT) continue;
+            it.remove();
+            p.x = Config.I.hudX - 2 + ndL[0];
+            p.y = 4 + ndL[1];
+            taken.add(new HudPacker.Rect(p.x, p.y, p.w, p.h));
+            bottomL = p.y + p.h + HudPacker.GAP;
+            break;
+        }
         if (!sides.isEmpty()) {
             String size = sw + "x" + sh + " " + all + " " + dev.zmuzy.sbc.core.GameState.island;
             if (!size.equals(columnsFor)) {
@@ -472,7 +484,7 @@ public final class HudLayout {
                     p.scale = Math.min(p.scale, limit / gui);
                     if (b.stretched || p.held) p.element.forcedWidth = Math.round(b.w / p.scale);
                 }
-                bottomL = packer.bottom(false);
+                bottomL = Math.max(bottomL, packer.bottom(false));
                 bottomR = packer.bottom(true);
                 break;
             }
