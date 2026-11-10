@@ -428,7 +428,41 @@ public final class SkillCards {
         return 1;
     }
 
+    public static final String MAXED_MENU = "skill_maxed_menu";
+
+    // a skill's slot in Your Skills is gold once it is maxed, like its card on the profile page
+    static void markMaxed(io.github.zmuzy.sbc.item.menus.MenuView v) {
+        for (int slot = 0; slot < v.top; slot++) {
+            io.github.zmuzy.sbc.item.menus.MenuView.Item it = v.item(slot);
+            if (!it.empty() && maxed(it.clean, it.cleanLore)) v.back(slot, io.github.zmuzy.sbc.item.menus.MenuView.GOLD);
+        }
+    }
+
+    // "Enchanting LX" at its cap, or a skill whose lore says it is maxed. pure, for tests
+    static boolean maxed(String name, List<String> lore) {
+        String[] parts = name.split(" ");
+        if (parts.length < 2) return false;
+        String skill = parts[0];
+        boolean isSkill = false;
+        for (String l : lore) {
+            if (l.contains("Click to view!")) isSkill = true;
+            if (l.contains("MAX LEVEL") || l.contains("Max Level")) return isSkillName(skill);
+        }
+        if (!isSkill || !isSkillName(skill)) return false;
+        String lvl = parts[parts.length - 1];
+        int level = lvl.matches("\\d+") ? Integer.parseInt(lvl) : GameState.roman(lvl);
+        int cap = cap(skill);
+        return cap > 0 && level >= cap;
+    }
+
+    private static boolean isSkillName(String word) {
+        return java.util.Arrays.asList(io.github.zmuzy.sbc.core.Profile.SKILLS).contains(word.toUpperCase(Locale.ROOT));
+    }
+
     public static void register() {
+        Features.add(new Feature(MAXED_MENU, "Skills", "Maxed skills in gold", "In Your Skills, a maxed skill's slot is gold.", "")
+                .when(() -> GameState.inSkyBlock));
+        io.github.zmuzy.sbc.item.menus.MenuMarks.add(MAXED_MENU, "Your Skills", SkillCards::markMaxed);
         Features.add(new Feature(ETA, "Skills", "Skill ETA", "The skill you are levelling: how long to the next level or your goal, XP per hour, and how long this session has run. All three pause when XP stops coming in. The skill progress bar shows the same, so this is off unless you want the card.", "SkyHanni: Skill ETA")
                 .defaultOff()
                 .when(() -> GameState.inSkyBlock)

@@ -13,7 +13,7 @@ public final class Releases {
     public static final String FIRST = "beta-0.1";
 
     public static final List<Release> ALL = List.of(
-            new Release("beta-0.2", "Beta 0.2", List.of("sack_helper", "garden_mutation_analyzed")));
+            new Release("beta-0.2", "Beta 0.2", List.of("sack_helper", "garden_mutation_analyzed", "skill_maxed_menu")));
 
     private Releases() {}
 
