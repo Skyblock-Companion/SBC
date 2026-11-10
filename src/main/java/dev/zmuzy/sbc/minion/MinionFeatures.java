@@ -108,7 +108,7 @@ public final class MinionFeatures {
 
     private MinionFeatures() {}
 
-    private static String key(Vec3 v) {
+    static String key(Vec3 v) {
         return String.format(Locale.ROOT, "%.2f,%.2f,%.2f", v.x, v.y, v.z);
     }
 
@@ -417,6 +417,7 @@ public final class MinionFeatures {
         }
         if (PICKUP.matcher(message).find() && lastMinion != null) {
             s.minionSpots.remove(key(lastMinion));
+            Minions.pickedUp(GameState.island, lastMinion);
             lastClickedEntity = null;
             lastMinion = null;
             lastMinionOpened = 0;

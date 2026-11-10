@@ -245,7 +245,7 @@ public final class CompanionScreen extends SbcScreen {
             badge.cursorStyle(CursorStyle.HAND);
             row.child(badge);
         } else if (index == 6) {
-            LabelComponent badge = liveLabel(() -> Store.I.minions.isEmpty() ? "" : String.valueOf(Store.I.minions.size()), Modern.DIM);
+            LabelComponent badge = liveLabel(() -> Store.minions().isEmpty() ? "" : String.valueOf(Store.minions().size()), Modern.DIM);
             badge.cursorStyle(CursorStyle.HAND);
             row.child(badge);
         }

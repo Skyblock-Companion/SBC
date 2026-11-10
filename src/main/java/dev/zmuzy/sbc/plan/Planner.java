@@ -82,7 +82,7 @@ public final class Planner {
                     "Finished: it makes nothing more until you claim it. The Forge page shows what pays most to put in.", ""));
             minutesLeft -= 2;
         }
-        for (Store.MinionRecord r : Store.I.minions.values()) {
+        for (Store.MinionRecord r : Store.minions().values()) {
             if (dev.zmuzy.sbc.minion.Minions.hoursUntilFull(r) != 0) continue;
             out.add(new Step("Empty your " + dev.zmuzy.sbc.minion.Minions.pretty(r.type) + " minion " + r.tier, "chest", 1, 0, 0,
                     r.island == null || r.island.isEmpty() ? "PRIVATE_ISLAND" : r.island, "", true, "Full by its measured rate: it stopped working.", ""));
@@ -125,7 +125,7 @@ public final class Planner {
 
         // 4. upgrades that pay back fastest (only prices that actually trade)
         List<Object[]> upgrades = new ArrayList<>();
-        for (Store.MinionRecord r : Store.I.minions.values())
+        for (Store.MinionRecord r : Store.minions().values())
             for (dev.zmuzy.sbc.minion.Minions.Advice a : dev.zmuzy.sbc.minion.Minions.advise(r))
                 if (a.certain() && a.cost() > 0 && a.daysToPayBack() <= PAYBACK_DAYS) upgrades.add(new Object[]{r, a});
         upgrades.sort(java.util.Comparator.comparingDouble(o -> ((dev.zmuzy.sbc.minion.Minions.Advice) o[1]).daysToPayBack()));

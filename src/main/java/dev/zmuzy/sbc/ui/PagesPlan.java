@@ -712,7 +712,7 @@ final class PagesPlan {
 
     static int minions(MenuUi ui, int x, int y, int w) {
         int y0 = y, gap = MenuUi.GAP;
-        List<Store.MinionRecord> list = new ArrayList<>(Store.I.minions.values());
+        List<Store.MinionRecord> list = new ArrayList<>(Store.minions().values());
         list.sort(Comparator.comparingDouble(Minions::coinsPerDay).reversed());
         double total = list.stream().mapToDouble(Minions::coinsPerDay).sum();
         long measured = list.stream().filter(Minions::measured).count();

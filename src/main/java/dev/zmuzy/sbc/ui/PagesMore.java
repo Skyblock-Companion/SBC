@@ -474,7 +474,7 @@ final class PagesMore {
         t = ui.card(x2, y, col, h, "Minions", "hopper", null, 0xFFFFB454);
         ui.textScaled(d.uniqueMinions + " crafted", x2 + 6, y + t, 1.25f, Ui.TEXT, true);
         ui.text("Unique minion tiers", x2 + 6, y + t + 17, Ui.DIM);
-        ui.row("Tracked by the mod", String.valueOf(Store.I.minions.size()), x2 + 6, y + t + 29, col - 12, Ui.MUTED);
+        ui.row("Tracked by the mod", String.valueOf(Store.minions().size()), x2 + 6, y + t + 29, col - 12, Ui.MUTED);
 
         double petWorth = d.pets.stream().mapToDouble(Profile.Pet::value).sum();
         t = ui.card(x3, y, c3, h, "Pets", "bone", null, 0xFFFFB454);

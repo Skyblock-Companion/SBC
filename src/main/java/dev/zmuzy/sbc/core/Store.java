@@ -36,6 +36,9 @@ public final class Store {
     public List<SessionRecord> sessions = new ArrayList<>();
     // [epochMillis, purse, bank]
     public List<long[]> wealth = new ArrayList<>();
+    // your minions per profile name: "ISLAND@x, y, z" (or "ISLAND@TypeTier" from a menu) -> record
+    public Map<String, Map<String, MinionRecord>> minionsByProfile = new HashMap<>();
+    // minions from before the split, or seen while no profile name was known yet. they go to the next profile read
     public Map<String, MinionRecord> minions = new LinkedHashMap<>();
     // "ISLAND|Name" -> [x,y,z], npc spots learned from their nametags
     public Map<String, double[]> npcs = new HashMap<>();
@@ -335,8 +338,31 @@ public final class Store {
         public Map<String, Long> islandMs = new HashMap<>();
     }
 
+    // minions of the profile youre on
+    public static Map<String, MinionRecord> minions() {
+        return I.minionsOf(GameState.profileName);
+    }
+
+    // a profiles minions. the old shared map moves into the first profile asked for, once
+    public Map<String, MinionRecord> minionsOf(String profile) {
+        if (profile == null || profile.isEmpty()) return minions;
+        Map<String, MinionRecord> m = minionsByProfile.computeIfAbsent(profile, k -> new LinkedHashMap<>());
+        if (!minions.isEmpty()) {
+            // records from before fromScan was saved: seen by the head scan, never opened = made by the scan
+            for (MinionRecord r : minions.values()) if (r.lastSeen == 0 && r.catalogType != null && !r.fromSpot) r.fromScan = true;
+            minions.forEach(m::putIfAbsent);
+            minions.clear();
+            markDirty();
+        }
+        return m;
+    }
+
     public static final class MinionRecord {
         public String key, type;
+        // made by the head scan (so the scan may forget it), not by opening the menu or a remembered spot
+        public boolean fromScan;
+        // made from a spot MinionFeatures remembers, goes when that spot does
+        public boolean fromSpot;
         // repo type id (COBBLESTONE) when we know it from its head
         public String catalogType;
         public long lastDetected;

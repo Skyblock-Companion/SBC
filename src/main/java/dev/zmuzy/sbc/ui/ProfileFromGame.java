@@ -238,7 +238,7 @@ final class ProfileFromGame {
 
         // the game never shows crafted minions as a number, so we show what we track
         t = ui.card(x2, y, col, h, "Minions", "hopper", null, 0xFFFFB454);
-        ui.textScaled(Store.I.minions.size() + " tracked", x2 + 6, y + t, 1.25f, Ui.TEXT, true);
+        ui.textScaled(Store.minions().size() + " tracked", x2 + 6, y + t, 1.25f, Ui.TEXT, true);
         ui.text("Minions the mod has seen", x2 + 6, y + t + 17, Ui.DIM);
 
         t = ui.card(x3, y, c3, h, "Pets", "bone", null, 0xFFFFB454);

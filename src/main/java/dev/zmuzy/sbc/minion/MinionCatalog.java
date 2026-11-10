@@ -9,6 +9,8 @@ import dev.zmuzy.sbc.SbcMod;
 import dev.zmuzy.sbc.core.GameState;
 import dev.zmuzy.sbc.core.Prices;
 import dev.zmuzy.sbc.core.Store;
+import dev.zmuzy.sbc.core.game.GameProfile;
+import dev.zmuzy.sbc.core.game.Seen;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
@@ -38,6 +40,13 @@ public final class MinionCatalog {
     private static final dev.zmuzy.sbc.core.Patterns.P ID = dev.zmuzy.sbc.core.Patterns.p("MinionCatalog.ID");
     private static final dev.zmuzy.sbc.core.Patterns.P DELAY = dev.zmuzy.sbc.core.Patterns.p("MinionCatalog.DELAY");
     private static final dev.zmuzy.sbc.core.Patterns.P STORAGE = dev.zmuzy.sbc.core.Patterns.p("MinionCatalog.STORAGE");
+    // "Tungsten Minion XI" or "Tungsten Minion 11", on a name stand, a menu title or a remembered spot
+    private static final dev.zmuzy.sbc.core.Patterns.P NAME = dev.zmuzy.sbc.core.Patterns.p("MinionCatalog.NAME");
+    // where the games minion name and its repo id differ
+    private static final Map<String, String> ID_OF_NAME = Map.of("NETHER_WART", "NETHER_WARTS", "END_STONE", "ENDER_STONE",
+            "CAVE_SPIDER", "CAVESPIDER");
+    private static final Map<String, String> NAME_OF_ID = Map.of("NETHER_WARTS", "Nether Wart", "ENDER_STONE", "End Stone",
+            "CAVESPIDER", "Cave Spider");
     private static final Map<String, Spec> byTexture = new HashMap<>();
     private static final Map<String, Spec> byKey = new HashMap<>();
     private static int scan;
@@ -70,6 +79,42 @@ public final class MinionCatalog {
         drops("FISHING", "RAW_FISH", 0.5, "RAW_FISH:1", 0.25, "PRISMARINE_SHARD", 0.1, "PRISMARINE_CRYSTALS", 0.1, "SPONGE", 0.03, "CLAY_BALL", 0.1);
         drops("OAK", "LOG", 1); drops("SPRUCE", "LOG:1", 1); drops("BIRCH", "LOG:2", 1); drops("JUNGLE", "LOG:3", 1); drops("ACACIA", "LOG_2", 1);
         drops("DARK_OAK", "LOG_2:1", 1); drops("FLOWER", "YELLOW_FLOWER", 0.5, "RED_ROSE", 0.5); drops("VOIDLING", "QUARTZ", 1);
+        drops("LILY_PAD", "WATER_LILY", 1); drops("SUNFLOWER", "DOUBLE_PLANT", 1); drops("INFERNO", "CRUDE_GABAGOOL", 1);
+        drops("VAMPIRE", "HEMOVIBE", 1);
+    }
+
+    public record Named(String type, int tier) {}
+
+    // a minion name to its repo type + tier, null = not a minion name
+    public static Named named(String name) {
+        if (name == null) return null;
+        Matcher m = NAME.matcher(GameState.strip(name).trim());
+        if (!m.matches()) return null;
+        String t = m.group(2);
+        int tier = t.chars().allMatch(Character::isDigit) ? Integer.parseInt(t) : GameState.roman(t);
+        if (tier < 1 || tier > 12) return null;
+        String type = typeId(m.group(1));
+        return type.isEmpty() ? null : new Named(type, tier);
+    }
+
+    // "Nether Wart" -> NETHER_WARTS, the id the repo + DROPS use
+    public static String typeId(String name) {
+        if (name == null) return "";
+        String id = GameState.strip(name).trim().toUpperCase(java.util.Locale.ROOT).replaceAll("[^A-Z0-9]+", "_").replaceAll("^_|_$", "");
+        if (id.endsWith("_MINION")) id = id.substring(0, id.length() - "_MINION".length());
+        return ID_OF_NAME.getOrDefault(id, id);
+    }
+
+    // NETHER_WARTS -> "Nether Wart", like the game names the minion
+    public static String displayType(String id) {
+        if (NAME_OF_ID.containsKey(id)) return NAME_OF_ID.get(id);
+        StringBuilder b = new StringBuilder();
+        for (String w : id.toLowerCase(java.util.Locale.ROOT).split("_")) {
+            if (w.isEmpty()) continue;
+            if (b.length() > 0) b.append(' ');
+            b.append(Character.toUpperCase(w.charAt(0))).append(w.substring(1));
+        }
+        return b.toString();
     }
 
     private MinionCatalog() {}
@@ -193,55 +238,94 @@ public final class MinionCatalog {
         return out.size() > limit ? out.subList(0, limit) : out;
     }
 
-    // spots minions near you on your island by their heads and records them (every 2 sec)
+    private static Object level;
+    private static long levelAt;
+
+    // spots minions near you on your island by their heads and records them (every 2 sec). a head the repo
+    // doesnt know (newer types, skins) still counts by its name stand or the name MinionFeatures remembers
     public static void tick(Minecraft mc) {
-        if (mc.level == null || mc.player == null || !ready() || ++scan % 40 != 0) return;
-        if (!"PRIVATE_ISLAND".equals(GameState.island) && !"GARDEN".equals(GameState.island) || GameState.guest) return;
+        if (mc.level == null || mc.player == null || ++scan % 40 != 0) return;
         long now = System.currentTimeMillis();
-        java.util.Set<String> here = new java.util.HashSet<>();
+        if (mc.level != level) {
+            level = mc.level;
+            levelAt = now;
+        }
+        Seen seen = GameProfile.current();
+        Map<String, Store.MinionRecord> all = Store.minions();
+        if (seen != null && Minions.fillFromSpots(seen.minionSpots, all)) Store.markDirty();
+        if (!"PRIVATE_ISLAND".equals(GameState.island) && !"GARDEN".equals(GameState.island) || GameState.guest) return;
+        java.util.Set<String> occupied = new java.util.HashSet<>();
         for (Entity en : mc.level.entitiesForRendering()) {
             if (!(en instanceof ArmorStand a) || a.distanceToSqr(mc.player) > 96 * 96) continue;
             ItemStack head = a.getItemBySlot(EquipmentSlot.HEAD);
             if (head.isEmpty()) continue;
-            ResolvableProfile prof = head.get(DataComponents.PROFILE);
-            if (prof == null) continue;
-            String hash = null;
-            for (Property p : prof.partialProfile().properties().get("textures")) hash = skinHash(p.value());
-            Spec s = hash == null ? null : byTexture.get(hash);
-            if (s == null) continue;
             String key = GameState.island + "@" + a.blockPosition().toShortString();
-            here.add(key);
-            Store.MinionRecord r = Store.I.minions.computeIfAbsent(key, k -> new Store.MinionRecord());
-            boolean changed = r.tier != s.tier() || !s.type().equals(r.type);
+            occupied.add(key);
+            Spec s = byHead(head);
+            Named n = s != null ? new Named(s.type(), s.tier()) : nameNear(mc, a, seen);
+            if (n == null) continue;
+            Store.MinionRecord r = all.get(key);
+            boolean made = r == null;
+            if (made) {
+                r = new Store.MinionRecord();
+                r.fromScan = true;
+                all.put(key, r);
+            }
+            boolean changed = made || r.tier != n.tier() || !n.type().equals(r.catalogType);
             r.key = key;
-            r.type = Minions.pretty(s.type().toLowerCase().replace('_', ' '));
-            r.catalogType = s.type();
-            r.tier = s.tier();
+            if (changed || r.type == null) r.type = displayType(n.type());
+            r.catalogType = n.type();
+            r.tier = n.tier();
             r.island = GameState.island;
-            if (r.storageSlots <= 0) r.storageSlots = Math.max(1, s.storage() / 64);
+            if (r.storageSlots <= 0) r.storageSlots = s != null ? Math.max(1, s.storage() / 64) : Minions.slotsForTier(n.tier());
             if (changed || now - r.lastDetected > 60_000) {
                 r.lastDetected = now;
                 Store.markDirty();
             }
         }
-        forgetGone(mc, here);
+        // entities come in a moment after the world, till then every spot looks empty
+        if (now - levelAt < 10_000) return;
+        var p = mc.player.position();
+        if (forgetGone(all, GameState.island, occupied, k -> {
+            double[] c = Minions.coords(k);
+            return c != null && p.distanceTo(new net.minecraft.world.phys.Vec3(c[0] + 0.5, c[1], c[2] + 0.5)) <= 30
+                    && mc.level.hasChunkAt(net.minecraft.core.BlockPos.containing(c[0], c[1], c[2]));
+        })) Store.markDirty();
     }
 
-    // from skyhanni removeBuggedMinions. a spot on this island within 30 blocks with no minion means it got
-    // picked up or moved
-    // without this old spots stay minions forever (no fuel, no upgrades)
-    static void forgetGone(Minecraft mc, java.util.Set<String> here) {
-        var p = mc.player.position();
-        boolean gone = Store.I.minions.entrySet().removeIf(e -> {
-            String k = e.getKey();
-            if (here.contains(k) || !Minions.hasCoords(k) || !GameState.island.equals(e.getValue().island)) return false;
-            String[] c = k.substring(k.indexOf('@') + 1).split(",\\s*");
-            try {
-                return p.distanceTo(new net.minecraft.world.phys.Vec3(Double.parseDouble(c[0]) + 0.5, Double.parseDouble(c[1]), Double.parseDouble(c[2]) + 0.5)) <= 30;
-            } catch (Exception ex) {
-                return false;
-            }
+    private static Spec byHead(ItemStack head) {
+        ResolvableProfile prof = head.get(DataComponents.PROFILE);
+        if (prof == null) return null;
+        String hash = null;
+        for (Property p : prof.partialProfile().properties().get("textures")) hash = skinHash(p.value());
+        return hash == null ? null : byTexture.get(hash);
+    }
+
+    // a minion whose head isnt in the repo: its own name, a name stand right above it, or the spot MinionFeatures remembers
+    private static Named nameNear(Minecraft mc, ArmorStand a, Seen seen) {
+        if (a.hasCustomName()) {
+            Named n = named(a.getCustomName().getString());
+            if (n != null) return n;
+        }
+        var box = new net.minecraft.world.phys.AABB(a.position(), a.position()).inflate(0.4, 0, 0.4).expandTowards(0, 2.5, 0);
+        for (ArmorStand above : mc.level.getEntitiesOfClass(ArmorStand.class, box, o -> o != a && o.hasCustomName())) {
+            Named n = named(above.getCustomName().getString());
+            if (n != null) return n;
+        }
+        if (seen == null) return null;
+        Seen.MinionSpot spot = seen.minionSpots.get(MinionFeatures.key(a.position()));
+        return spot == null ? null : named(spot.displayName);
+    }
+
+    // from skyhanni removeBuggedMinions. a spot the head scan recorded, now loaded (in reach) and with nothing
+    // standing on it, got picked up or moved. minions added by opening their menu or from a remembered spot
+    // stay: their head may just be one the repo doesnt know
+    static boolean forgetGone(Map<String, Store.MinionRecord> all, String island, java.util.Set<String> occupied,
+                              java.util.function.Predicate<String> loaded) {
+        return all.entrySet().removeIf(e -> {
+            Store.MinionRecord r = e.getValue();
+            return r.fromScan && island.equals(r.island) && Minions.hasCoords(e.getKey()) && !occupied.contains(e.getKey())
+                    && loaded.test(e.getKey());
         });
-        if (gone) Store.markDirty();
     }
 }

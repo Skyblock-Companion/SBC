@@ -226,7 +226,7 @@ public final class MoneyMethods {
     }
 
     public static double minionsPerHour() {
-        return Store.I.minions.values().stream().mapToDouble(Minions::coinsPerDay).sum() / 24;
+        return Store.minions().values().stream().mapToDouble(Minions::coinsPerDay).sum() / 24;
     }
 
     // shard price * how much actually sells per hour, so dead shards dont top the list
