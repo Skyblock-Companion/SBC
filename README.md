@@ -16,7 +16,7 @@
 [![Report issues](.github/assets/badges/github-report-issues-d73a49.svg)](https://github.com/Skyblock-Companion/SBC/issues)
 [![Donate](.github/assets/badges/github-sponsors-donate-ea4aaa.svg)](https://github.com/sponsors/Skyblock-Companion)
 
-**[Features](docs/FEATURES.md)** · **[Commands](docs/COMMANDS.md)** · **[Install](docs/INSTALLING.md)** · **[FAQ](docs/FAQ.md)** · **[Performance](docs/PERFORMANCE.md)** · **[Changelog](docs/CHANGELOG.md)**
+**[Features](docs/FEATURES.md)** · **[Gallery](docs/GALLERY.md)** · **[Commands](docs/COMMANDS.md)** · **[Install](docs/INSTALLING.md)** · **[FAQ](docs/FAQ.md)** · **[Performance](docs/PERFORMANCE.md)** · **[Changelog](docs/CHANGELOG.md)**
 
 </div>
 
