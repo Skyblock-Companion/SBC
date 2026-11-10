@@ -15,6 +15,8 @@ public final class GardenData {
     // VisitorDrops
     public int acceptedVisitors, deniedVisitors, copper, farmingExp, gardenExp, bits, mithrilPowder, gemstonePowder;
     public long coinsSpent;
+    // greenhouse mutations you analyzed, lower case names
+    public java.util.Set<String> analyzedMutations = new java.util.HashSet<>();
     public Map<String, Long> acceptedRarities = new HashMap<>();
     public Map<String, Integer> rewardsCount = new HashMap<>();
 

@@ -116,6 +116,7 @@ public final class GardenPack {
         dev.zmuzy.sbc.garden.pests.PestHighlight.register();
         dev.zmuzy.sbc.garden.greenhouse.DnaSolver.register();
         dev.zmuzy.sbc.garden.greenhouse.CropDiagnostics.register();
+        dev.zmuzy.sbc.garden.greenhouse.MutationAnalysis.register();
         dev.zmuzy.sbc.garden.greenhouse.PhantomleafSolver.register();
         dev.zmuzy.sbc.garden.greenhouse.GreenhousePaste.register();
         dev.zmuzy.sbc.garden.farming.MilestoneGoals.register();
