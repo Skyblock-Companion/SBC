@@ -1,6 +1,6 @@
 accessWidener v2 official
 
-# What the layer in io.github.zmuzy.sbc.ui.layout needs of the game: the same openings owo-lib made for its graphics object and screens.
+# What the layer in io.muzy.sbc.ui.layout needs of the game: the same openings owo-lib made for its graphics object and screens.
 accessible method net/minecraft/client/gui/screens/Screen addRenderableWidget (Lnet/minecraft/client/gui/components/events/GuiEventListener;)Lnet/minecraft/client/gui/components/events/GuiEventListener;
 
 accessible class net/minecraft/client/gui/GuiGraphicsExtractor$ScissorStack
