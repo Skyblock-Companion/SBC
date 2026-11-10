@@ -92,8 +92,8 @@ public final class Config {
     // your own chat rules (see ChatFilters)
     public java.util.List<dev.zmuzy.sbc.chat.ChatFilters.Rule> chatRules = new java.util.ArrayList<>();
 
-    // dungeon secret route set: fow, 3ppopka, pearl or normal
-    public String routeSet = "fastest";
+    // dungeon secret route set: normal, fow, 3ppopka, pearl or fastest (mixes them per room)
+    public String routeSet = "normal";
 
     // armor dye per piece (head, chest, legs, feet -> rgb), only on your own body
     public java.util.Map<String, Integer> armorDye = new java.util.HashMap<>();
@@ -222,7 +222,7 @@ public final class Config {
         Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
     }
 
-    private static void migrate() {
+    static void migrate() {
         // config v3: everything on by default. a config with every switch off (and nothing on) is old leftovers not a
         // choice, so turn it all back on once
         boolean anyOn = I.features.containsValue(Boolean.TRUE);
@@ -262,7 +262,9 @@ public final class Config {
             if ("Both".equals(h)) I.options.put("garden_visitor_status.highlight", "Name");
             else if ("Color".equals(h)) I.options.put("garden_visitor_status.highlight", "Off");
         }
-        I.configVersion = 12;
+        // fastest mixed the playstyles room to room, normal is the default now. only for who still had the old one
+        if (I.configVersion < 13 && "fastest".equals(I.routeSet)) I.routeSet = "normal";
+        I.configVersion = 13;
     }
 
     // /sbc reset: every feature + hud switch back on, options kept

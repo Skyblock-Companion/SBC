@@ -250,7 +250,8 @@ public final class DungeonMap {
         }
         List<Routes.Step> steps = cur == null || !routes ? List.of() : Routes.steps(cur.def.id());
         int step = cur == null ? 0 : cur.step;
-        String type = step < steps.size() ? steps.get(step).type() : "";
+        // the next thing to do (lever, etherwarp, mine...), not just the secrets kind
+        String type = step < steps.size() ? Routes.next(cur) : "";
         int stepsDone = 0, secretSteps = 0;
         for (int i = 0; i < steps.size(); i++) {
             if (!secretStep(steps.get(i))) continue;

@@ -356,8 +356,8 @@ public final class Dungeon {
                 .option(Option.bool("dungeon_rooms.key", "Redstone keys", "Mark redstone keys.", true))
                 .option(Option.bool("dungeon_rooms.other", "Everything else", "Mark what has no kind of its own.", true))
                 .option(Option.bool("dungeon_rooms.entrance", "Entrances", "Mark the way into a secret room too.", false)));
-        Features.add(new Feature("dungeon_routes", "Dungeons", "Secret routes", "Leads you secret after secret: the path, the etherwarp, mine, TNT and interact spots, and the secret itself; reaching it moves to the next step. Set with /sbc route set fow|3ppopka|pearl|normal, skip with /sbc route next.", "Secret Routes Mod")
-                .when(inDungeon));
+        Routes.register(Features.add(new Feature("dungeon_routes", "Dungeons", "Secret routes", "Leads you secret after secret: the path, a jump arc for each etherwarp, the spots to mine with Dungeon Breaker, blow up with Superboom or pull a lever at, and the secret itself; opening, picking up or killing the secret moves to the next step. Set with /sbc route set normal|fow|3ppopka|pearl|fastest, skip with /sbc route next.", "Secret Routes Mod")
+                .when(inDungeon)));
         Features.add(new Feature("dungeon_map", "Dungeons", "Room map", "A small map of the floor with every room you have been in, coloured by kind, and where you stand.", "Skyblocker: dungeon map")
                 .when(inDungeon)
                 .option(Option.bool("dungeon_map.team", "Teammates", "Your teammates on the map, in the colour of their class.", true))
