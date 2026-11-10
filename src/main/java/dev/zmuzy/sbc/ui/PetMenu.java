@@ -385,7 +385,8 @@ public final class PetMenu {
     // clicks get registered with the Ui
     public static void paint(Ui ui, GuiGraphicsExtractor g, Data d, View v, int W, int H, Runnable back) {
         ui.rect(0, 0, W, H, 0xB0060A10);
-        int w = Math.min(W - 16, 640), h = H - 16, x = (W - w) / 2, y = 8;
+        int[] box = Modern.window(W, H, 640);
+        int x = box[0], y = box[1], w = box[2], h = box[3];
         Modern.card(ui, x, y, w, h, 0.97f);
         List<PetHelper.Owned> mine = d.mine();
         int maxed = 0;

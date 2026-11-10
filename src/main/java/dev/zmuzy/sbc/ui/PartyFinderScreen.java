@@ -459,7 +459,8 @@ public final class PartyFinderScreen extends Screen {
 
     void paint(Ui ui, GuiGraphicsExtractor g, int W, int H) {
         ui.rect(0, 0, W, H, 0xB0060A10);
-        int w = Math.min(W - 16, 760), h = H - 16, x = (W - w) / 2, y = 8;
+        int[] box = Modern.window(W, H, 760);
+        int x = box[0], y = box[1], w = box[2], h = box[3];
         Modern.card(ui, x, y, w, h, 0.97f);
         String right = page == Page.FINDER ? shown().size() + " of " + parties.size() + " parties" : subTitle;
         Modern.band(ui, "Party Finder", LegacyItems.stack("skeleton_skull"), right, ACCENT, x, y, w);

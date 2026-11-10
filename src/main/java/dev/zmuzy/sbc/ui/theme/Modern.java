@@ -28,6 +28,14 @@ public final class Modern {
     }
 
     // opacity 0 draws nothing, edges too
+    // a mod window the size of the K menu: 80% of the width (at most max), 90% of the height, in the middle, with
+    // the game still around it. x, y, w, h
+    public static int[] window(int W, int H, int max) {
+        int w = Math.min(max, Math.max(Math.round(W * 0.8f), Math.min(W - 16, 420)));
+        int h = Math.max(Math.round(H * 0.9f), Math.min(H - 16, 260));
+        return new int[]{(W - w) / 2, (H - h) / 2, w, h};
+    }
+
     public static void card(Ui ui, int x, int y, int w, int h, float opacity) {
         if (opacity <= 0f || w < 3 || h < 3) return;
         int top = solid(GLASS_TOP, opacity), bottom = solid(GLASS_BOTTOM, opacity);

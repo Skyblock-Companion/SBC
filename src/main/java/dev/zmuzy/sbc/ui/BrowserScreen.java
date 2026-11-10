@@ -294,8 +294,8 @@ public final class BrowserScreen extends Screen {
         ui.begin(g, mouseX, mouseY);
         int W = width, H = height;
         ui.rect(0, 0, W, H, 0xC0060810);
-        int pad = Math.max(4, W / 80);
-        int x = pad, y = pad, w = W - pad * 2, h = H - pad * 2;
+        int[] box = dev.zmuzy.sbc.ui.theme.Modern.window(W, H, Integer.MAX_VALUE);
+        int x = box[0], y = box[1], w = box[2], h = box[3];
         ui.round(x, y, w, h, 8, PAGE);
         // tab strip, toolbar, bookmarks bar
         ui.round(x, y, w, TAB_H + 6, 8, STRIP);
