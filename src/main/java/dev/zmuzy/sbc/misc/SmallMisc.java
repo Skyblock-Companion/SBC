@@ -356,11 +356,21 @@ public final class SmallMisc {
 
     // --- skyhanni FixDoubleClicks, ColorParticleFix ---
 
-    // the packet mixin calls this: the use on block part of a click hypixel would count twice
-    public static boolean dropUseOnBlock() {
+    // the packet mixin calls this: the use on block part of a click hypixel would count twice. never on a block that
+    // is meant to be used (a lever, a chest, a button, a secret's skull), or dungeon secrets could not be opened
+    public static boolean dropUseOnBlock(net.minecraft.core.BlockPos at) {
         if (!GameState.inSkyBlock || !Features.on(DOUBLE)) return false;
-        Player p = Minecraft.getInstance().player;
-        return p != null && (FishState.holdingRod || BLAZE_DAGGERS.contains(Gain.sbId(p.getMainHandItem())));
+        Minecraft mc = Minecraft.getInstance();
+        Player p = mc.player;
+        if (p == null || !(FishState.holdingRod || BLAZE_DAGGERS.contains(Gain.sbId(p.getMainHandItem())))) return false;
+        return mc.level == null || at == null || !usable(mc.level.getBlockState(at));
+    }
+
+    static boolean usable(net.minecraft.world.level.block.state.BlockState b) {
+        var block = b.getBlock();
+        return block instanceof net.minecraft.world.level.block.LeverBlock || block instanceof net.minecraft.world.level.block.ChestBlock
+                || block instanceof net.minecraft.world.level.block.ButtonBlock || block instanceof net.minecraft.world.level.block.SkullBlock
+                || block instanceof net.minecraft.world.level.block.WallSkullBlock || block instanceof net.minecraft.world.level.block.EnderChestBlock;
     }
 
     public static boolean fixParticles() {

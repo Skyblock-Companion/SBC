@@ -20,7 +20,7 @@ public abstract class PacketSendMixin {
     private void sbc$send(Packet<?> packet, CallbackInfo ci) {
         if (Safe.resting("PacketSendMixin.send")) return;
         try {
-            if (packet instanceof ServerboundUseItemOnPacket && dev.zmuzy.sbc.misc.SmallMisc.dropUseOnBlock()) ci.cancel();
+            if (packet instanceof ServerboundUseItemOnPacket use && dev.zmuzy.sbc.misc.SmallMisc.dropUseOnBlock(use.hitResult().getBlockPos())) ci.cancel();
         } catch (Throwable t) {
             Safe.caught("PacketSendMixin.send", t);
         }
