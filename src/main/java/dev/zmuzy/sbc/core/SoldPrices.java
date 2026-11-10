@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 // what items really sold for: a collector reads every auction that ended for 3 days and the data repo shares,
-// per item, the median price a piece and how many sold a day. a missing or old file, or under a day of sales, shows nothing
+// per item, the median price a piece and how many sold a day. a missing or old file, or under a day of sales,
+// shows nothing
 public final class SoldPrices {
     public record Sold(double median, double perDay, int sales) {}
 
