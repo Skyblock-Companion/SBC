@@ -307,6 +307,16 @@ public final class Trackers {
         }
     }
 
+    private static final java.util.regex.Pattern SACK_WINDOW = java.util.regex.Pattern.compile("\\(Last (\\d+)s\\.\\)");
+
+    // a [Sacks] line covers the last few seconds ("(Last 30s.)"). removals count only when no menu was open in that
+    // time: selling sacks, a visitor or a craft in a menu takes items out on purpose. pure, for tests
+    static boolean countsRemovals(String plain, long sinceMenuMs) {
+        java.util.regex.Matcher m = SACK_WINDOW.matcher(plain);
+        long window = m.find() ? Long.parseLong(m.group(1)) * 1000 : 30_000;
+        return sinceMenuMs > window + 1000;
+    }
+
     // what left the inventory lately with no menu open, per id: amount and when
     private static final Map<String, long[]> RECENT_LOSS = new java.util.HashMap<>();
     // the [Sacks] message can come up to half a minute after the items went
@@ -340,10 +350,19 @@ public final class Trackers {
         if (!GameState.strip(line.plain()).trim().startsWith("[Sacks]") || !opt("sack", true) || !Features.on("pickups")) return ChatBus.PASS;
         String text = sackChangeText(line.component());
         if (text.isEmpty()) return ChatBus.PASS;
+        long now = System.currentTimeMillis();
+        boolean removals = countsRemovals(GameState.strip(line.plain()).trim(), now - lastMenuAt);
         for (var e : parseSackChanges(text).entrySet()) {
             String id = e.getKey();
             long delta = e.getValue();
             PickupLog.add(id, delta);
+            // what left the sacks with no menu open: a compactor turning 160 Mushroom into an Enchanted Mushroom, or
+            // /gfs taking items out. it comes off again, so a compacted item and the items it was made from count once
+            if (!id.startsWith("vanilla:") && delta < 0 && removals) {
+                get("loot", "Items gained").add(id, delta);
+                for (var l : LISTENERS) l.accept(id, (int) Math.max(Integer.MIN_VALUE, delta));
+                if (now - lastSackMenuAt > 10_000) for (var l : FRESH) l.accept(id, (int) Math.max(Integer.MIN_VALUE, delta));
+            }
             if (!id.startsWith("vanilla:") && delta > 0) {
                 netCompaction(id, delta, System.currentTimeMillis());
                 get("loot", "Items gained").add(id, delta);
