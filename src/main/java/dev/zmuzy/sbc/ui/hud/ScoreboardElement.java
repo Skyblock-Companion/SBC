@@ -538,7 +538,13 @@ public final class ScoreboardElement extends HudElement {
     // what only the tab says about a running contest under "Jacob's Contest: 1m 8s left": " Wheat ◆ Top 88.5%",
     // "Bronze has +8,229", next medal + how far. the one you hold is the one below
     static List<String> contestLines(List<String> tab) {
-        String rank = null, medal = null, next = null;
+        return contestLines(tab, -1);
+    }
+
+    // held: the bracket the sidebar says you are in ("BRONZE with 30,000"), -1 when it says none. the tab's
+    // "Bronze has" line can stay behind after you pass it, so a bracket you already hold is never the next one
+    static List<String> contestLines(List<String> tab, int held) {
+        String rank = null, medal = held >= 0 ? BRACKETS[held][1] + BRACKETS[held][0] + " " : null, next = null;
         for (int i = 0; i < tab.size(); i++) {
             if (!GameState.strip(tab.get(i)).trim().startsWith("Jacob's Contest")) continue;
             for (int j = i + 1; j < tab.size(); j++) {
@@ -552,9 +558,9 @@ public final class ScoreboardElement extends HudElement {
                 Matcher m = CONTEST_NEXT.matcher(line);
                 if (!m.matches()) continue;
                 for (int b = 0; b < BRACKETS.length; b++) {
-                    if (!BRACKETS[b][0].equals(m.group(1))) continue;
+                    if (!BRACKETS[b][0].equalsIgnoreCase(m.group(1)) || b <= held) continue;
                     next = "§7To " + BRACKETS[b][1] + BRACKETS[b][0] + "§7: §f" + m.group(2);
-                    if (b > 0) medal = BRACKETS[b - 1][1] + BRACKETS[b - 1][0] + " ";
+                    if (b > 0 && held < 0) medal = BRACKETS[b - 1][1] + BRACKETS[b - 1][0] + " ";
                 }
             }
             break;
@@ -593,8 +599,20 @@ public final class ScoreboardElement extends HudElement {
     }
 
     // rank goes right under the contest lines like on hypixels sidebar
+    private static final Pattern HELD = Pattern.compile("^(BRONZE|SILVER|GOLD|PLATINUM|DIAMOND) with .*");
+
+    // the bracket the sidebar says you are in, -1 for none
+    static int heldBracket(List<String> lines) {
+        for (String l : lines) {
+            Matcher m = HELD.matcher(GameState.strip(l).trim());
+            if (!m.matches()) continue;
+            for (int b = 0; b < BRACKETS.length; b++) if (BRACKETS[b][0].equalsIgnoreCase(m.group(1))) return b;
+        }
+        return -1;
+    }
+
     static List<String> withContestRank(List<String> lines, List<String> tab) {
-        List<String> rank = contestLines(tab);
+        List<String> rank = contestLines(tab, heldBracket(lines));
         if (rank.isEmpty()) return lines;
         int after = -1;
         for (int i = 0; i < lines.size(); i++) {
