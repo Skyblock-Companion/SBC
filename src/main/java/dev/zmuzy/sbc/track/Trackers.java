@@ -272,11 +272,22 @@ public final class Trackers {
         if (!cooled) return;
         if (!old.isEmpty()) {
             Named loot = get("loot", "Items gained");
+            boolean quiet = mc.gui.screen() == null && now - lastMenuAt > 2000;
+            RECENT_LOSS.values().removeIf(l -> now - l[1] > COMPACT_MS);
+            if (quiet) for (var e : old.entrySet()) {
+                long loss = e.getValue() - itemList.getOrDefault(e.getKey(), 0L);
+                if (loss > 0 && !e.getKey().startsWith("vanilla:")) {
+                    long[] l = RECENT_LOSS.computeIfAbsent(e.getKey(), k -> new long[2]);
+                    l[0] += loss;
+                    l[1] = now;
+                }
+            }
             for (var e : itemList.entrySet()) {
                 long gain = e.getValue() - old.getOrDefault(e.getKey(), 0L);
                 if (gain <= 0) continue;
                 if (comesBack(e.getKey(), now)) continue;
                 if (!e.getKey().startsWith("vanilla:")) {
+                    netCompaction(e.getKey(), gain, now);
                     loot.add(e.getKey(), gain);
                     for (var l : LISTENERS) l.accept(e.getKey(), (int) Math.min(Integer.MAX_VALUE, gain));
                     if (now - lastMenuAt > 500) for (var l : FRESH) l.accept(e.getKey(), (int) Math.min(Integer.MAX_VALUE, gain));
@@ -296,6 +307,31 @@ public final class Trackers {
         }
     }
 
+    // what left the inventory lately with no menu open, per id: amount and when
+    private static final Map<String, long[]> RECENT_LOSS = new java.util.HashMap<>();
+    // the [Sacks] message can come up to half a minute after the items went
+    private static final long COMPACT_MS = 60_000;
+
+    // a compactor turns the items you picked up into their enchanted form. both would count as gained, so when the
+    // made item comes in, the items it was made from that just left you come off again
+    static void netCompaction(String made, long amount, long now) {
+        for (dev.zmuzy.sbc.core.ItemInfo.Recipe r : dev.zmuzy.sbc.core.ItemInfo.recipes(made)) {
+            if (r.parts().isEmpty() || r.resultCount() <= 0) continue;
+            String base = r.parts().get(0).id();
+            if (base.equals(made) || !r.parts().stream().allMatch(p -> p.id().equals(base))) continue;
+            long per = r.parts().stream().mapToLong(dev.zmuzy.sbc.core.ItemInfo.Part::count).sum();
+            long[] lost = RECENT_LOSS.get(base);
+            if (lost == null || lost[0] <= 0 || now - lost[1] > COMPACT_MS) continue;
+            long used = Math.min(lost[0], per * amount / r.resultCount());
+            if (used <= 0) continue;
+            lost[0] -= used;
+            get("loot", "Items gained").add(base, -used);
+            for (var l : LISTENERS) l.accept(base, (int) -Math.min(Integer.MAX_VALUE, used));
+            for (var l : FRESH) l.accept(base, (int) -Math.min(Integer.MAX_VALUE, used));
+            return;
+        }
+    }
+
     // the [Sacks] message (skyhanni data/SackApi.kt onChat): the "+5 items" / "-2 items" parts have hovers
     // starting with Added / Removed listing "+5 Wheat (Agronomy Sack)" lines
     public static ChatBus.Result onChat(ChatBus.Line line) {
@@ -309,6 +345,7 @@ public final class Trackers {
             long delta = e.getValue();
             PickupLog.add(id, delta);
             if (!id.startsWith("vanilla:") && delta > 0) {
+                netCompaction(id, delta, System.currentTimeMillis());
                 get("loot", "Items gained").add(id, delta);
                 for (var l : LISTENERS) l.accept(id, (int) Math.min(Integer.MAX_VALUE, delta));
                 if (System.currentTimeMillis() - lastSackMenuAt > 10_000) for (var l : FRESH) l.accept(id, (int) Math.min(Integer.MAX_VALUE, delta));
