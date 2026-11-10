@@ -725,6 +725,17 @@ public final class SlayerCombatCrimson {
         return out;
     }
 
+    // armor stacks are a row only when switched on
+    static boolean stacksShown() {
+        Feature f = Features.get("combat_session");
+        var o = f == null ? null : f.option("combat_session.armorStacks");
+        return o != null && o.bool();
+    }
+
+    private static int armorStacks() {
+        return stacksShown() ? Vitals.armorStacks() : 0;
+    }
+
     // max stacks, the action bar writes them bold at 10
     private static final int MAX_STACKS = 10;
 
@@ -756,7 +767,7 @@ public final class SlayerCombatCrimson {
 
         @Override
         public boolean visible() {
-            return sb() && (stacks() > 0 || cocoons > 0 || !ghostDrops.isEmpty() || ghostCash > 0);
+            return sb() && (armorStacks() > 0 || cocoons > 0 || !ghostDrops.isEmpty() || ghostCash > 0);
         }
 
         // all this sessions drops in coins
@@ -783,12 +794,12 @@ public final class SlayerCombatCrimson {
 
         @Override
         public List<Row> rows() {
-            return combatRows(stacks(), cocoons, ghostDrops, ghostCash, MARKET);
+            return combatRows(armorStacks(), cocoons, ghostDrops, ghostCash, MARKET);
         }
 
         @Override
         public List<Row> demo() {
-            return combatRows(7, 3, DEMO_GHOST, 1_250_000, EXAMPLE);
+            return combatRows(stacksShown() ? 7 : 0, 3, DEMO_GHOST, 1_250_000, EXAMPLE);
         }
     };
 
@@ -924,7 +935,8 @@ public final class SlayerCombatCrimson {
                 .option(Option.integer("slayer_spawn_soon.percent", "Warn at (%)", "", 80, 50, 99))
                 .option(Option.bool("slayer_spawn_soon.repeat", "Warn on every kill after that", "", false)));
         Features.add(new Feature("slayer_attunement", "Slayer", "Blaze attunement alert", "Which attunement the dagger needs, as a coloured alert.", "").when(SlayerCombatCrimson::sb));
-        Features.add(new Feature("combat_session", "Combat", "Combat session", "Armor stacks from the action bar, cocoons, ghost drops and bag-of-cash coins.", "").when(SlayerCombatCrimson::sb));
+        Features.add(new Feature("combat_session", "Combat", "Combat session", "Cocoons, ghost drops and bag-of-cash coins, and your armor stacks when you switch them on.", "").when(SlayerCombatCrimson::sb)
+                .option(Option.bool("combat_session.armorStacks", "Armor stacks", "Your armor's stacks from the action bar, out of ten.", false)));
         Features.add(new Feature("end_dragon", "Combat", "Dragon fight", "Which dragon spawned and when, its HP and your damage from the sidebar; ender node drops.", "").when(SlayerCombatCrimson::end));
         ChatBus.register(ChatBus.OBSERVE + 16, "slayercombat", null, SlayerCombatCrimson::onChat);
         HudLayout.add(SLAYER);
