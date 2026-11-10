@@ -413,7 +413,8 @@ public final class MuseumData {
     public static Set<String> fromApi(Collection<String> donatedSets) {
         Set<String> ids = new HashSet<>();
         for (String s : donatedSets) {
-            Donation d = byId.get(s);
+            // the answer can use an item's other id, the catalog knows it under one
+            Donation d = byId.get(mapped.getOrDefault(s, s));
             if (d == null) continue;
             ids.addAll(d.downgrades);
             if (d.isSet()) {
@@ -465,8 +466,14 @@ public final class MuseumData {
                 }
             }
         }
-        if (any) PanelStore.save();
+        if (any) {
+            PanelStore.save();
+            changed = true;
+        }
     }
+
+    // something new was learned: the panel works its list out again now instead of after its pause
+    static boolean changed;
 
     private static String path(ItemStack st) {
         return BuiltInRegistries.ITEM.getKey(st.getItem()).getPath();
@@ -516,14 +523,26 @@ public final class MuseumData {
                 if (id == null) id = setFromName(name);
             }
             if (id == null || id.isEmpty()) continue;
+            // same as a donation: its other id, and the lower tiers it stands for
+            id = mapped.getOrDefault(id, id);
             Donation d = byId.get(id);
             String setId = setOfPiece.get(id);
             if (d == null && setId == null) continue;
             grew |= items.add(id);
             if (setId != null) grew |= items.add(setId);
             if (d != null && d.isSet()) grew |= items.addAll(d.set);
+            Donation top = d != null ? d : byId.get(setId);
+            if (top != null)
+                for (String lower : top.downgrades) {
+                    grew |= items.add(lower);
+                    Donation low = byId.get(lower);
+                    if (top.isSet() && low != null) grew |= items.addAll(low.set);
+                }
         }
-        if (grew) PanelStore.save();
+        if (grew) {
+            PanelStore.save();
+            changed = true;
+        }
     }
 
     static void profileChanged() {

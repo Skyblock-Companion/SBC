@@ -118,7 +118,8 @@ public final class MuseumPanel implements SideHelper.Content {
             if (onPage(title)) MuseumData.readPage(i -> menu.getSlot(i).getItem(), menu.getRowCount() * 9);
         }
         long now = System.currentTimeMillis();
-        if (now - pricedAt < 15_000 && !undonated.isEmpty()) return;
+        if (now - pricedAt < 15_000 && !undonated.isEmpty() && !MuseumData.changed) return;
+        MuseumData.changed = false;
         pricedAt = now;
         MuseumData.forgetCrafts();
         set(MuseumData.undonated(MuseumData::lBinOf, MuseumData::craftOf), MuseumData.all().size());
