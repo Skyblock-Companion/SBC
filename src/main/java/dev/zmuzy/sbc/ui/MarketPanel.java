@@ -47,6 +47,10 @@ public final class MarketPanel {
 
     private static final Buy BUY = new Buy();
 
+    static boolean isBuy(SideHelper.Content c) {
+        return c == BUY;
+    }
+
     public static SideHelper.Content buyFallback() {
         return MoreMarket.purchasing && !MoreMarket.buying.isEmpty() ? BUY : null;
     }

@@ -140,8 +140,14 @@ public final class MoreMarket {
         for (var e : manual.entrySet()) all.merge(e.getKey(), e.getValue(), Integer::sum);
         List<Material> out = new ArrayList<>();
         for (var e : all.entrySet()) out.add(new Material(e.getKey(), e.getValue()));
+        boolean had = !buying.isEmpty();
         buying = out;
         purchasing = !out.isEmpty();
+        // folded while empty, open as soon as there is something to buy
+        if (had != !out.isEmpty()) {
+            dev.zmuzy.sbc.core.Config.I.buyHelperOpen = !out.isEmpty();
+            dev.zmuzy.sbc.core.Config.save();
+        }
     }
 
     // one more of it by hand, from any menu. how many it holds now

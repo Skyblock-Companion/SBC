@@ -97,8 +97,13 @@ public final class SideHelper {
     }
 
     private static void setOpen(boolean open) {
-        Config.I.helperOpen = open;
+        if (MarketPanel.isBuy(shown)) Config.I.buyHelperOpen = open;
+        else Config.I.helperOpen = open;
         Config.save();
+    }
+
+    private static boolean open(Content c) {
+        return MarketPanel.isBuy(c) ? Config.I.buyHelperOpen : Config.I.helperOpen;
     }
 
     public static void draw(Screen s, GuiGraphicsExtractor g, int mx, int my) {
@@ -125,7 +130,7 @@ public final class SideHelper {
         onLeft = !ItemList.onLeftSide(left, cw, sw);
         int room = onLeft ? left - 10 : sw - left - cw - 10;
         int y = Math.max(4, top - 24), h = Math.min(sh - y - 6, 270);
-        if (Config.I.helperOpen && room >= NARROWEST && h >= 120) {
+        if (open(c) && room >= NARROWEST && h >= 120) {
             int w = Math.min(WIDE, room);
             paintOpen(ui, c, onLeft ? left - 8 - w : left + cw + 8, y, w, h);
         } else paintClosed(ui, c, left, top, cw, sh, ContainerValue.hudBoxes(s));

@@ -43,6 +43,8 @@ public final class Config {
     public boolean itemListOpen = false;
     // acc + pet helpers next to their chests: open or folded to a tab
     public boolean helperOpen = true;
+    // the buy helper starts folded like the item list, and opens by itself when its list gets something
+    public boolean buyHelperOpen = false;
     public float classicAlpha = DEFAULT_ALPHA;
     public static final float DEFAULT_ALPHA = 0.78f;
     // per element (see HudLayout): pinned 0/1, x, y, size multiplier. missing = default spot + size
