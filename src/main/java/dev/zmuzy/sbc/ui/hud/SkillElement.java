@@ -58,9 +58,9 @@ public final class SkillElement extends HudElement {
         return GameState.inSkyBlock || SbcMod.DEV;
     }
 
-    // hypixels xp bar (vanilla xp bar + level) stays hidden, this replaces it
+    // hypixels xp bar (vanilla xp bar + level) shows your level and stays, unless you choose to hide it
     public static boolean hidesXpBar() {
-        return on() && opt("hideXpBar", true);
+        return on() && opt("hideXpBar", false);
     }
 
     // "+12.5 Farming (96.7%)" leaves the action bar, this bar shows the same
@@ -447,7 +447,7 @@ public final class SkillElement extends HudElement {
     public static void register() {
         Feature f = new Feature("skill_progress", "HUD", "Skill progress", "The skill you are levelling as a bar above the status bars: level, percent, XP into the level out of the XP needed, last gain and XP per hour. Replaces Hypixel's XP bar.", "")
                 .when(() -> GameState.inSkyBlock || SbcMod.DEV)
-                .option(Option.bool("skill_progress.hideXpBar", "Hide Hypixel's XP bar", "The vanilla experience bar and level number, which Hypixel uses for skill progress.", true))
+                .option(Option.bool("skill_progress.hideXpBar", "Hide Hypixel's XP bar", "The vanilla experience bar and level number, which Hypixel uses for skill progress.", false))
                 .option(Option.bool("skill_progress.hideActionBar", "Hide Hypixel's skill text", "The +12.5 Farming (96.7%) part of the action bar above the hotbar.", true))
                 .option(Option.bool("skill_progress.bar", "Progress bar", "", true))
                 .option(Option.bool("skill_progress.percent", "Percent", "", true))
