@@ -373,11 +373,16 @@ public final class ItemList {
                 if (Store.I.favourites.contains(id)) ui.textShadow("★", x + COL - 8, y, Modern.GOLD);
                 if (hv) {
                     hoverId = id;
-                    List<String> tip = new ArrayList<>(ItemInfo.tooltip(id));
-                    tip.add("");
-                    tip.addAll(ItemInfo.priceLines(id));
-                    tip.add("§eClick: recipe  §7Right-click: used in  §7F: star");
-                    ui.tooltip(tip.toArray(new String[0]));
+                    // the item's real tooltip with the mod's lines, like over an inventory. outside SkyBlock the
+                    // price lines are not added there, so the list adds its own
+                    List<String> extra = new ArrayList<>();
+                    if (!io.github.zmuzy.sbc.core.GameState.inSkyBlock) {
+                        extra.add("");
+                        extra.addAll(ItemInfo.priceLines(id));
+                    }
+                    extra.add("");
+                    extra.add("§eClick: recipe  §7Right-click: used in  §7F: star");
+                    ui.itemTooltip(ItemInfo.stack(id), extra);
                 }
             }
         }

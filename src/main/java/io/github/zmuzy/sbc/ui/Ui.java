@@ -581,10 +581,25 @@ public final class Ui {
         List<Component> l = new ArrayList<>();
         for (String s : lines) l.add(Component.literal(s));
         tooltip.add(l);
+        itemTip = null;
+    }
+
+    // an item's own tooltip, the way it shows over an inventory: Hypixel's lines, the mod's lines and style, then extra
+    private net.minecraft.world.item.ItemStack itemTip;
+    private List<String> itemExtra = List.of();
+
+    public void itemTooltip(net.minecraft.world.item.ItemStack stack, List<String> extra) {
+        itemTip = stack;
+        itemExtra = extra;
     }
 
     // draws the last tooltip asked for, long lines wrap so it never goes off screen
     public void flushTooltip() {
+        if (itemTip != null) {
+            io.github.zmuzy.sbc.item.tooltip.ItemTips.draw(g, itemTip, realMx, realMy, itemExtra);
+            itemTip = null;
+            return;
+        }
         if (tooltip.isEmpty()) return;
         int max = Math.max(120, Math.min(300, g.guiWidth() * 45 / 100));
         List<net.minecraft.util.FormattedCharSequence> out = new ArrayList<>();
