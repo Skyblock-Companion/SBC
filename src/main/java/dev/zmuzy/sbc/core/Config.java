@@ -146,7 +146,6 @@ public final class Config {
 
 
     public boolean pathLine = true;
-    public boolean pathThroughWalls = false;
     public int pathColor = 0xFF39D0FF;
 
     // 0 = pure sb level, 100 = pure money
@@ -257,8 +256,6 @@ public final class Config {
         if (I.configVersion < 9) I.options.remove("board.unclaimedBits");
         // both minimaps north up by default
         if (I.configVersion < 10) I.minimapRotate = false;
-        // route line through walls is confusing, behind them by default
-        if (I.configVersion < 11) I.pathThroughWalls = false;
         // the visitor box is for new visitors only and starts off
         if (I.configVersion < 12) {
             Object h = I.options.get("garden_visitor_status.highlight");

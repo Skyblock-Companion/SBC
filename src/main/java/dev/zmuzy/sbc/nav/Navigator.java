@@ -174,7 +174,7 @@ public final class Navigator {
         if (target == null || mc.player == null || !Config.I.pathLine) return;
         if (!target.island().isEmpty() && !target.island().equals(GameState.island)) return;
         int color = Config.I.pathColor;
-        boolean onTop = Config.I.pathThroughWalls;
+        boolean onTop = false;
         Vec3 me = mc.player.position().add(0, 0.1, 0);
 
         // skyhanni style route: one solid line from your eyes along the path nodes, rounded at every corner (a curve

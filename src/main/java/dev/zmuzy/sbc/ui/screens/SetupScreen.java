@@ -51,7 +51,7 @@ public final class SetupScreen extends SbcScreen {
     // the answers. null = not answered yet: Next waits for every question on its page
     private final Set<String> playing = new LinkedHashSet<>();
     private Float size;
-    private Boolean bars, smooth, routine, rotate, throughWalls, viewmodel, briefing;
+    private Boolean bars, smooth, routine, rotate, viewmodel, briefing;
     private String chat;
     private String preset = Config.I.routinePreset;
     private boolean autoGuide = Config.I.autoGuide;
@@ -427,7 +427,6 @@ public final class SetupScreen extends SbcScreen {
 
     private void preferences() {
         ask("The minimap", List.of("Turns with you", "North stays up"), List.of(true, false), rotate, v -> rotate = v);
-        ask("The route line to where you're going", List.of("Shows through walls", "Only where you can see"), List.of(true, false), throughWalls, v -> throughWalls = v);
         ask("The item in your hand", List.of("Small and floating", "As the game draws it"), List.of(true, false), viewmodel, v -> viewmodel = v);
         ask("When you join SkyBlock", List.of("Show what is ready today", "Show nothing"), List.of(true, false), briefing, v -> briefing = v);
         body.child(nav());
@@ -457,7 +456,7 @@ public final class SetupScreen extends SbcScreen {
             case 2 -> size != null && bars != null && smooth != null;
             case 3 -> chat != null;
             case 4 -> routine != null;
-            case 5 -> rotate != null && throughWalls != null && viewmodel != null && briefing != null;
+            case 5 -> rotate != null && viewmodel != null && briefing != null;
             default -> true;
         };
     }
@@ -484,7 +483,7 @@ public final class SetupScreen extends SbcScreen {
             default -> "as clean as possible.";
         });
         if (routine != null) out.add(routine ? "Daily routine: " + chosenPreset().name() + (autoGuide ? ", the guide starts by itself." : ".") : "No daily routine.");
-        if (rotate != null) out.add("Minimap " + (rotate ? "turns with you" : "keeps north up") + ", route line " + (Boolean.TRUE.equals(throughWalls) ? "through walls" : "only where you can see") + ".");
+        if (rotate != null) out.add("Minimap " + (rotate ? "turns with you" : "keeps north up") + ".");
         if (viewmodel != null) out.add((viewmodel ? "Small floating item in your hand" : "Item in your hand as the game draws it") + (Boolean.TRUE.equals(briefing) ? ", and a summary when you join." : "."));
         long on = changed.values().stream().filter(v -> v).count(), off = changed.size() - on;
         if (!changed.isEmpty()) out.add("Switched by hand: " + (on > 0 ? on + " on" : "") + (on > 0 && off > 0 ? ", " : "") + (off > 0 ? off + " off" : "") + ".");
@@ -549,7 +548,7 @@ public final class SetupScreen extends SbcScreen {
         applyScreen(size, bars, smooth);
         applyChat(chat);
         applyRoutine(Boolean.TRUE.equals(routine), preset, autoGuide);
-        applyPreferences(rotate, throughWalls, viewmodel, briefing);
+        applyPreferences(rotate, viewmodel, briefing);
         applyHandSwitches(changed);
         Config.I.setupDone = true;
         Config.I.lastVersion = dev.zmuzy.sbc.feature.Releases.current();
@@ -611,9 +610,8 @@ public final class SetupScreen extends SbcScreen {
         for (var e : changed.entrySet()) setEnabled(e.getKey(), e.getValue());
     }
 
-    static void applyPreferences(Boolean rotate, Boolean throughWalls, Boolean viewmodel, Boolean briefing) {
+    static void applyPreferences(Boolean rotate, Boolean viewmodel, Boolean briefing) {
         if (rotate != null) Config.I.minimapRotate = rotate;
-        if (throughWalls != null) Config.I.pathThroughWalls = throughWalls;
         if (viewmodel != null) setEnabled(dev.zmuzy.sbc.render.HeldItem.ID, viewmodel);
         if (briefing != null) Config.I.loginBriefing = briefing;
     }

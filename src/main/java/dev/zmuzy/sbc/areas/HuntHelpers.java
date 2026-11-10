@@ -650,7 +650,7 @@ public final class HuntHelpers {
     }
 
     public static void register() {
-        Features.add(new Feature(HIGH, "Hunting", "Hunting highlights", "A box with name and distance on the mobs you hunt on Galatea and in the Torrhus Canyon, when you are near them. Not through walls.", "SkyHanni: Galatea Mob Highlight").when(() -> galatea() || torrhus() || SbcMod.DEV)
+        Features.add(new Feature(HIGH, "Hunting", "Hunting highlights", "A box with name and distance on the mobs you hunt on Galatea and in the Torrhus Canyon, when you are near them.", "SkyHanni: Galatea Mob Highlight").when(() -> galatea() || torrhus() || SbcMod.DEV)
                 .world(w -> {
                     highDraw(w);
                     invisibugDraw(w);
@@ -669,7 +669,7 @@ public final class HuntHelpers {
         FishHooks.scan(HIGH_SCAN);
         ParticleHooks.listen(HuntHelpers::particle);
 
-        Features.add(new Feature(FLOOR, "Hunting", "Floor drops", "Marks a shard lying on the floor while it sparkles. Not through walls.", "Skyblocker: Highlight Floor Drops").when(() -> galatea() || torrhus() || safari() || SbcMod.DEV).tick(HuntHelpers::floorTick).world(HuntHelpers::floorDraw).left(floorDrops::clear)
+        Features.add(new Feature(FLOOR, "Hunting", "Floor drops", "Marks a shard lying on the floor while it sparkles.", "Skyblocker: Highlight Floor Drops").when(() -> galatea() || torrhus() || safari() || SbcMod.DEV).tick(HuntHelpers::floorTick).world(HuntHelpers::floorDraw).left(floorDrops::clear)
                 .option(Option.color("hunting_floor_drops.color", "Colour", "", 0xFFFFAA00)));
         Interactions.onBlockClick((pos, right) -> floorDrops.remove(BlockPos.containing(pos)));
 

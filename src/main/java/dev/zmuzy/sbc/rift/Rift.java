@@ -382,7 +382,7 @@ public final class Rift {
                 })
                 .option(Option.color("rift_enigma.color", "Waypoint colour", "The colour of the soul waypoints.", 0xFFAA00AA))
                 .option(Option.bool("rift_enigma.path", "Path to the soul", "Navigates to a soul when you start tracking it.", true))
-                .option(Option.bool("rift_enigma.all", "Mark every soul", "A mark on all of them, through walls, without tracking each one.", false))
+                .option(Option.bool("rift_enigma.all", "Mark every soul", "A mark on all of them, without tracking each one.", false))
                 .option(Option.bool("rift_enigma.found", "Mark found souls too", "With every soul marked: red for the ones you have found.", true)));
         Features.add(new Feature(TIMER, "Rift", "Rift Timer", "Your Rift time from the action bar with the maximum, the percentage and the recent changes.", "SkyHanni: Rift Timer")
                 .when(Rift::rift)
@@ -404,12 +404,11 @@ public final class Rift {
                 .when(Rift::rift).world(w -> {
                     RiftMotesOrb.hideParticles = b(MOTES, "hideParticles", false);
                     RiftMotesOrb.size = i(MOTES, "size", 5);
-                    RiftMotesOrb.throughWalls = b(MOTES, "through_walls", false);
+                    RiftMotesOrb.throughWalls = false;
                     RiftMotesOrb.render(w);
                 })
                 .option(Option.bool("hideParticles", "Hide particles", "Hide the orb's particles once it is recognised.", false))
-                .option(Option.integer("size", "Size", "Marker size (1-10).", 5, 1, 10))
-                .option(Option.bool("through_walls", "Through walls", "Also show the orbs behind blocks.", false)));
+                .option(Option.integer("size", "Size", "Marker size (1-10).", 5, 1, 10)));
         Features.add(new Feature(PUNCHCARD, "Rift", "Punchcard Artifact", "Highlights players you have not punched yet (20 per visit) and counts your punches.", "SkyHanni: Punchcard Highlight")
                 .when(Rift::rift).world(Rift::drawPunchcard)
                 .option(Option.color("rift_punchcard.color", "Highlight colour", "", 0xFFFF55FF))

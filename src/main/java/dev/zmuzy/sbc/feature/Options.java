@@ -58,7 +58,6 @@ public final class Options {
         add("inv_search", Option.bool("inv_search.skyblockOnly", "Only on SkyBlock", "", false));
         add("tablist", Option.bool("tablist.reverseSort", "Reverse the order of the players", "", false));
         add("tablist", Option.bool("tablist.toggle", "The TAB key toggles", "One press opens it and the next closes it, instead of holding.", false));
-        add("pathline", Option.bool("pathline.throughWalls", "Show through walls", "Off: the route hides behind blocks like the world does, so you see which way to go.", false).bind(() -> Config.I.pathThroughWalls, v -> Config.I.pathThroughWalls = (Boolean) v));
         add("pathline", Option.color("pathline.color", "Colour", "", 0xFF39D0FF).bind(() -> Config.I.pathColor, v -> Config.I.pathColor = ((Number) v).intValue()));
 
         // chat

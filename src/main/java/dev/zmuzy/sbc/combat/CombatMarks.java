@@ -71,6 +71,13 @@ public final class CombatMarks {
         return glow.isEmpty() ? -1 : glow.getOrDefault(e.getId(), -1);
     }
 
+    // a glow outline is drawn over the world, walls too. so every glow of the mod is only given to an entity you can
+    // see from here: its feet, middle or head in sight, so it does not flicker at a corner (like skyhanni's no-xray glow)
+    public static boolean inSight(Entity e) {
+        double h = e.getBbHeight();
+        return Combat.seen(e, 96, h * 0.5) || Combat.seen(e, 96, h * 0.9) || Combat.seen(e, 96, 0.1);
+    }
+
     // glow only on what you can see from here. a highlight that doesnt go through walls is what you see anyway
     public static void seenGlow(BiConsumer<Entity, Integer> mark, Entity e, int rgb) {
         if (Combat.seen(e, 64, e.getBbHeight() * 0.8)) mark.accept(e, rgb);

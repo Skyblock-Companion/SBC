@@ -75,7 +75,6 @@ public final class WorldMarks {
         if (!Features.on(TREVOR) || !"THE_FARMING_ISLANDS".equals(GameState.island)) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) return;
-        boolean walls = Features.get(TREVOR).option("through_walls").bool();
         for (Entity e : mc.level.entitiesForRendering()) {
             String animal = animal(e);
             if (animal == null) continue;
@@ -85,8 +84,7 @@ public final class WorldMarks {
                 if (color >= 0) break;
             }
             if (color < 0) continue;
-            if (walls) mark.accept(e, color);
-            else CombatMarks.seenGlow(mark, e, color);
+            CombatMarks.seenGlow(mark, e, color);
         }
     }
 
@@ -234,9 +232,8 @@ public final class WorldMarks {
 
     public static void register() {
         Features.add(new Feature(TREVOR, "Farming Islands", "Trevor's animals", "The animals of Trevor's tasks get an outline in the colour of their rarity.", "Skyblocker: trapper animal highlighter")
-                .when(() -> "THE_FARMING_ISLANDS".equals(GameState.island) || SbcMod.DEV)
-                .option(Option.bool("trevor_glow.through_walls", "Show through walls", "", false)));
-        Features.add(new Feature(DROPPED, "World", "Outline on dropped items", "Items on the ground get an outline in their rarity's colour, which also shows through walls.", "SkyHanni: Glowing Dropped Items")
+                .when(() -> "THE_FARMING_ISLANDS".equals(GameState.island) || SbcMod.DEV));
+        Features.add(new Feature(DROPPED, "World", "Outline on dropped items", "Items on the ground get an outline in their rarity's colour.", "SkyHanni: Glowing Dropped Items")
                 .when(WorldMarks::sb).defaultOff());
         Features.add(new Feature(MARKED, "World", "Marked players in the world", "Players you marked get an outline when you can see them.", "SkyHanni: Marked Players")
                 .when(WorldMarks::sb)

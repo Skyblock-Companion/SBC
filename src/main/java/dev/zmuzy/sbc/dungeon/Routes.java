@@ -161,7 +161,7 @@ public final class Routes {
         route.add(dir.lengthSqr() < 1e-4 ? eye : eye.add(dir.normalize().scale(0.8)).add(0, -0.35, 0));
         route.addAll(points.subList(start, points.size()));
         List<Vec3> smooth = dev.zmuzy.sbc.nav.Navigator.rounded(route);
-        for (int i = 1; i < smooth.size(); i++) w.line(smooth.get(i - 1), smooth.get(i), Config.I.pathColor | 0xFF000000, 5f, Config.I.pathThroughWalls);
+        for (int i = 1; i < smooth.size(); i++) w.line(smooth.get(i - 1), smooth.get(i), Config.I.pathColor | 0xFF000000, 5f, false);
     }
 
     public static boolean draw(WorldDraw w, Dungeon.Placed r) {

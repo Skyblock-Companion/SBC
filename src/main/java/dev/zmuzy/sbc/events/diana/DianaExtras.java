@@ -155,7 +155,7 @@ public final class DianaExtras {
         int color = Diana.color(Diana.SHARE, "highlightColor", 0x7F55FFFF);
         for (RareMobWaypointShare.Mob m : highlighted) {
             var p = m.pos();
-            w.box(new net.minecraft.world.phys.AABB(p.x - 0.4, p.y, p.z - 0.4, p.x + 0.4, p.y + 2.0, p.z + 0.4), color, true, Diana.b(Diana.SHARE, "highlightWalls", false));
+            w.box(new net.minecraft.world.phys.AABB(p.x - 0.4, p.y, p.z - 0.4, p.x + 0.4, p.y + 2.0, p.z + 0.4), color, true, false);
         }
     }
 

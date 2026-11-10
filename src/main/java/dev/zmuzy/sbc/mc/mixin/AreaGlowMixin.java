@@ -19,7 +19,11 @@ public abstract class AreaGlowMixin {
     private void sbc$area(Entity entity, EntityRenderState state, float partialTicks, CallbackInfo ci) {
         if (Safe.resting("AreaGlowMixin.area")) return;
         try {
-            int color = dev.zmuzy.sbc.mc.EntityTickCache.color(dev.zmuzy.sbc.mc.EntityTickCache.AREA_GLOW, entity, dev.zmuzy.sbc.areas.AreaHooks::glow);
+            int color = dev.zmuzy.sbc.mc.EntityTickCache.color(dev.zmuzy.sbc.mc.EntityTickCache.AREA_GLOW, entity, e -> {
+                int c = dev.zmuzy.sbc.areas.AreaHooks.glow(e);
+                // never through walls
+                return c >= 0 && !dev.zmuzy.sbc.combat.CombatMarks.inSight(e) ? -1 : c;
+            });
             if (color >= 0) state.outlineColor = color | 0xFF000000;
             var name = state.nameTag == null ? null : dev.zmuzy.sbc.mc.EntityTickCache.name(dev.zmuzy.sbc.mc.EntityTickCache.NAME_AREA, entity, state.nameTag, dev.zmuzy.sbc.areas.AreaHooks::nameTag);
             if (name != null) state.nameTag = name;

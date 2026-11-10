@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
 
 // outlines on players. from skyhanni PartyMemberOutlines (party members) and CenturyPartyInvitation (with the
 // invite in hand, who has a level colour you still miss)
-// outlines go through walls so both start off
+// outlines only on the players you can see, both start off
 public final class PartyMarks {
     public static final String PARTY = "party_member_outlines", CENTURY = "century_party_invitation";
     private static final Patterns.P SEPARATOR = Patterns.p("SH.misc.century-party-invitation.item-lore.missing-color-separator"), MISSING = Patterns.p("SH.misc.century-party-invitation.item-lore.missing-color-line"),
@@ -97,10 +97,10 @@ public final class PartyMarks {
     }
 
     public static void register() {
-        Features.add(new Feature(PARTY, "World", "Party member outlines", "Your party members get an outline in the world, so you find them. Not in dungeons. It shows through walls.", "SkyHanni: Highlight Party Members")
+        Features.add(new Feature(PARTY, "World", "Party member outlines", "Party members get an outline in the world, so you find them. Not in dungeons.", "SkyHanni: Highlight Party Members")
                 .when(() -> (GameState.inSkyBlock || SbcMod.DEV) && !"CATACOMBS".equals(GameState.island)).defaultOff()
                 .option(Option.color("party_member_outlines.color", "Outline colour", "", 0xFF55FF55)));
-        Feature century = Features.add(new Feature(CENTURY, "Events", "Century Party Invitation", "With the invitation in hand, players with a level colour you still need get one outline and the others another. It shows through walls.", "SkyHanni: Century Party Invitation")
+        Feature century = Features.add(new Feature(CENTURY, "Events", "Century Party Invitation", "With the invitation in hand, players with a level colour you still need get one outline and the others another.", "SkyHanni: Century Party Invitation")
                 .when(() -> GameState.inSkyBlock || SbcMod.DEV).defaultOff()
                 .tick(PartyMarks::century)
                 .left(() -> {

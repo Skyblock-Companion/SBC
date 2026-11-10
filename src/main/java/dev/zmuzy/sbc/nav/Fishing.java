@@ -139,7 +139,7 @@ public final class Fishing {
                 .option(Option.bool("fishing_catches.name", "Say which creature", "", true))
                 .option(Option.bool("fishing_catches.sound", "With a sound", "", true))
                 .option(Option.choice("fishing_catches.min_rarity", "Alert from", "", "Rare ones", "Rare ones", "Rare", "Epic", "Legendary", "Mythic"))
-                .option(Option.bool("fishing_catches.highlight", "Outline rare ones", "Up to 30 blocks, also through walls.", false)));
+                .option(Option.bool("fishing_catches.highlight", "Outline rare ones", "Up to 30 blocks.", false)));
         dev.zmuzy.sbc.areas.FishState.ON_SPAWN.add(Fishing::otherCatch);
         dev.zmuzy.sbc.chat.ChatBus.register(dev.zmuzy.sbc.chat.ChatBus.OBSERVE + 8, "seacreatures", null, Fishing::onCatch);
     }

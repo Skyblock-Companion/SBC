@@ -256,8 +256,8 @@ public final class Slayers {
         if (!questOn) return;
         int color = dev.zmuzy.sbc.combat.Combat.color("slayers", "color", 0xFFFF3B3B);
         if (dev.zmuzy.sbc.combat.Combat.choice("slayers", "highlight", "Nothing").equals("Box")) {
-            if (boss != null && boss.isAlive() && !bossName.contains("Bloodfiend")) w.box(boss.getBoundingBox().inflate(0.05), color, false, true);
-            else if (stand != null && stand.isAlive()) w.box(new AABB(stand.blockPosition()).inflate(0.4, 1.2, 0.4).move(0, -1.2, 0), color, false, true);
+            if (boss != null && boss.isAlive() && !bossName.contains("Bloodfiend")) w.box(boss.getBoundingBox().inflate(0.05), color, false, false);
+            else if (stand != null && stand.isAlive()) w.box(new AABB(stand.blockPosition()).inflate(0.4, 1.2, 0.4).move(0, -1.2, 0), color, false, false);
         }
         if (dev.zmuzy.sbc.combat.EndermanSlayer.ownsBeacons()) return;
         long now = System.currentTimeMillis();
@@ -364,10 +364,10 @@ public final class Slayers {
     }
 
     public static void register() {
-        Feature f = Features.add(new Feature("slayers", "Slayer", "Slayer helper", "Times the kill against your best, counts bosses to the next level and marks Voidgloom beacons. It can also mark your boss, through walls.", "Skyblocker: slayers · SkyHanni: slayer displays")
+        Feature f = Features.add(new Feature("slayers", "Slayer", "Slayer helper", "Times the kill against your best, counts bosses to the next level and marks Voidgloom beacons. It can also mark your boss.", "Skyblocker: slayers · SkyHanni: slayer displays")
                 .when(() -> GameState.inSkyBlock || SbcMod.DEV).tick(Slayers::tick).world(Slayers::draw)
                 .option(dev.zmuzy.sbc.feature.Option.bool("slayers.boss_alert", "Boss spawn alert", "A title and a sound when your boss spawns.", true))
-                .option(dev.zmuzy.sbc.feature.Option.choice("slayers.highlight", "Mark your boss with", "Box and Glow also show it through walls.", "Nothing", "Nothing", "Box", "Glow"))
+                .option(dev.zmuzy.sbc.feature.Option.choice("slayers.highlight", "Mark your boss with", "", "Nothing", "Nothing", "Box", "Glow"))
                 .option(dev.zmuzy.sbc.feature.Option.color("slayers.color", "Mark colour", "", 0xFFFF3B3B))
                 .option(dev.zmuzy.sbc.feature.Option.bool("slayers.hide_away", "Hide while you do something else", "The card goes after 30 seconds away from your slayer's area with no kills for the quest, and comes back when you are.", true)));
         dev.zmuzy.sbc.combat.CombatMarks.glowing(mark -> {

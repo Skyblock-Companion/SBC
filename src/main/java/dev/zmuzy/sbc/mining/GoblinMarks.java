@@ -73,7 +73,7 @@ public final class GoblinMarks {
     private static void draw(WorldDraw w) {
         if (yours == null || yours.isRemoved()) return;
         w.box(box(yours), 0xFF55FF55, false, false);
-        if (MiningPack.on(GOBLIN, "mining_goblin.line")) w.line(w.eye.add(w.mc.player.getLookAngle()).add(0, -0.2, 0), new Vec3(yours.getX(), yours.getY() - 1, yours.getZ()), 0xFF55FF55, 2f, true);
+        if (MiningPack.on(GOBLIN, "mining_goblin.line")) w.line(w.eye.add(w.mc.player.getLookAngle()).add(0, -0.2, 0), new Vec3(yours.getX(), yours.getY() - 1, yours.getZ()), 0xFF55FF55, 2f, false);
     }
 
     private static void drawRaid(WorldDraw w) {
@@ -98,7 +98,7 @@ public final class GoblinMarks {
     public static void register() {
         Feature f = Features.add(new Feature(GOBLIN, "Mining", "Your Golden Goblin", "A box around the Golden or Diamond Goblin you just spawned, where you can see it.", "SkyHanni: Highlight your Golden Goblin, Line to your Golden Goblin")
                 .when(MiningPack::mining).tick(GoblinMarks::tick).world(GoblinMarks::draw).left(GoblinMarks::leave)
-                .option(Option.bool("mining_goblin.line", "Line to it", "Through walls, so it starts off.", false)));
+                .option(Option.bool("mining_goblin.line", "Line to it", "", false)));
         ChatBus.register(ChatBus.OBSERVE + 27, GOBLIN, f, GoblinMarks::onChat);
         Features.add(new Feature(RAID, "Mining", "Superprotectron", "Colours the Superprotectron during a Goblin Raid, where you can see it.", "SkyHanni: Superprotectron Highlight")
                 .when(MiningPack::mining).tick(GoblinMarks::tick).world(GoblinMarks::drawRaid).left(SUPER::clear)

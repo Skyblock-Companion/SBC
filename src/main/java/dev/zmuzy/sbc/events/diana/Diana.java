@@ -424,7 +424,6 @@ public final class Diana {
                 .option(Option.bool("showDespawnTime", "Show despawn time", "", true))
                 .option(Option.bool("globalChat", "Read global chat", "Also read coordinates from the global chat, not only the party.", false))
                 .option(Option.bool("highlight", "Highlight rare mobs", "", true))
-                .option(Option.bool("highlightWalls", "Also through walls", "", false))
                 .option(Option.color("highlightColor", "Highlight colour", "", 0x7F55FFFF))
                 .option(Option.text("soundName", "Sound", "The game's name of a sound, played when a party member's mob comes in.", "entity.experience_orb.pickup"))
                 .option(Option.number("soundPitch", "Sound pitch", "", 1.0, 0.5, 2.0, 0.1))

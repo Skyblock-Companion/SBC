@@ -219,7 +219,7 @@ public final class DungeonDoors {
 
     private static void drawKeys(WorldDraw w) {
         loadHeads();
-        boolean walls = DungeonMarks.opt("dungeon_door_keys", "through_walls");
+        boolean walls = false;
         Vec3 me = w.mc.player.position();
         for (var e : w.mc.level.entitiesForRendering()) {
             if (!(e instanceof ArmorStand st) || !st.hasItemInSlot(EquipmentSlot.HEAD)) continue;
@@ -238,8 +238,7 @@ public final class DungeonDoors {
                 .option(Option.choice("dungeon_doors.look", "Look", "How the door is drawn.", "Outline", DungeonMarks.LOOKS))
                 .option(Option.bool("dungeon_doors.through_walls", "Through walls", "Also draws the door behind walls.", false)));
         Features.add(new Feature("dungeon_door_keys", "Dungeons", "Keys on the ground", "Marks wither and blood keys lying around, with their name and how far they are.", "Skyblocker: Highlight Door Keys")
-                .when(() -> DungeonRun.inDungeon() || SbcMod.DEV).world(DungeonDoors::drawKeys)
-                .option(Option.bool("dungeon_door_keys.through_walls", "Through walls", "Also draws keys behind walls.", false)));
+                .when(() -> DungeonRun.inDungeon() || SbcMod.DEV).world(DungeonDoors::drawKeys));
         ChatBus.register(ChatBus.OBSERVE + 15, "dungeondoors", doors, DungeonDoors::onChat);
     }
 }

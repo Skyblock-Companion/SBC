@@ -611,7 +611,7 @@ public final class MinionFeatures {
                 .option(Option.bool("minion_names.only_tier", "Only the tier", "Useful for Bingo.", false))
                 .option(Option.bool("minion_names.emptied", "Hopper emptied", "", true))
                 .option(Option.integer("minion_names.distance", "Distance", "How close you need to stand.", 10, 1, 50)));
-        Features.add(new Feature(LAST, "Minions", "Last clicked minion", "Marks the minion you last opened for a little while, through walls.", "SkyHanni: Last Minion Display")
+        Features.add(new Feature(LAST, "Minions", "Last clicked minion", "Marks the minion you last opened for a little while.", "SkyHanni: Last Minion Display")
                 .when(MinionFeatures::ours).defaultOff().world(MinionFeatures::drawLast)
                 .option(Option.integer("minion_last_clicked.time", "Seconds", "", 20, 1, 120))
                 .option(Option.color("minion_last_clicked.color", "Colour", "", 0xF555FF55)));

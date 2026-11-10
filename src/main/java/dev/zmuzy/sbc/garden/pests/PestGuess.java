@@ -93,7 +93,7 @@ public final class PestGuess {
         if (guess == null) return;
         // same as skyhanni: the block + its beam (behind blocks unless the option is on), "Pest Guess" on top at the guess
         // "(plot middle)" a line under it, the line from the crosshair always on top
-        boolean walls = GardenPack.on(ID, "through_walls");
+        boolean walls = false;
         boolean middle = guessIsMiddle && GardenPack.on(ID, "middle");
         int colour = middle ? 0xFFFFFF55 : 0xFFFF5555;
         w.waypointBox(guess, colour, true, walls, 0);
@@ -106,7 +106,6 @@ public final class PestGuess {
         Feature f = new Feature(ID, "Garden", "Pest guess", "When you use a vacuum, a waypoint at where its particles are heading, worked out from their path.", "SkyHanni: Pest Waypoint")
                 .when(GardenPack::garden).tick(PestGuess::tick).world(PestGuess::draw).left(PestGuess::reset)
                 .option(Option.bool("garden_pest_waypoint.line", "Draw a line to it", "", true))
-                .option(Option.bool("garden_pest_waypoint.through_walls", "Box through walls", "The box shows behind blocks too. Its name and line always do.", false))
                 .option(Option.bool("garden_pest_waypoint.middle", "Tell the plot's middle apart", "Yellow and marked when the guess is only the middle of the plot, not a pest.", true))
                 .option(Option.bool("garden_pest_waypoint.hide_particles", "Hide the particles", "The ones of the vacuum's ability.", true))
                 .option(Option.integer("garden_pest_waypoint.seconds", "Show for (s)", "", 15, 1, 60));

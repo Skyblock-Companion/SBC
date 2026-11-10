@@ -501,7 +501,7 @@ public final class Puzzles {
         Features.add(new Feature("dungeon_livid", "Dungeons", "Livid finder", "In the floor 5 boss fight, outlines the real Livid among the nine (the wool block's colour names it) with a line to it.", "SkyHanni: Livid finder")
                 .when(() -> "CATACOMBS".equals(GameState.island) || SbcMod.DEV).world(Puzzles::drawLivid)
                 .option(Option.bool("dungeon_livid.box", "Box", "A box around the real Livid.", true))
-                .option(Option.bool("dungeon_livid.glow", "Glow", "The real Livid glows, which also shows it through walls.", false))
+                .option(Option.bool("dungeon_livid.glow", "Glow", "The real Livid glows.", false))
                 .option(Option.bool("dungeon_livid.title", "Title", "A title on screen naming the colour.", false))
                 .option(Option.text("dungeon_livid.title_text", "Title text", "[color] becomes the colour.", "The livid is [color]"))
                 .option(Option.bool("dungeon_livid.hide_wrong", "Hide wrong Livids", "The other Livids disappear.", false))

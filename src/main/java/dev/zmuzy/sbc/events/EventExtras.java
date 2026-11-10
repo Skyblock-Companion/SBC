@@ -581,7 +581,7 @@ public final class EventExtras {
                 .when(() -> "HUB".equals(GameState.island)).world(EventExtras::pigLines)
                 .option(Option.bool("pig_lines.to_pig", "You to the pig", "", true))
                 .option(Option.bool("pig_lines.to_orb", "Pig to the orb", "", true)));
-        Features.add(new Feature(TEAM, "Events", "Century cake teams through walls", "In the Century Celebration, holding a Slice of Cake: players of that team glow in its colour, the others grey, also through walls.", "SkyHanni: Team Finder")
+        Features.add(new Feature(TEAM, "Events", "Century cake team colours", "In the Century Celebration, holding a Slice of Cake: players of that team glow in its colour, the others grey.", "SkyHanni: Team Finder")
                 .when(EventExtras::sb).defaultOff());
         Features.add(new Feature(RAFFLE, "Events", "Raffle tasks", "In the Century Celebration's Raffle Tasks menu, what is not done yet is red.", "SkyHanni: Raffle Task Highlighter")
                 .when(EventExtras::sb)

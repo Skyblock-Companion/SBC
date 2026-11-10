@@ -50,7 +50,7 @@ public final class Kuudra {
         lastSlot = -1;
     }
 
-    // from skyblocker KuudraGlowAdder: kuudra = the size 30 magma cube. shows through walls so it starts off
+    // from skyblocker KuudraGlowAdder: kuudra = the size 30 magma cube
     public static int glow(Entity e) {
         return e instanceof net.minecraft.world.entity.monster.cubemob.MagmaCube m && m.getSize() == KUUDRA_SIZE && Features.on(ID) && opt("kuudra_helper.glow", false) ? 0xF7510F : -1;
     }
@@ -186,7 +186,7 @@ public final class Kuudra {
                 .option(Option.bool("kuudra_helper.danger", "Danger warning", "A warning in the colour of the danger when a tentacle slam or TNT is about to hit you.", true))
                 .option(Option.bool("kuudra_helper.no_poison", "Arrow poison warning", "When you pull out a bow in the damage phase with no or little Toxic Arrow Poison.", true))
                 .option(Option.integer("kuudra_helper.poison_threshold", "Little poison is under", "", 32, 1, 256))
-                .option(Option.bool("kuudra_helper.glow", "Kuudra glows", "A deep orange outline that also shows through walls.", false)));
+                .option(Option.bool("kuudra_helper.glow", "Kuudra glows", "A deep orange outline.", false)));
         ChatBus.register(ChatBus.OBSERVE + 9, "kuudra", f, Kuudra::onChat);
     }
 }

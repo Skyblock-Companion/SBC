@@ -30,7 +30,7 @@ public final class PestFinder {
         return m.base != null && m.base.isAlive() && PEST_NAMES.contains(m.name);
     }
 
-    // bright red box on every pest through walls, no text. easy to spot from anywhere
+    // bright red box on every pest in sight, no text
     public static void boxes(WorldDraw w) {
         if (!garden() || !Features.on("garden_pest_box")) return;
         float partial = w.mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
@@ -42,7 +42,7 @@ public final class PestFinder {
             double half = Math.max(0.5, Math.max(bb.getXsize(), bb.getZsize()) / 2 + 0.15), h = Math.max(1.0, bb.getYsize() + 0.3);
             net.minecraft.world.phys.AABB box = new net.minecraft.world.phys.AABB(at.x - half, at.y - 0.15, at.z - half, at.x + half, at.y - 0.15 + h, at.z + half);
             w.filledBox(box, 0xFF2020, 0.55f, true);
-            w.box(box, 0xFFFF3030, false, true);
+            w.box(box, 0xFFFF3030, false, false);
         }
     }
 
@@ -127,7 +127,7 @@ public final class PestFinder {
     }
 
     public static void register() {
-        Features.add(new Feature("garden_pest_box", "Garden", "Pest boxes", "A bright red box on every pest, seen through walls, with nothing written on it, so you spot them at once.", "")
+        Features.add(new Feature("garden_pest_box", "Garden", "Pest boxes", "A bright red box on every pest, with nothing written on it, so you spot them at once.", "")
                 .when(PestFinder::garden).world(PestFinder::boxes));
         Features.add(new Feature("garden_pest_finder", "Garden", "Pest finder", "Infested plots get lines on their walls in the world with the pest count while you hold a vacuum. Where the vacuum's ability points is the Pest guess.", "")
                 .when(PestFinder::garden).world(PestFinder::draw)

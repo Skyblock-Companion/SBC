@@ -141,7 +141,7 @@ public final class RiftColosseum {
         Features.add(new Feature(ID, "Rift", "Bacte fight", "In the Colosseum, marks the Blobbercysts and the tentacles on the floor with how many hits each one has left.", "SkyHanni: Colosseum; Skyblocker: Blobbercyst Glow")
                 .when(Rift::rift).tick(RiftColosseum::tick).world(RiftColosseum::draw).left(RiftColosseum::reset)
                 .option(Option.bool("rift_colosseum.blobbercysts", "Mark the Blobbercysts", "A red box around each one.", true))
-                .option(Option.bool("rift_colosseum.blobbercyst_glow", "Blobbercysts glow", "A green outline that also shows through walls.", false))
+                .option(Option.bool("rift_colosseum.blobbercyst_glow", "Blobbercysts glow", "A green outline.", false))
                 .option(Option.bool("rift_colosseum.tentacles", "Mark the tentacles", "A marker with a beam and the hits left.", true)));
     }
 }

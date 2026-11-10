@@ -21,7 +21,7 @@ import java.util.List;
 
 // from skyblocker GardenGlowAdder: every pest on the garden stands out, green for the running contest's crop,
 // blue for the vinyl you play
-// skyblocker makes them glow, here they get a box like other mobs. shows through walls so off by default
+// skyblocker makes them glow, here they get a box like other mobs, behind blocks like the pest itself
 public final class PestHighlight {
     public static final String ID = "garden_pest_highlight";
     private static final int PEST = 0xFFB62F00, CONTEST = 0xFF55FF55, VINYL = 0xFF00AAAA;
@@ -70,12 +70,12 @@ public final class PestHighlight {
             String crop = PestHeads.CROP_BY_HEAD.get(texture(st.getItemBySlot(EquipmentSlot.HEAD)));
             int c = colour(crop, contest, vinylCrop, contestOn, vinylOn);
             double x = st.getX(), y = st.getY() + 1.4, z = st.getZ();
-            w.box(new AABB(x - 0.4, y, z - 0.4, x + 0.4, y + 0.8, z + 0.4), c, false, true);
+            w.box(new AABB(x - 0.4, y, z - 0.4, x + 0.4, y + 0.8, z + 0.4), c, false, false);
         }
     }
 
     public static void register() {
-        Features.add(new Feature(ID, "Garden", "Pest highlight", "A box around each pest on the Garden, through walls: green for the running contest's crop, blue for the vinyl you play.", "Skyblocker: Pest Highlighter")
+        Features.add(new Feature(ID, "Garden", "Pest highlight", "A box around each pest on the Garden: green for the running contest's crop, blue for the vinyl you play.", "Skyblocker: Pest Highlighter")
                 .when(GardenPack::garden).defaultOff().tick(PestHighlight::tick).world(PestHighlight::draw).left(PESTS::clear)
                 .option(Option.bool("garden_pest_highlight.vinyl", "Pick out the vinyl's pests", "Blue, outside of a contest.", true))
                 .option(Option.bool("garden_pest_highlight.contest", "Pick out the contest's pests", "Green, during Jacob's contest.", true)));

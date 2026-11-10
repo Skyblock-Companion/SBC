@@ -239,7 +239,7 @@ public final class SlayerFeatures {
         if (!groundNames.isEmpty()) for (var e : groundNames.entrySet()) if (e.getKey().isAlive()) w.label(e.getValue(), e.getKey().position().add(0, 0.8, 0), false);
         if (Features.on(MINIBOSS) && o(MINIBOSS, "line") && SlayerApi.inAnyArea()) {
             float width = Combat.integer(MINIBOSS, "line_width", 3);
-            for (Mobs.Mob m : minis.values()) if (Combat.seen(m.base, 10, 0.5)) w.line(Combat.fromCrosshair(w), m.base.position().add(0, 1, 0), 0xFF55FFFF, width, true);
+            for (Mobs.Mob m : minis.values()) if (Combat.seen(m.base, 10, 0.5)) w.line(Combat.fromCrosshair(w), m.base.position().add(0, 1, 0), 0xFF55FFFF, width, false);
         }
     }
 
@@ -457,7 +457,7 @@ public final class SlayerFeatures {
                 .option(Option.bool("slayer_miniboss.hide_chat", "Hide the chat line", "", false))
                 .option(Option.bool("slayer_miniboss.highlight", "Highlight", "A glow on a miniboss you can see.", true))
                 .option(Option.color("slayer_miniboss.color", "Highlight colour", "", 0xFF55FFFF))
-                .option(Option.bool("slayer_miniboss.line", "Line to it", "From your crosshair, through walls.", false))
+                .option(Option.bool("slayer_miniboss.line", "Line to it", "From your crosshair.", false))
                 .option(Option.integer("slayer_miniboss.line_width", "Line width", "", 3, 1, 10)));
         Features.add(new Feature(GROUND, "Slayer", "Slayer items on the ground", "The name and worth of what is lying near you during a quest.", "SkyHanni: Items on Ground").when(Combat::sb)
                 .option(Option.integer("slayer_ground_items.min_price", "At least worth", "Coins, for the whole stack.", 50_000, 0, 10_000_000)));

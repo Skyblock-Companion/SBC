@@ -1102,7 +1102,7 @@ public final class ForageHelpers {
                 .option(Option.bool("foraging_sweep_overlay.thrown", "Also for a thrown axe", "Half the logs, a dimmer colour.", true))
                 .option(Option.color("foraging_sweep_overlay.color", "Colour", "", 0x40FF9600)));
 
-        Features.add(new Feature(BLOCKS, "Foraging", "Foraging highlights", "Lushlilac and Sea Lumies on Galatea, full Honeyhives and Ruby Veilshrooms in the Torrhus Canyon. Not through walls.", "Skyblocker: block highlighters").when(ForageHelpers::customTrees)
+        Features.add(new Feature(BLOCKS, "Foraging", "Foraging highlights", "Lushlilac and Sea Lumies on Galatea, full Honeyhives and Ruby Veilshrooms in the Torrhus Canyon.", "Skyblocker: block highlighters").when(ForageHelpers::customTrees)
                 .tick(ForageHelpers::blocksTick).world(ForageHelpers::blocksDraw).left(() -> {
                     found.clear();
                     foundName.clear();

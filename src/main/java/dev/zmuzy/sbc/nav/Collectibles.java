@@ -27,7 +27,7 @@ public final class Collectibles {
             new Spec("col_enigma", "Enigma souls nearby", "Marks Rift enigma souls near you.", Set.of("rift_enigma"), "Enigma soul", 0xFFB070FF, 60, 8, false),
             new Spec("col_relic", "Spider relics", "Marks the relics in the Spider's Den.", Set.of("SPIDER_RELIC"), "Relic", 0xFFFFD36B, 70, 8, false),
             new Spec("col_basket", "Event baskets", "Marks event baskets near you.", Set.of("event_basket"), "Basket", 0xFF97C459, 60, 6, false),
-            new Spec("col_emissary", "Mining emissaries", "The name of every emissary that gives Commissions, and how far away it is, through walls.", Set.of("mines_emissary"), "Emissary", 0xFFEF9F27, 400, 9, true));
+            new Spec("col_emissary", "Mining emissaries", "The name of every emissary that gives Commissions, and how far away it is.", Set.of("mines_emissary"), "Emissary", 0xFFEF9F27, 400, 9, true));
 
     private static final java.util.Map<String, List<Graph.Node>> CACHE = new java.util.HashMap<>();
 

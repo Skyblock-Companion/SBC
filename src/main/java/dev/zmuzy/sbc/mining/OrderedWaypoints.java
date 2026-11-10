@@ -245,7 +245,7 @@ public final class OrderedWaypoints {
                 .option(Option.color("mining_ordered_waypoints.previous_color", "Previous colour", "", 0x995555FF))
                 .option(Option.color("mining_ordered_waypoints.next_color", "Next colour", "", 0x99FFFF55))
                 .option(Option.integer("mining_ordered_waypoints.next_count", "Waypoints ahead", "", 2, 1, 10))
-                .option(Option.bool("mining_ordered_waypoints.fill", "Fill the block", "Through walls.", false))
+                .option(Option.bool("mining_ordered_waypoints.fill", "Fill the block", "", false))
                 .option(Option.integer("mining_ordered_waypoints.range", "Reached within", "Blocks.", 3, 1, 10))
                 .option(Option.bool("mining_ordered_waypoints.trace_line", "Line to the next one", "", true))
                 .option(Option.color("mining_ordered_waypoints.trace_color", "Line colour", "", 0xFF55FF55))

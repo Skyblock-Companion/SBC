@@ -132,7 +132,7 @@ public final class BloodCamp {
     }
 
     public static void register() {
-        Features.add(new Feature("dungeon_blood_camp", "Dungeons", "Blood camp helper", "Shows where each blood mob will stop once it starts moving, so you can wait there. Drawn through walls.", "Skyblocker: Blood Camp Helper")
+        Features.add(new Feature("dungeon_blood_camp", "Dungeons", "Blood camp helper", "Shows where each blood mob will stop once it starts moving, so you can wait there.", "Skyblocker: Blood Camp Helper")
                 .when(() -> DungeonRun.inDungeon() || SbcMod.DEV).tick(BloodCamp::tick).world(BloodCamp::draw).left(BloodCamp::reset).defaultOff());
     }
 }

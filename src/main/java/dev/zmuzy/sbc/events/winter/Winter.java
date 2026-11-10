@@ -219,7 +219,7 @@ public final class Winter {
         if (!Combat.opt(JERRIES, "line")) return;
         for (Map.Entry<Entity, Integer> e : jerries.entrySet()) {
             if (!e.getKey().isAlive() || e.getKey().distanceTo(w.mc.player) > JERRY_RANGE) continue;
-            w.line(Combat.fromCrosshair(w), e.getKey().position().add(0, e.getKey().getBbHeight() / 2, 0), 0xFF000000 | e.getValue(), 2, true);
+            w.line(Combat.fromCrosshair(w), e.getKey().position().add(0, e.getKey().getBbHeight() / 2, 0), 0xFF000000 | e.getValue(), 2, false);
         }
     }
 
@@ -294,7 +294,7 @@ public final class Winter {
                 .world(Winter::jerryDraw)
                 .left(jerries::clear)
                 .option(Option.bool("jerry_highlight.highlight", "Glow", "", true))
-                .option(Option.bool("jerry_highlight.line", "Line to your Jerries", "Shows through walls.", false)));
+                .option(Option.bool("jerry_highlight.line", "Line to your Jerries", "", false)));
         Features.add(new Feature(JERRY_TIMER, "Events", "Jerry cooldown", "While Jerry's Jerrypocalypse is on, how long until a hidden Jerry can come again, with a message and a sound when it can.", "Skyblocker: Jerry Timer")
                 .when(Winter::sb)
                 .tick(Winter::jerryTick));

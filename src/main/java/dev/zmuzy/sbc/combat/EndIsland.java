@@ -333,8 +333,7 @@ public final class EndIsland {
         long now = System.currentTimeMillis();
         if (Features.on(NODES)) {
             int color = Combat.color(NODES, "color", 0xFF55FFFF);
-            boolean through = Combat.opt(NODES, "through_walls");
-            for (Node n : NODE_MAP.values()) if (n.confirmed + 5000 > now) w.box(new net.minecraft.world.phys.AABB(n.pos), color, false, through);
+            for (Node n : NODE_MAP.values()) if (n.confirmed + 5000 > now) w.box(new net.minecraft.world.phys.AABB(n.pos), color, false, false);
             if (NODE_MAP.size() > 256) NODE_MAP.values().removeIf(n -> n.confirmed + 5000 < now);
         }
         if (Features.on(PROTECTOR) && Combat.opt(PROTECTOR, "waypoint") && place != null && stage == 5) w.waypoint(new Vec3(place.x(), 0, place.z()), 0xFFFF55FF, "Protector", true, true);
@@ -452,8 +451,7 @@ public final class EndIsland {
         Features.add(new Feature(PROTECTOR, "Combat", "End Stone Protector", "Its stage and spot, and a waypoint when it is about to rise.", "Skyblocker: Protector Location, End Protector Waypoint").when(() -> Combat.island("THE_END"))
                 .option(Option.bool("end_protector.waypoint", "Waypoint when it rises", "", true)));
         Features.add(new Feature(NODES, "Combat", "Ender Node boxes", "A box around the Ender Nodes near you, found by their particles.", "Skyblocker: Ender Node Helper").when(() -> Combat.island("THE_END"))
-                .option(Option.color("ender_node_helper.color", "Colour", "", 0xFF55FFFF))
-                .option(Option.bool("ender_node_helper.through_walls", "Through walls", "", false)));
+                .option(Option.color("ender_node_helper.color", "Colour", "", 0xFF55FFFF)));
         ParticleHooks.listen(EndIsland::onParticle);
         dev.zmuzy.sbc.mc.Interactions.onBlockClick((pos, right) -> {
             if (!right) NODE_MAP.remove(BlockPos.containing(pos));

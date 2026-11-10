@@ -420,11 +420,11 @@ public final class DungeonObjects {
                 .option(Option.bool("dungeon_mob_marks.fels", "Fel skulls", "Marks the skulls of Fels that are not active yet.", true))
                 .option(Option.color("dungeon_mob_marks.fel_color", "Fel colour", "The colour of the Fel mark and its line.", 0xFFFF00FF))
                 .option(Option.bool("dungeon_mob_marks.fel_line", "Line to Fel skulls", "A line to Fel skulls within 30 blocks.", false)));
-        Features.add(new Feature(STARRED, "Dungeons", "Starred mobs", "Starred mobs, minibosses and bats glow, which also shows them through walls.", "SkyHanni: Highlight Starred; Skyblocker: Starred Mob Glow").when(dg).world(DungeonObjects::drawStars).defaultOff()
+        Features.add(new Feature(STARRED, "Dungeons", "Starred mobs", "Starred mobs, minibosses and bats glow.", "SkyHanni: Highlight Starred; Skyblocker: Starred Mob Glow").when(dg).world(DungeonObjects::drawStars).defaultOff()
                 .option(Option.bool("dungeon_starred.glow", "Glow", "Starred mobs glow in the colour below.", true))
                 .option(Option.bool("dungeon_starred.boxes", "Boxes", "Draws a box around starred mobs too.", false))
                 .option(Option.color("dungeon_starred.color", "Colour", "The colour of the glow and the boxes.", 0xFFF57738)));
-        Features.add(new Feature("dungeon_class_glow", "Dungeons", "Class colour on teammates", "Teammates glow in the colour of their class, which also shows them through walls.", "Skyblocker: Class-based Player Glow").when(dg).defaultOff());
+        Features.add(new Feature("dungeon_class_glow", "Dungeons", "Class colour on teammates", "Teammates glow in the colour of their class.", "Skyblocker: Class-based Player Glow").when(dg).defaultOff());
         Feature clicks = Features.add(new Feature(CLICKED, "Dungeons", "Clicked blocks", "Levers, chests and wither essence you click light up for three seconds and say what they were. Hides the lever line in chat.", "SkyHanni: Clicked Blocks").when(dg).world(DungeonObjects::drawClicks).defaultOff()
                 .option(Option.bool("dungeon_clicked_blocks.text", "Say what it was", "A short text on the block.", true))
                 .option(Option.bool("dungeon_clicked_blocks.random", "Random colours", "A new colour each click instead of the ones below.", false))

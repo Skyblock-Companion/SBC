@@ -24,7 +24,8 @@ public abstract class EntityGlowMixin {
                 if (c < 0) c = dev.zmuzy.sbc.areas.FishHooks.glowOf(e);
                 if (c < 0) c = dev.zmuzy.sbc.combat.CombatMarks.glow(e);
                 if (c < 0) c = dev.zmuzy.sbc.chat.PartyMarks.glow(e);
-                return c;
+                // never through walls
+                return c >= 0 && !dev.zmuzy.sbc.combat.CombatMarks.inSight(e) ? -1 : c;
             });
             if (color >= 0) state.outlineColor = color | 0xFF000000;
         } catch (Throwable t) {

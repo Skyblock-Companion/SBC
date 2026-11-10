@@ -48,7 +48,7 @@ public final class GlowingMushrooms {
         if (mc.level == null || SEEN.isEmpty()) return;
         Feature f = Features.get(ID);
         int color = f.option("color").color();
-        boolean walls = f.option("through_walls").bool();
+        boolean walls = false;
         long now = System.currentTimeMillis();
         for (Iterator<Map.Entry<BlockPos, Long>> it = SEEN.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<BlockPos, Long> e = it.next();
@@ -67,8 +67,7 @@ public final class GlowingMushrooms {
         Features.add(new Feature(ID, "Farming Islands", "Glowing mushrooms", "Outlines the glowing mushrooms in the Mushroom Cave.", "Skyblocker: glowing mushroom helper · SkyHanni: glowing mushroom highlighter")
                 .when(() -> "THE_FARMING_ISLANDS".equals(GameState.island) || SbcMod.DEV).world(GlowingMushrooms::draw)
                 .left(SEEN::clear)
-                .option(Option.color("glowing_mushrooms.color", "Colour", "", 0x7F55FFFF))
-                .option(Option.bool("glowing_mushrooms.through_walls", "Show through walls", "", false)));
+                .option(Option.color("glowing_mushrooms.color", "Colour", "", 0x7F55FFFF)));
         ParticleHooks.listen(GlowingMushrooms::particle);
         Safe.attackBlock("GlowingMushrooms.attackBlock", (player, level, hand, pos, direction) -> {
             if (level.isClientSide() && !SEEN.isEmpty()) SEEN.remove(pos);
