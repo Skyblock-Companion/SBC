@@ -158,10 +158,56 @@ public final class Tips {
     }
 
     // prices, estimated value, craft profit
+    private static final java.util.regex.Pattern ENCHANT_NAME = java.util.regex.Pattern.compile("^(.+?) ([IVXLC]+|\\d+)$");
+
+    // an item a menu shows with only its name (the Experimentation Table's rewards, say): its id from the name,
+    // "" when the name says nothing. an enchant's name gives its book. pure enough for tests
+    public static String idFromShownName(String shown, java.util.function.Function<String, String> enchantId, java.util.function.Function<String, String> repoId) {
+        String name = io.github.zmuzy.sbc.core.GameState.strip(shown).trim();
+        int x = name.lastIndexOf(" x");
+        if (x > 0 && name.substring(x + 2).chars().allMatch(Character::isDigit)) name = name.substring(0, x).trim();
+        if (name.isEmpty()) return "";
+        java.util.regex.Matcher m = ENCHANT_NAME.matcher(name);
+        if (m.matches()) {
+            String nbt = enchantId.apply(m.group(1));
+            if (nbt != null) {
+                String lvl = m.group(2);
+                int level = lvl.chars().allMatch(Character::isDigit) ? Integer.parseInt(lvl) : io.github.zmuzy.sbc.core.GameState.roman(lvl);
+                if (level > 0) return "ENCHANTMENT_" + nbt.toUpperCase(Locale.ROOT) + "_" + level;
+            }
+        }
+        String id = repoId.apply(name);
+        return id == null ? "" : id;
+    }
+
+    // prices for an item known only by its name
+    private static void pricesByName(ItemStack st, List<Component> lines) {
+        String id = idFromShownName(st.getHoverName().getString(), n -> {
+            var e = io.github.zmuzy.sbc.core.Enchants.byName(n);
+            return e == null ? null : e.id();
+        }, io.github.zmuzy.sbc.core.ItemRepo::idForName);
+        if (id.isEmpty()) return;
+        int n = Math.max(1, st.getCount());
+        Prices.Product bz = on("tip_prices", "tip_prices.bazaar") ? Prices.get(id) : null;
+        if (bz != null) {
+            line(lines, "");
+            line(lines, "§6Bazaar §7buy §e" + Prices.coins(bz.buy() * n) + " §7· sell §e" + Prices.coins(bz.sell() * n) + (n > 1 ? " §8(" + n + "x)" : ""));
+            return;
+        }
+        double bin = on("tip_prices", "tip_prices.lowestBin") ? AuctionPrices.lowestBin(id) : 0;
+        if (bin > 0) {
+            line(lines, "");
+            line(lines, "§6Lowest BIN §e" + Prices.coins(bin * n) + (n > 1 ? " §8(" + n + "x)" : ""));
+        }
+    }
+
     public static void prices(ItemStack st, List<Component> lines) {
         String id = Gain.sbId(st);
         String bzId = bazaarId(st);
-        if (id.isEmpty() && bzId.isEmpty()) return;
+        if (id.isEmpty() && (bzId.isEmpty() || Prices.get(bzId) == null)) {
+            pricesByName(st, lines);
+            return;
+        }
         int n = Math.max(1, st.getCount());
         boolean any = false;
         Prices.Product bz = on("tip_prices", "tip_prices.bazaar") ? Prices.get(bzId) : null;
