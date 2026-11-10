@@ -26,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,13 +40,14 @@ public final class Loadouts {
     private static final Pattern LOCKED = Patterns.get("SH.inventory.loadout.lockedslot");
     private static final Pattern ARMOR_SETS = Patterns.get("SH.inventory.wardrobe.armor.name");
     private static final Pattern EQUIPMENT_SETS = Patterns.get("SH.inventory.wardrobe.equipment.name");
+    private static final Pattern PET = Pattern.compile("^\\[Lvl \\d+\\] ");
     // from skyhanni LoadoutApi: icons start at 14, 3 per row. pages hold 4, 4 and 1 rows
     public static final int[] ICONS = {14, 15, 16, 23, 24, 25, 32, 33, 34, 41, 42, 43};
     private static final int[] FIRST_OF_PAGE = {0, 12, 24};
     // from skyhanni AbstractWardrobeApi: a slots button is FIRST_SLOT + its column, pieces above
     private static final int FIRST_SLOT = 36, MAX_SLOT_PER_PAGE = 9;
 
-    private static int page = 1, currentSlot = -1, wait;
+    private static int page = 1, currentSlot = -1, wait, lastFound = -1;
 
     private Loadouts() {}
 
@@ -111,10 +113,46 @@ public final class Loadouts {
             }
         }
         currentSlot = found;
+        // same one on two reads in a row: the left column is that loadouts, not half of a switch
+        if (found >= 0 && found == lastFound && Panels.on("equipment_slots") && EquipmentCache.current() == EquipmentCache.normal())
+            remember(page, found, i -> menu.getSlot(i).getItem(), menu.getRowCount() * 9);
+        lastFound = found;
+    }
+
+    // the loadout on, as the menu shows it: equipment in column 1 like EquipmentCache reads it, the pet by its
+    // level tag. true = something new
+    static boolean remember(int page, int currentIndex, IntFunction<ItemStack> slotAt, int slots) {
+        List<ItemStack> equipment = EquipmentCache.column(slotAt, slots, 1);
+        return LoadoutCache.remember(loadoutNumber(page, currentIndex), equipment, pet(slotAt, slots));
+    }
+
+    // a pet in the menu outside the loadout icons, nothing if there isnt one
+    static ItemStack pet(IntFunction<ItemStack> slotAt, int slots) {
+        outer:
+        for (int i = 0; i < slots; i++) {
+            for (int icon : ICONS) if (icon == i) continue outer;
+            ItemStack st = slotAt.apply(i);
+            if (!st.isEmpty() && PET.matcher(GameState.strip(st.getHoverName().getString()).trim()).find()) return st;
+        }
+        return ItemStack.EMPTY;
+    }
+
+    // a click or a key on a loadout icon that offers to equip it: its stored pieces go on at once. true = applied
+    public static boolean equipping(String title, int slotId, ItemStack icon) {
+        if (!Panels.on("equipment_slots") || !isLoadouts(title) || icon.isEmpty()) return false;
+        int n = loadoutNumber(pageOf(title), slotId);
+        if (n < 0) return false;
+        boolean offers = false;
+        for (String line : plainLore(icon)) if (UNEQUIPPED.matcher(line).find()) offers = true;
+        return offers && LoadoutCache.apply(n);
     }
 
     // loadout number over all pages, -1 = not one
     private static int loadoutNumber(int slotIndex) {
+        return loadoutNumber(page, slotIndex);
+    }
+
+    static int loadoutNumber(int page, int slotIndex) {
         for (int i = 0; i < ICONS.length; i++) if (ICONS[i] == slotIndex) return FIRST_OF_PAGE[Math.max(0, Math.min(page - 1, 2))] + i;
         return -1;
     }

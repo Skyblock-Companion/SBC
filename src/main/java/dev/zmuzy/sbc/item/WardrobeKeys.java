@@ -110,7 +110,10 @@ public final class WardrobeKeys {
         Minecraft mc = Minecraft.getInstance();
         if (mc.gameMode == null || mc.player == null) return false;
         lastClick = now;
+        ItemStack icon = cs.getMenu().getSlot(slot).getItem();
         mc.gameMode.handleContainerInput(cs.getMenu().containerId, slot, 0, ContainerInput.PICKUP, mc.player);
+        // the click skips the screen, so the equipment panel hears of the switch here
+        dev.zmuzy.sbc.ui.panels.Loadouts.equipping(title(cs), slot, icon);
         return true;
     }
 

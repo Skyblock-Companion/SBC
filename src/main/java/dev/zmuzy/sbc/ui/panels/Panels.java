@@ -58,6 +58,10 @@ public final class Panels {
         Safe.stopping("Panels.stopping", c -> {
             PanelStore.save();
             EquipmentCache.save(c);
+            LoadoutCache.save(c);
+        });
+        Safe.game("Panels.game", (message, overlay) -> {
+            if (!overlay && (GameState.inSkyBlock || dev.zmuzy.sbc.SbcMod.DEV)) EquipmentCache.chat(Minecraft.getInstance(), message);
         });
         Safe.afterInit("Panels.afterInit", (client, screen, w, h) -> {
             if (screen instanceof InventoryScreen inv && (GameState.inSkyBlock || dev.zmuzy.sbc.SbcMod.DEV)) {
@@ -81,6 +85,7 @@ public final class Panels {
             // from skyblocker MuseumItemCache: donation confirm button
             if (t.equals("Confirm Donation") && slotId == 20 && screen.getMenu() instanceof ChestMenu menu) MuseumData.confirmed(i -> menu.getSlot(i).getItem());
             EquipmentCache.clicked(t, slotId, slot.getItem());
+            if (button == 0) Loadouts.equipping(t, slotId, slot.getItem());
             return false;
         });
         Safe.commands("Panels.commands", (dispatcher, registry) -> dispatcher.register(literal("sbc")
@@ -97,6 +102,7 @@ public final class Panels {
         if (!GameState.inSkyBlock && !dev.zmuzy.sbc.SbcMod.DEV) return;
         PanelStore.tick(mc);
         EquipmentCache.tick(mc);
+        LoadoutCache.tick(mc);
         Loadouts.tick(mc);
     }
 

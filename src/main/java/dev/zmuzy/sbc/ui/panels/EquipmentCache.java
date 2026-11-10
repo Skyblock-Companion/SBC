@@ -33,17 +33,25 @@ import java.util.regex.Pattern;
 public final class EquipmentCache {
     private static final Pattern STATS_OR_LOADOUTS = Pattern.compile("^Stats & Equipment|(?:\\(\\d/\\d\\) )?Loadouts$");
     private static final Pattern WARDROBE = Pattern.compile("^(?:\\(\\d/\\d\\) )?Equipment Sets$");
-    private static final Codec<ItemStack> STACK = Codec.lazyInitialized(() -> RecordCodecBuilder.create(i -> i.group(
+    static final Codec<ItemStack> STACK = Codec.lazyInitialized(() -> RecordCodecBuilder.create(i -> i.group(
             BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("id").forGetter(ItemStack::typeHolder),
             Codec.INT.orElse(1).fieldOf("count").forGetter(ItemStack::getCount),
             DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(ItemStack::getComponentsPatch)
     ).apply(i, ItemStack::new)));
     private static final Codec<List<ItemStack>> LIST = STACK.listOf().fieldOf("items").codec();
 
+    // skyhanni EquipmentApi: the chat line when a piece goes on, from the menu or a right click
+    private static final Pattern EQUIP = dev.zmuzy.sbc.core.Patterns.get("SH.data.equipment.chat.equip");
+    private static final Pattern EQUIP_PLAIN = Pattern.compile("^You equipped an? (.+)!$");
+    // rarity line at the end of the lore: "LEGENDARY NECKLACE", "EPIC DUNGEON GLOVES"
+    private static final Pattern KIND = Pattern.compile("\\b(?:COMMON|UNCOMMON|RARE|EPIC|LEGENDARY|MYTHIC|DIVINE|SPECIAL|ULTIMATE|ADMIN)\\b[A-Z ]*?\\b(NECKLACE|CLOAK|BELT|GLOVES|BRACELET)\\b");
+
     private static final ItemStack[] NORMAL = empty(), RIFT = empty(), SAFARI = empty();
     private static String loaded = "";
     private static boolean dirty;
-    private static int wait;
+    private static int wait, hold;
+    // the held item a tick ago: right clicking a piece takes it from the hand before or after the chat line
+    private static ItemStack lastHeld = ItemStack.EMPTY;
 
     private EquipmentCache() {}
 
@@ -127,9 +135,15 @@ public final class EquipmentCache {
             loaded = PanelStore.key();
             load(mc);
         }
+        if (hold > 0) hold--;
+        if (mc.player != null) {
+            ItemStack held = mc.player.getMainHandItem();
+            if (!held.isEmpty() && !ItemStack.matches(held, lastHeld)) lastHeld = held.copy();
+        }
         if (--wait > 0) return;
         wait = 10;
-        if (mc.gui.screen() instanceof ContainerScreen cs && Panels.on("equipment_slots")) {
+        // just switched loadout: the menu still shows the old pieces till hypixel sends the new ones
+        if (hold <= 0 && mc.gui.screen() instanceof ContainerScreen cs && Panels.on("equipment_slots")) {
             ChestMenu menu = cs.getMenu();
             int rows = menu.getRowCount() * 9;
             if (read(GameState.strip(cs.getTitle().getString()).trim(), i -> menu.getSlot(i).getItem(), rows)) dirty = true;
@@ -168,13 +182,85 @@ public final class EquipmentCache {
         try {
             RegistryOps<Tag> ops = mc.level.registryAccess().createSerializationContext(NbtOps.INSTANCE);
             List<ItemStack> written = new ArrayList<>(all.size());
-            for (ItemStack s : all) written.add(s.isEmpty() ? new ItemStack(net.minecraft.world.item.Items.AIR.builtInRegistryHolder(), 1, DataComponentPatch.EMPTY) : s);
+            for (ItemStack s : all) written.add(forFile(s));
             Tag tag = LIST.encodeStart(ops, written).getOrThrow();
             Files.createDirectories(f.getParent());
             if (tag instanceof CompoundTag c) NbtIo.write(c, f);
         } catch (Exception e) {
             SbcMod.LOG.warn("Could not save {}", f.getFileName(), e);
         }
+    }
+
+    // the codec wants an item, so nothing is written as one air
+    static ItemStack forFile(ItemStack s) {
+        return s.isEmpty() ? new ItemStack(net.minecraft.world.item.Items.AIR.builtInRegistryHolder(), 1, DataComponentPatch.EMPTY) : s;
+    }
+
+    static ItemStack[] normal() {
+        return NORMAL;
+    }
+
+    // a loadout switch: its stored pieces are worn now. the menus correct it once they show them
+    static void put(ItemStack[] pieces) {
+        for (int i = 0; i < 4; i++) NORMAL[i] = pieces[i].isEmpty() ? ItemStack.EMPTY : pieces[i].copy();
+        dirty = true;
+        hold = 20;
+    }
+
+    // which of the 4 slots a piece goes in by its rarity line, -1 = not equipment
+    static int slotOf(ItemStack st) {
+        if (st.isEmpty()) return -1;
+        List<String> lore = dev.zmuzy.sbc.core.LegacyText.lore(st);
+        for (int i = lore.size() - 1; i >= 0; i--) {
+            java.util.regex.Matcher m = KIND.matcher(GameState.strip(lore.get(i)));
+            if (!m.find()) continue;
+            return switch (m.group(1)) {
+                case "NECKLACE" -> 0;
+                case "CLOAK" -> 1;
+                case "BELT" -> 2;
+                default -> 3;
+            };
+        }
+        return -1;
+    }
+
+    // the item name in "You equipped a X!", null = some other line
+    static String equippedName(String legacy, String plain) {
+        java.util.regex.Matcher m = EQUIP.matcher(legacy);
+        if (m.matches()) return GameState.strip(m.group("item")).trim();
+        m = EQUIP_PLAIN.matcher(plain.trim());
+        return m.matches() ? m.group(1).trim() : null;
+    }
+
+    // puts the piece with this name in its slot of the set that counts here. the chat line only has the name, so
+    // the piece comes from what was seen: the inventory, the hand, the stored loadouts. true = set changed
+    static boolean equipped(String name, List<ItemStack> seen) {
+        if (name == null || name.isEmpty()) return false;
+        for (ItemStack st : seen) {
+            if (st.isEmpty() || !GameState.strip(st.getHoverName().getString()).trim().equals(name)) continue;
+            int slot = slotOf(st);
+            if (slot < 0) continue;
+            ItemStack[] set = current();
+            if (ItemStack.matches(set[slot], st)) return false;
+            set[slot] = st.copy();
+            dirty = true;
+            return true;
+        }
+        return false;
+    }
+
+    static void chat(Minecraft mc, net.minecraft.network.chat.Component message) {
+        if (!Panels.on("equipment_slots")) return;
+        String name = equippedName(dev.zmuzy.sbc.core.LegacyText.of(message), GameState.strip(message.getString()));
+        if (name == null) return;
+        List<ItemStack> seen = new ArrayList<>();
+        if (mc.player != null) {
+            seen.add(mc.player.containerMenu.getCarried());
+            for (int i = 0; i < mc.player.getInventory().getContainerSize(); i++) seen.add(mc.player.getInventory().getItem(i));
+        }
+        seen.add(lastHeld);
+        seen.addAll(LoadoutCache.pieces());
+        equipped(name, seen);
     }
 
     // reads what writeStacks wrote, nothing if theres no file
