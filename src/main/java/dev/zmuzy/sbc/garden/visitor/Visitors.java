@@ -182,11 +182,27 @@ public final class Visitors {
                 found = false;
                 continue;
             }
-            remaining--;
             String name = t.endsWith(" NEW!") ? t.substring(0, t.length() - 5).trim() : t;
-            if (!name.isEmpty()) out.add(name);
+            // a blank line ends the widget, even when Hypixel cut it short and fewer names came
+            if (name.isEmpty()) {
+                found = false;
+                continue;
+            }
+            remaining--;
+            out.add(name);
         }
         return out;
+    }
+
+    // how many visitors the header says there are, -1 without the widget
+    public static int visitorsExpected(List<String> tab) {
+        for (String line : tab) {
+            String t = line.trim();
+            if (!t.startsWith("Visitors:")) continue;
+            String n = t.substring("Visitors:".length()).replaceAll("\\D", "");
+            return n.isEmpty() ? 0 : Integer.parseInt(n);
+        }
+        return -1;
     }
 
     private static void readTab() {
@@ -194,7 +210,9 @@ public final class Visitors {
         // VisitorListener.onWidgetUpdate: only if the widget is there at all
         boolean widget = GameState.tab.stream().anyMatch(l -> l.trim().startsWith("Visitors:"));
         if (!widget) return;
-        if (sinceWorldSwitch() > 2000) visitors.keySet().removeIf(name -> !inTab.contains(name));
+        // the tab list is often cut off after a name or two. a visitor that is not shown is only gone when every
+        // name the header counts is there; otherwise the list kept flickering and lost its offers
+        if (sinceWorldSwitch() > 2000 && inTab.size() >= visitorsExpected(GameState.tab)) visitors.keySet().removeIf(name -> !inTab.contains(name));
         for (String name : inTab) add(name);
     }
 
