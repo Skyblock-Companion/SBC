@@ -253,7 +253,7 @@ public final class ProfileChat {
     private static void openProfile(String name) {
         if (name == null) {
             Profile.viewed = null;
-            if (Profile.current == null) Profile.loadSelf();
+            Profile.loadSelfIfOld();
         } else Profile.lookup(name);
         CompanionScreen.page = 7;
         SbcMod.openNextTick = true;

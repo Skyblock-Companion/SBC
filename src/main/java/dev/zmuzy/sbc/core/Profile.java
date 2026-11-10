@@ -107,6 +107,8 @@ public final class Profile {
     public static final class Data {
         // read from what the game showed (core/game/GameProfile) not the api, only known() stuff is known
         public boolean fromGame;
+        // when the server's answer was read. networth is worked out then, so an old one is loaded again
+        public long loadedAt = System.currentTimeMillis();
         public final java.util.Set<String> known = java.util.concurrent.ConcurrentHashMap.newKeySet();
         // bestiary milestone from the menu, -1 = unknown
         public int bestiaryMilestone = -1;
@@ -302,8 +304,32 @@ public final class Profile {
         });
     }
 
+    // your own profile again when it is older than this, so networth and the stats from it keep up
+    static final long REFRESH_MS = 5 * 60_000L;
+    private static long refreshTried;
+
+    public static void refreshTick() {
+        long now = System.currentTimeMillis();
+        Data d = current;
+        if (d == null || d.fromGame || loading || !serverUp() || now - d.loadedAt < REFRESH_MS || now - refreshTried < 60_000) return;
+        refreshTried = now;
+        var p = Minecraft.getInstance().player;
+        if (p != null) load(p.getUUID().toString().replace("-", ""), p.getGameProfile().name(), true);
+    }
+
+    // the profile page asks: yours again when what is loaded is over a minute old
+    public static void loadSelfIfOld() {
+        if (current == null || !current.fromGame && System.currentTimeMillis() - current.loadedAt > 60_000) loadSelf();
+    }
+
     public static void load(String uuid, String playerName) {
+        load(uuid, playerName, false);
+    }
+
+    // background: a refresh of your own profile, which must not replace another player open on the profile page
+    private static void load(String uuid, String playerName, boolean background) {
         if (!serverUp()) {
+            if (background) return;
             status = "";
             viewed = null;
             dev.zmuzy.sbc.core.game.GameProfile.requestRebuild();
@@ -311,10 +337,11 @@ public final class Profile {
         }
         if (loading) return;
         loading = true;
-        status = "Loading " + playerName + "...";
+        if (!background) status = "Loading " + playerName + "...";
         ProfileServer.get(ProfileServer.profiles(uuid)).whenComplete((json, e) -> {
             loading = false;
             if (e != null) {
+                if (background) return;
                 ProfileServer.failed();
                 status = "The server did not answer, so your profile comes from the game for now.";
                 dev.zmuzy.sbc.core.game.GameProfile.requestRebuild();
@@ -322,7 +349,7 @@ public final class Profile {
             }
             try {
                 Data read = parse(json.getAsJsonObject(), uuid, playerName);
-                viewed = read;
+                if (!background || viewed == null || viewed.uuid.equalsIgnoreCase(uuid)) viewed = read;
                 var me = Minecraft.getInstance().player;
                 if (me == null || me.getUUID().toString().replace("-", "").equalsIgnoreCase(uuid)) current = read;
                 status = "";

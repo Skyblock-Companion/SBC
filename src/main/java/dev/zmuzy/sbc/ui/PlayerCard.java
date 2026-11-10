@@ -133,7 +133,9 @@ public final class PlayerCard {
         }
         ry += 12;
         long purse = sample ? 1_423_085_776L : GameState.purse, bank = sample ? 1_250_000_000L : GameState.bank, bits = sample ? 140_965 : GameState.bits;
-        double networth = sample ? 9_860_000_000d : d == null || !d.knows(dev.zmuzy.sbc.core.game.GameProfile.NETWORTH) ? 0 : d.networth();
+        // purse and bank as they are now, the rest from the last profile read
+        double networth = sample ? 9_860_000_000d : d == null || !d.knows(dev.zmuzy.sbc.core.game.GameProfile.NETWORTH) ? 0
+                : d.networth() - d.worth.getOrDefault("Purse", 0d) - d.worth.getOrDefault("Bank", 0d) + Math.max(0, purse) + Math.max(0, bank);
         int bx = rx + half + gap, bw = rw - half - gap;
         ui.rect(rx + half + gap / 2, ry, 1, 17, 0x30FFFFFF);
         pair(ui, "Purse", purse >= 0 ? dev.zmuzy.sbc.core.Prices.coins(purse) : "-", rx, ry, half, dev.zmuzy.sbc.ui.theme.Modern.GOLD);

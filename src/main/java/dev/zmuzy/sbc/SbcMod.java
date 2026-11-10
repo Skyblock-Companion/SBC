@@ -297,6 +297,7 @@ public class SbcMod implements ClientModInitializer {
                     return 1;
                 })))
                 .then(literal("pv").executes(c -> {
+                    dev.zmuzy.sbc.core.Profile.loadSelfIfOld();
                     CompanionScreen.page = 7;
                     openNextTick = true;
                     return 1;
@@ -631,6 +632,7 @@ public class SbcMod implements ClientModInitializer {
                 Safe.run("Prices.tick", Prices::tick);
                 Safe.run("AuctionPrices.tick", dev.zmuzy.sbc.core.AuctionPrices::tick);
                 Safe.run("SoldPrices.tick", dev.zmuzy.sbc.core.SoldPrices::tick);
+                Safe.run("Profile.refresh", dev.zmuzy.sbc.core.Profile::refreshTick);
                 Safe.run("SkyHelperPrices.tick", dev.zmuzy.sbc.core.SkyHelperPrices::tick);
                 Safe.run("Mayor.tick", Mayor::tick);
             }
