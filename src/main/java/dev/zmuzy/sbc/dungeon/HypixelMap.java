@@ -50,11 +50,15 @@ public final class HypixelMap {
         MapRooms.rooms();
         mc.getMapRenderer().extractRenderState(DungeonDoors.mapId(), data, STATE);
         double[] me = MapRooms.mapPos(mc.player.getX(), mc.player.getZ());
-        if (me != null) {
-            STATE.decorations.clear();
-            var render = (MapRendererAccess) mc.getMapRenderer();
-            for (MapDecoration d : data.getDecorations())
-                if (!d.type().value().equals(MapDecorationTypes.FRAME.value())) STATE.decorations.add(render.sbc$decoration(d));
+        // the game draws only the markers an item frame would show, which leaves out every player on a held map.
+        // so each marker is drawn whatever its kind. ours replaces Hypixel's own white one when we know where you are
+        STATE.decorations.clear();
+        var render = (MapRendererAccess) mc.getMapRenderer();
+        for (MapDecoration d : data.getDecorations()) {
+            if (me != null && d.type().value().equals(MapDecorationTypes.FRAME.value())) continue;
+            var marker = render.sbc$decoration(d);
+            marker.renderOnFrame = true;
+            STATE.decorations.add(marker);
         }
         int[] b = bounds(data.colors);
         int cx = cropStart(b[0], b[2], side), cz = cropStart(b[1], b[3], side);
