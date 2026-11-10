@@ -2,6 +2,7 @@
 package dev.zmuzy.sbc.ui.screens;
 
 import dev.zmuzy.sbc.core.Config;
+import dev.zmuzy.sbc.feature.Changelog;
 import dev.zmuzy.sbc.feature.Feature;
 import dev.zmuzy.sbc.feature.Features;
 import dev.zmuzy.sbc.feature.Option;
@@ -32,6 +33,8 @@ public final class WhatsNewScreen extends SbcScreen {
     private final List<Releases.Release> releases;
     // older versions start folded so a long list stays short
     private final Set<String> open = new HashSet<>();
+    // sections folded or opened by hand, per version
+    private final Set<String> closed = new HashSet<>(), opened = new HashSet<>();
     private FlowLayout body;
 
     WhatsNewScreen(Screen parent, List<Releases.Release> releases) {
@@ -135,7 +138,6 @@ public final class WhatsNewScreen extends SbcScreen {
             })).horizontalSizing(Sizing.fixed(50)));
         list.child(head);
         if (!shown) return;
-        for (String h : r.highlights()) list.child(label("- " + h, text()).maxWidth(textWidth() - 10));
         boolean any = false;
         for (String id : r.features()) {
             Feature f = Features.get(id);
@@ -145,6 +147,32 @@ public final class WhatsNewScreen extends SbcScreen {
                 any = true;
             }
             helper(list, f);
+        }
+        // everything that changed, as the changelog says it: new features and improvements open, the rest folded
+        for (Changelog.Section s : Changelog.of(r.version())) {
+            String key = r.version() + "/" + s.name();
+            boolean folded = s.name().startsWith("New") || s.name().startsWith("Improvements") ? closed.contains(key) : !opened.contains(key);
+            FlowLayout row = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
+            row.verticalAlignment(VerticalAlignment.CENTER);
+            row.margins(Insets.top(4));
+            row.child(label(s.name() + " (" + s.entries().size() + ")", text()).horizontalSizing(Sizing.expand()));
+            row.child(SettingsScreen.ui(SbcWidgets.button(Component.literal(folded ? "Show" : "Hide"), b -> {
+                if (s.name().startsWith("New") || s.name().startsWith("Improvements")) {
+                    if (!closed.remove(key)) closed.add(key);
+                } else if (!opened.remove(key)) opened.add(key);
+                fill();
+            })).horizontalSizing(Sizing.fixed(50)));
+            list.child(row);
+            if (folded) continue;
+            String area = null;
+            for (Changelog.Entry e : s.entries()) {
+                if (!e.area().isEmpty() && !e.area().equals(area)) {
+                    area = e.area();
+                    list.child(label(area, dim()).margins(Insets.of(2, 0, 0, 4)));
+                }
+                list.child(label("- " + e.text(), text()).maxWidth(textWidth() - 14).margins(Insets.left(6)));
+                for (String m : e.more()) list.child(label(m, dim()).maxWidth(textWidth() - 24).margins(Insets.left(16)));
+            }
         }
     }
 

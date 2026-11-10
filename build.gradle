@@ -27,6 +27,8 @@ processResources {
     filesMatching('fabric.mod.json') { expand 'version': project.version }
     from('LICENSE') { rename { 'LICENSE-SkyBlockCompanion.txt' } }
     from('THIRD_PARTY_NOTICES.md')
+    // what's new reads the changelog from the jar
+    from('docs/CHANGELOG.md') { into 'assets/sbcompanion'; rename { 'changelog.md' } }
 }
 
 tasks.named('jar') { archiveFileName = "${project.jar_name}.jar" }

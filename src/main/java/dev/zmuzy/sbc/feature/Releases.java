@@ -4,20 +4,16 @@ package dev.zmuzy.sbc.feature;
 import java.util.ArrayList;
 import java.util.List;
 
-// every version after the first: what it brought in a few lines, and the features it added. what's new after an
-// update and the version a feature came with both read this. a version goes at the top when it is released
+// every version after the first and the features it added. what's new after an update and the version a feature
+// came with both read this. a version goes at the top when it is released
 public final class Releases {
-    public record Release(String version, String name, List<String> highlights, List<String> features) {}
+    // what changed is in docs/CHANGELOG.md (Changelog). this only says which features a version brought
+    public record Release(String version, String name, List<String> features) {}
 
     public static final String FIRST = "beta-0.1";
 
     public static final List<Release> ALL = List.of(
-            new Release("beta-0.2", "Beta 0.2", List.of(
-                    "The Item List finds NPCs, bosses, mobs, places and warps, and has every Hunting shard.",
-                    "A Sack Helper beside the Sack of Sacks.",
-                    "The dungeon map is Hypixel's own map from your last hotbar slot, with your arrow on it.",
-                    "Item icons use the textures Hypixel itself gives each item."),
-                    List.of("sack_helper")));
+            new Release("beta-0.2", "Beta 0.2", List.of("sack_helper")));
 
     private Releases() {}
 
