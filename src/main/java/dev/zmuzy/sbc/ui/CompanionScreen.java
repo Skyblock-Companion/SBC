@@ -313,6 +313,9 @@ public final class CompanionScreen extends SbcScreen {
 
     private void row(FlowLayout col, String name, Supplier<String> value, int valueColor, String tip) {
         FlowLayout r = UIContainers.horizontalFlow(Sizing.fill(100), Sizing.content());
+        // the value ends at the row's edge and its shadow one pixel past it: drawn whole, not cut
+        r.allowOverflow(true);
+        r.padding(Insets.right(1));
         r.child(label(name, color(Ui.MUTED)).horizontalSizing(Sizing.expand()));
         r.child(liveLabel(value, valueColor));
         if (tip != null) r.tooltip(Component.literal(tip));
