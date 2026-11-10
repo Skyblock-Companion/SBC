@@ -790,7 +790,7 @@ public final class Profit {
     private static final Card SLAYER_CARD = new Card("slayer_profit", "Slayer profit", "Slayer", 41, SLAYER) {
         @Override
         boolean relevant() {
-            return Slayers.active() || System.currentTimeMillis() - lastSlayerAt < 120_000;
+            return slayering() || System.currentTimeMillis() - lastSlayerAt < 120_000;
         }
 
         @Override
@@ -945,13 +945,21 @@ public final class Profit {
     // stuff with many kinds where the id alone doesnt say which
     private static final Set<String> ANY_KIND = Set.of("ENCHANTED_BOOK", "RUNE", "PET");
 
+    // the quest stays on the sidebar wherever you go, so slayer only counts in its area or while the boss is up
+    static boolean slayering() {
+        if (!Slayers.active()) return false;
+        if (dev.zmuzy.sbc.combat.SlayerApi.inCorrectArea()) return true;
+        Slayers.Quest q = Slayers.quest();
+        return q != null && q.phase() == Slayers.Phase.FIGHTING;
+    }
+
     static void onGain(String id, int amount) {
         if (!GameState.inSkyBlock && !SbcMod.DEV) return;
         warn(id, amount);
         ProfitCards.onGain(id, amount);
         TOTAL.item(id, amount);
         if (garden() && farming()) FARMING.item(id, amount);
-        if (Slayers.active()) {
+        if (slayering()) {
             String boss = Slayers.quest().boss();
             if (ANY_KIND.contains(id) || slayerItems(boss).contains(id)) {
                 SLAYER.item(id, amount);
@@ -971,7 +979,7 @@ public final class Profit {
         ProfitCards.onCoins(diff, cause);
         if (cause == Trackers.Cause.MOB_KILL) {
             TOTAL.coins(diff);
-            if (Slayers.active() && diff < 100_000) {
+            if (slayering() && diff < 100_000) {
                 SLAYER.coins(diff);
                 lastSlayerAt = System.currentTimeMillis();
             }
