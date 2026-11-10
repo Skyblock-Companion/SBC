@@ -24,7 +24,7 @@
     }
   },
   "environment": "client",
-  "entrypoints": { "client": ["dev.zmuzy.sbc.SbcMod"] },
+  "entrypoints": { "client": ["io.github.zmuzy.sbc.SbcMod"] },
   "mixins": ["sbcompanion.mixins.json"],
   "accessWidener": "sbcompanion.accesswidener",
   "depends": {

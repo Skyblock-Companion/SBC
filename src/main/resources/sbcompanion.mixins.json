@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "dev.zmuzy.sbc.mc.mixin",
+  "package": "io.github.zmuzy.sbc.mc.mixin",
   "compatibilityLevel": "JAVA_25",
   "client": [
     "MenuPacketsMixin",

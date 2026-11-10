@@ -3,7 +3,7 @@ plugins {
 }
 
 version = project.mod_version
-group = 'dev.zmuzy'
+group = 'io.github.zmuzy'
 base { archivesName = 'sbc' }
 
 repositories {
