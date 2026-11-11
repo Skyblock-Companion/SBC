@@ -5,7 +5,12 @@ package io.muzy.sbc.mc;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
+//? if >=26.3 {
 import org.lwjgl.sdl.SDLMouse;
+//?} else {
+/*import net.minecraft.client.Minecraft;
+import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.function.IntPredicate;
 
@@ -18,7 +23,13 @@ public final class KeyHeld {
     public static boolean held(KeyMapping key) {
         if (key == null || key.isUnbound()) return false;
         try {
+            //? if >=26.3 {
             return held(KeyMappingHelper.getBoundKeyOf(key));
+            //?} else {
+            /*Minecraft mc = Minecraft.getInstance();
+            long window = mc.getWindow().handle();
+            return held(KeyMappingHelper.getBoundKeyOf(key), button -> GLFW.glfwGetMouseButton(window, button) == GLFW.GLFW_PRESS, code -> InputConstants.isKeyDown(mc.getWindow(), code));
+            *///?}
         } catch (Throwable t) {
             return false;
         }
@@ -27,10 +38,17 @@ public final class KeyHeld {
     // same for a key with no KeyMapping, like a shortcuts
     public static boolean held(InputConstants.Key key) {
         try {
+            //? if >=26.3 {
             return held(key, KeyHeld::mouseDown, InputConstants::isKeyDown);
+            //?} else {
+            /*Minecraft mc = Minecraft.getInstance();
+            long window = mc.getWindow().handle();
+            return held(key, button -> GLFW.glfwGetMouseButton(window, button) == GLFW.GLFW_PRESS, code -> InputConstants.isKeyDown(mc.getWindow(), code));
+            *///?}
         } catch (Throwable t) {
             return false;
         }
+    //? if >=26.3 {
     }
 
     // sdl buttons start at 1 (left), one bit each in the mouse state
@@ -58,6 +76,7 @@ public final class KeyHeld {
         if (c >= '1' && c <= '9') return InputConstants.KEY_1 + (c - '1');
         if (c >= 'A' && c <= 'Z') return InputConstants.KEY_A + (c - 'A');
         return -1;
+    //?}
     }
 
     static boolean held(InputConstants.Key key, IntPredicate mouse, IntPredicate keyboard) {

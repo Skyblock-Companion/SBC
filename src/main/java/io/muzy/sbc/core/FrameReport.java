@@ -63,7 +63,11 @@ public final class FrameReport {
                 + (mc.player == null ? "" : String.format(Locale.ROOT, ", position %.0f %.0f %.0f facing %.0f %.0f", mc.player.getX(), mc.player.getY(), mc.player.getZ(), mc.player.getYRot(), mc.player.getXRot())));
         int cap = o.framerateLimit().get();
         out.add("frame cap: " + (cap >= 260 ? "unlimited (judged against 240)" : cap) + "   budget a frame: " + String.format(Locale.ROOT, "%.2f ms", budget));
+        //? if >=26.3 {
         out.add("vsync: " + o.enableVsync().get() + "   refresh rate: " + refreshRate(mc) + " Hz   fullscreen: " + mc.getWindow().isExclusiveFullscreen()
+        //?} else {
+        /*out.add("vsync: " + o.enableVsync().get() + "   refresh rate: " + mc.getWindow().getRefreshRate() + " Hz   fullscreen: " + mc.getWindow().isFullscreen()
+        *///?}
                 + "   window: " + mc.getWindow().getWidth() + "x" + mc.getWindow().getHeight() + "   gui scale: " + o.guiScale().get());
         out.add("render distance: " + o.renderDistance().get() + "   simulation distance: " + o.simulationDistance().get() + "   entity distance: "
                 + Math.round(o.entityDistanceScaling().get() * 100) + "%   graphics: " + o.graphicsPreset().get() + "   particles: " + o.particles().get());
@@ -360,9 +364,11 @@ public final class FrameReport {
         }
         return out;
     }
+    //? if >=26.3 {
 
     private static String refreshRate(Minecraft mc) {
         var monitor = mc.getWindow().findBestMonitor();
         return monitor == null ? "?" : String.valueOf(monitor.currentMode().getRefreshRate());
     }
+    //?}
 }

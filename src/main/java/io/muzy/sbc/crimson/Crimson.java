@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.crimson;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.SbcMod;
 import io.muzy.sbc.chat.ChatBus;
 import io.muzy.sbc.chat.Party;
@@ -512,7 +514,11 @@ public final class Crimson {
     private static net.minecraft.client.KeyMapping holdKey;
 
     public static void keys(net.minecraft.client.KeyMapping.Category cat) {
+        //? if >=26.3 {
         holdKey = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping(new net.minecraft.client.KeyMapping("key.sbcompanion.reputation_hold", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), cat));
+        //?} else {
+        /*holdKey = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping(new net.minecraft.client.KeyMapping("key.sbcompanion.reputation_hold", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), cat));
+        *///?}
     }
 
     // isHotkeyHeld: over the game or inventory only. key can be a mouse button, read like FarmingKeys.held does
@@ -521,8 +527,13 @@ public final class Crimson {
         var screen = mc.gui.screen();
         if (holdKey == null || holdKey.isUnbound() || (screen != null && !(screen instanceof net.minecraft.client.gui.screens.inventory.InventoryScreen))) return false;
         var k = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.getBoundKeyOf(holdKey);
+        //? if >=26.3 {
         if (k.getType() == InputConstants.Type.MOUSE) return io.muzy.sbc.mc.KeyHeld.mouseDown(k.getValue());
         return InputConstants.isKeyDown(k.getValue());
+        //?} else {
+        /*if (k.getType() == com.mojang.blaze3d.platform.InputConstants.Type.MOUSE) return org.lwjgl.glfw.GLFW.glfwGetMouseButton(mc.getWindow().handle(), k.getValue()) == org.lwjgl.glfw.GLFW.GLFW_PRESS;
+        return com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), k.getValue());
+        *///?}
     }
 
     // with "only while holding the key" on, panel + markers wait for the key

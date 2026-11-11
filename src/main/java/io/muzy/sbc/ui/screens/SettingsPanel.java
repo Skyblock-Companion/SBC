@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.ui.screens;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.Config;
 import io.muzy.sbc.core.LegacyItems;
 import io.muzy.sbc.feature.Feature;
@@ -31,6 +33,9 @@ import io.muzy.sbc.ui.layout.UIComponent;
 import io.muzy.sbc.ui.layout.VerticalAlignment;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -281,7 +286,11 @@ public final class SettingsPanel {
             }
         });
         row.mouseDown().subscribe((click, doubled) -> {
+            //? if >=26.3 {
             if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return false;
+            //?} else {
+            /*if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return false;
+            *///?}
             SbcWidgets.clickSound();
             section = module;
             buildSections();

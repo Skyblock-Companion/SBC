@@ -4,11 +4,18 @@ package io.muzy.sbc.mc.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.muzy.sbc.core.Safe;
 import io.muzy.sbc.render.HeldItem;
+//? if >=26.3 {
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.FirstPersonHandsAndItemsRenderer;
+//?} else {
+/*import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+*///?}
 import net.minecraft.client.renderer.SubmitNodeCollector;
+//? if >=26.3 {
 import net.minecraft.client.renderer.state.level.FirstPersonHandsAndItemsRenderState;
 import net.minecraft.client.renderer.state.level.PlayerRenderState;
+//?}
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
@@ -20,24 +27,45 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 // first person only. the item gets placed before the arm moves and sized right before drawing
 // the bare arm takes another path, untouched
+//? if >=26.3 {
 @Mixin(FirstPersonHandsAndItemsRenderer.class)
+//?} else {
+/*@Mixin(ItemInHandRenderer.class)
+*///?}
 public abstract class HeldItemMixin {
     // the first push of the pose: before the arm, the equip drop and the swing are added
     @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", ordinal = 0, shift = At.Shift.AFTER), require = 0)
+    //? if >=26.3 {
     private void sbc$place(PlayerRenderState player, FirstPersonHandsAndItemsRenderState state, float partialTick, float pitch, InteractionHand hand, float swing, ItemStack stack, float equip, PoseStack pose, SubmitNodeCollector nodes, int light, CallbackInfo ci) {
+    //?} else {
+    /*private void sbc$place(AbstractClientPlayer player, float partialTick, float pitch, InteractionHand hand, float swing, ItemStack stack, float equip, PoseStack pose, SubmitNodeCollector nodes, int light, CallbackInfo ci) {
+    *///?}
         if (Safe.resting("HeldItemMixin.place")) return;
         try {
+            //? if >=26.3 {
             var me = Minecraft.getInstance().player;
             if (!HeldItem.on() || me == null || stack.isEmpty() || stack.has(net.minecraft.core.component.DataComponents.MAP_ID)) return;
+            //?} else {
+            /*if (!HeldItem.on() || stack.isEmpty() || stack.has(net.minecraft.core.component.DataComponents.MAP_ID)) return;
+            *///?}
             boolean main = hand == InteractionHand.MAIN_HAND;
+            //? if >=26.3 {
             HeldItem.place(pose, main == (me.getMainArm() == HumanoidArm.RIGHT));
+            //?} else {
+            /*HeldItem.place(pose, main == (player.getMainArm() == HumanoidArm.RIGHT));
+            *///?}
         } catch (Throwable t) {
             Safe.caught("HeldItemMixin.place", t);
         }
     }
 
+    //? if >=26.3 {
     @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V"), require = 0)
     private void sbc$size(PlayerRenderState player, FirstPersonHandsAndItemsRenderState state, float partialTick, float pitch, InteractionHand hand, float swing, ItemStack stack, float equip, PoseStack pose, SubmitNodeCollector nodes, int light, CallbackInfo ci) {
+    //?} else {
+    /*@Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;renderItem(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;I)V"), require = 0)
+    private void sbc$size(AbstractClientPlayer player, float partialTick, float pitch, InteractionHand hand, float swing, ItemStack stack, float equip, PoseStack pose, SubmitNodeCollector nodes, int light, CallbackInfo ci) {
+    *///?}
         if (Safe.resting("HeldItemMixin.size")) return;
         try {
             if (HeldItem.on()) HeldItem.size(pose);

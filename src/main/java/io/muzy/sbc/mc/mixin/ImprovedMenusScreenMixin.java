@@ -13,7 +13,11 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 // from skyhanni MixinContainerScreen. optional, if it fails the chest stays as is
 @Mixin(ContainerScreen.class)
 public abstract class ImprovedMenusScreenMixin {
+    //? if >=26.3 {
     @ModifyArg(method = "extractBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIII)V"), index = 1, require = 0)
+    //?} else {
+    /*@ModifyArg(method = "extractBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIII)V"), index = 1, require = 0)
+    *///?}
     private Identifier sbc$background(Identifier sprite) {
         if (Safe.resting("ImprovedMenusScreenMixin.background")) return sprite;
         try {

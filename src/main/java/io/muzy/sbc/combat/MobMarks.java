@@ -9,7 +9,11 @@ import io.muzy.sbc.feature.Option;
 import io.muzy.sbc.render.WorldDraw;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
+//? if >=26.3 {
 import net.minecraft.world.entity.monster.Enderman;
+//?} else {
+/*import net.minecraft.world.entity.monster.EnderMan;
+*///?}
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
@@ -83,7 +87,11 @@ public final class MobMarks {
             }
         }
         if (Features.on(ZEALOTS)) {
+            //? if >=26.3 {
             for (Enderman e : mc.level.getEntitiesOfClass(Enderman.class, mc.player.getBoundingBox().inflate(64))) {
+            //?} else {
+            /*for (EnderMan e : mc.level.getEntitiesOfClass(EnderMan.class, mc.player.getBoundingBox().inflate(64))) {
+            *///?}
                 var held = e.getCarriedBlock();
                 if (held != null && held.is(Blocks.END_PORTAL_FRAME)) {
                     if (Combat.opt(ZEALOTS, "special")) CombatMarks.seenGlow(mark, e, 0xAA0000);

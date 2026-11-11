@@ -7,7 +7,9 @@ import io.muzy.sbc.ui.PartyFinderScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+//? if >=26.3 {
 import net.minecraft.world.level.block.entity.SignTextSlot;
+//?}
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -17,7 +19,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = LocalPlayer.class, priority = 500)
 public abstract class SignEditMixin {
     @Inject(method = "openTextEdit", at = @At("HEAD"), cancellable = true)
+    //? if >=26.3 {
     private void sbc$sign(SignBlockEntity sign, SignTextSlot front, CallbackInfo ci) {
+    //?} else {
+    /*private void sbc$sign(SignBlockEntity sign, boolean front, CallbackInfo ci) {
+    *///?}
         if (Safe.resting("SignEditMixin.sign")) return;
         try {
             if (Minecraft.getInstance().gui.screen() instanceof PartyFinderScreen screen && screen.onSign(sign, front)) ci.cancel();

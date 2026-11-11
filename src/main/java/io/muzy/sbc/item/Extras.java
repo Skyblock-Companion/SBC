@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.item;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.Gain;
 import io.muzy.sbc.core.ItemRepo;
 import io.muzy.sbc.core.Prices;
@@ -48,7 +50,11 @@ public final class Extras {
         }
         if (parts == null) return;
         var mc = net.minecraft.client.Minecraft.getInstance();
+        //? if >=26.3 {
         boolean shift = io.muzy.sbc.item.market.Market.b("tip_breakdown", "tip_breakdown.always", false) || InputConstants.isKeyDown(InputConstants.KEY_LSHIFT) || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
+        //?} else {
+        /*boolean shift = io.muzy.sbc.item.market.Market.b("tip_breakdown", "tip_breakdown.always", false) || com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT) || com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_SHIFT);
+        *///?}
         if (!shift) {
             line(lines, "§8Hold Shift for the value breakdown");
             return;

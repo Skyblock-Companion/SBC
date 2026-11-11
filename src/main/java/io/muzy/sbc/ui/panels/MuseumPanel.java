@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni, Skyblocker; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.ui.panels;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.core.ItemInfo;
 import io.muzy.sbc.core.ItemRepo;
@@ -22,6 +24,9 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -284,9 +289,17 @@ public final class MuseumPanel implements SideHelper.Content {
     // false = swallow the key
     static boolean key(AbstractContainerScreen<?> s, KeyEvent event) {
         if (focused) {
+            //? if >=26.3 {
             if (event.key() == InputConstants.KEY_BACKSPACE) {
+            //?} else {
+            /*if (event.key() == GLFW.GLFW_KEY_BACKSPACE) {
+            *///?}
                 if (!query.isEmpty()) query = query.substring(0, query.length() - 1);
+            //? if >=26.3 {
             } else if (event.key() == InputConstants.KEY_ESCAPE || event.key() == InputConstants.KEY_RETURN) focused = false;
+            //?} else {
+            /*} else if (event.key() == GLFW.GLFW_KEY_ESCAPE || event.key() == GLFW.GLFW_KEY_ENTER) focused = false;
+            *///?}
             return false;
         }
         return hovered == null || System.currentTimeMillis() - hoveredAt > 200 || !io.muzy.sbc.ui.UiFeatures.keyOver(s, hovered, event);

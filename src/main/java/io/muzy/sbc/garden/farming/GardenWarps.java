@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.garden.farming;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.Patterns;
 import io.muzy.sbc.core.Safe;
 import io.muzy.sbc.feature.Feature;
@@ -50,10 +52,17 @@ public final class GardenWarps {
     }
 
     public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
         int none = InputConstants.UNKNOWN.getValue();
         homeKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.garden_home", InputConstants.Type.KEYBOARD, none, category));
         setHomeKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.garden_sethome", InputConstants.Type.KEYBOARD, none, category));
         barnKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.garden_barn", InputConstants.Type.KEYBOARD, none, category));
+        //?} else {
+        /*int none = com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue();
+        homeKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.garden_home", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, none, category));
+        setHomeKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.garden_sethome", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, none, category));
+        barnKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.garden_barn", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, none, category));
+        *///?}
     }
 
     public static void register() {

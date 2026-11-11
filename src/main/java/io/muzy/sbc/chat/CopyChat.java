@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.chat;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.core.LegacyText;
 import io.muzy.sbc.core.Safe;
@@ -21,6 +23,9 @@ import net.minecraft.client.renderer.state.gui.GuiTextRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import org.joml.Matrix3x2f;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 // from skyhanni CopyChat: right click a chat line to copy it. ctrl = only the row under the mouse, alt = with
 // colour codes
@@ -34,7 +39,11 @@ public final class CopyChat {
         Safe.afterInit("CopyChat.afterInit", (client, screen, w, h) -> {
             if (!(screen instanceof ChatScreen)) return;
             Safe.allowMouseClick("CopyChat.allowMouseClick", screen, (s, event) -> {
+                //? if >=26.3 {
                 if (event.button() != InputConstants.MOUSE_BUTTON_RIGHT || !Features.on("chat_copy")) return true;
+                //?} else {
+                /*if (event.button() != GLFW.GLFW_MOUSE_BUTTON_RIGHT || !Features.on("chat_copy")) return true;
+                *///?}
                 copyAt(event);
                 return true;
             });

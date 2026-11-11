@@ -20,7 +20,11 @@ public abstract class PacketSendMixin {
     private void sbc$send(Packet<?> packet, CallbackInfo ci) {
         if (Safe.resting("PacketSendMixin.send")) return;
         try {
+            //? if >=26.3 {
             if (packet instanceof ServerboundUseItemOnPacket use && io.muzy.sbc.misc.SmallMisc.dropUseOnBlock(use.hitResult().getBlockPos())) ci.cancel();
+            //?} else {
+            /*if (packet instanceof ServerboundUseItemOnPacket use && io.muzy.sbc.misc.SmallMisc.dropUseOnBlock(use.getHitResult().getBlockPos())) ci.cancel();
+            *///?}
         } catch (Throwable t) {
             Safe.caught("PacketSendMixin.send", t);
         }

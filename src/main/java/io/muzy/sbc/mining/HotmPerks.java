@@ -18,6 +18,9 @@ import io.muzy.sbc.ui.HudLayout.Zone;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -255,7 +258,11 @@ public final class HotmPerks {
             if (costAt >= 0) costAt++;
         }
         if (costAt < 0 || level >= p.max()) return;
+        //? if >=26.3 {
         if (MiningPack.on(ID, "mining_hotm.for_ten") && InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)) {
+        //?} else {
+        /*if (MiningPack.on(ID, "mining_hotm.for_ten") && InputConstants.isKeyDown(mc.getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
+        *///?}
             int to = Math.min(level + 10, p.max());
             lines.add(Math.min(costAt + 2, lines.size()), Component.literal("§7Powder for " + (to - level) + (to - level == 1 ? " level" : " levels") + " §e" + MiningEnv.sep(p.total(to) - p.total(level))));
         }

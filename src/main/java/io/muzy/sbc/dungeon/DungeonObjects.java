@@ -385,9 +385,17 @@ public final class DungeonObjects {
         if (Features.on(CLEAN) && bossDone) return true;
         if (Features.on(HIDE) && o("terracotta_particles") && DungeonRun.inBoss() && DungeonRun.phase() == DungeonRun.Phase.F6_TERRACOTTA) return true;
         if (!Features.on(HIDE) || (!o("superboom") && !o("revive_stone")) || hiddenAt.isEmpty()) return false;
+        //? if >=26.3 {
         var type = p.particle().getType();
+        //?} else {
+        /*var type = p.getParticle().getType();
+        *///?}
         if (type != ParticleTypes.FIREWORK && type != ParticleTypes.DUST) return false;
+        //? if >=26.3 {
         Vec3 at = new Vec3(p.x(), p.y(), p.z());
+        //?} else {
+        /*Vec3 at = new Vec3(p.getX(), p.getY(), p.getZ());
+        *///?}
         for (Object[] h : hiddenAt) if (((Vec3) h[0]).distanceTo(at) < 2) return true;
         return false;
     }

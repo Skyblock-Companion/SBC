@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.ui.screens;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.ui.Ui;
 import io.muzy.sbc.ui.theme.Theme;
 import io.muzy.sbc.ui.layout.BaseUIComponent;
@@ -17,6 +19,9 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +128,11 @@ public final class SbcWidgets {
 
         @Override
         public boolean onMouseDown(MouseButtonEvent click, boolean doubled) {
+            //? if >=26.3 {
             if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            //?} else {
+            /*if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            *///?}
             clickSound();
             this.onPress.accept(this);
             return true;
@@ -187,7 +196,11 @@ public final class SbcWidgets {
 
         @Override
         public boolean onMouseDown(MouseButtonEvent click, boolean doubled) {
+            //? if >=26.3 {
             if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            //?} else {
+            /*if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            *///?}
             clickSound();
             this.on = !this.on;
             for (Consumer<Boolean> l : List.copyOf(this.listeners)) l.accept(this.on);
@@ -290,7 +303,11 @@ public final class SbcWidgets {
 
         @Override
         public boolean onMouseDown(MouseButtonEvent click, boolean doubled) {
+            //? if >=26.3 {
             if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            //?} else {
+            /*if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            *///?}
             var focus = focusHandler();
             if (focus != null) focus.focus(this, FocusSource.MOUSE_CLICK);
             setFrom(click.x());
@@ -429,7 +446,11 @@ public final class SbcWidgets {
 
         @Override
         public boolean onMouseDown(MouseButtonEvent click, boolean doubled) {
+            //? if >=26.3 {
             if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            //?} else {
+            /*if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return super.onMouseDown(click, doubled);
+            *///?}
             var focus = focusHandler();
             if (focus != null) focus.focus(this, FocusSource.MOUSE_CLICK);
             String s = shown(this.get.get());
@@ -456,21 +477,35 @@ public final class SbcWidgets {
             String v = this.get.get();
             int k = e.key();
             int c = Math.min(this.cursor, v.length());
+            //? if >=26.3 {
             if (k == InputConstants.KEY_RETURN || k == InputConstants.KEY_NUMPADENTER) {
+            //?} else {
+            /*if (k == GLFW.GLFW_KEY_ENTER || k == GLFW.GLFW_KEY_KP_ENTER) {
+            *///?}
                 if (this.onEnter != null) this.onEnter.run();
                 return true;
             }
             if (e.hasControlDown()) {
                 switch (k) {
+                    //? if >=26.3 {
                     case InputConstants.KEY_A -> this.allSelected = !v.isEmpty();
                     case InputConstants.KEY_C -> Minecraft.getInstance().keyboardHandler.setClipboard(this.allSelected ? v : "");
                     case InputConstants.KEY_X -> {
+                    //?} else {
+                    /*case GLFW.GLFW_KEY_A -> this.allSelected = !v.isEmpty();
+                    case GLFW.GLFW_KEY_C -> Minecraft.getInstance().keyboardHandler.setClipboard(this.allSelected ? v : "");
+                    case GLFW.GLFW_KEY_X -> {
+                    *///?}
                         if (this.allSelected) {
                             Minecraft.getInstance().keyboardHandler.setClipboard(v);
                             change("", 0);
                         }
                     }
+                    //? if >=26.3 {
                     case InputConstants.KEY_V -> insert(Minecraft.getInstance().keyboardHandler.getClipboard().replaceAll("[\\r\\n]", ""));
+                    //?} else {
+                    /*case GLFW.GLFW_KEY_V -> insert(Minecraft.getInstance().keyboardHandler.getClipboard().replaceAll("[\\r\\n]", ""));
+                    *///?}
                     default -> {
                         return false;
                     }
@@ -478,31 +513,59 @@ public final class SbcWidgets {
                 return true;
             }
             switch (k) {
+                //? if >=26.3 {
                 case InputConstants.KEY_BACKSPACE -> {
+                //?} else {
+                /*case GLFW.GLFW_KEY_BACKSPACE -> {
+                *///?}
                     if (this.allSelected) change("", 0);
                     else if (c > 0) change(v.substring(0, c - 1) + v.substring(c), c - 1);
                 }
+                //? if >=26.3 {
                 case InputConstants.KEY_DELETE -> {
+                //?} else {
+                /*case GLFW.GLFW_KEY_DELETE -> {
+                *///?}
                     if (this.allSelected) change("", 0);
                     else if (c < v.length()) change(v.substring(0, c) + v.substring(c + 1), c);
                 }
+                //? if >=26.3 {
                 case InputConstants.KEY_LEFT -> {
+                //?} else {
+                /*case GLFW.GLFW_KEY_LEFT -> {
+                *///?}
                     this.cursor = Math.max(0, c - 1);
                     this.allSelected = false;
                 }
+                //? if >=26.3 {
                 case InputConstants.KEY_RIGHT -> {
+                //?} else {
+                /*case GLFW.GLFW_KEY_RIGHT -> {
+                *///?}
                     this.cursor = Math.min(v.length(), c + 1);
                     this.allSelected = false;
                 }
+                //? if >=26.3 {
                 case InputConstants.KEY_HOME -> {
+                //?} else {
+                /*case GLFW.GLFW_KEY_HOME -> {
+                *///?}
                     this.cursor = 0;
                     this.allSelected = false;
                 }
+                //? if >=26.3 {
                 case InputConstants.KEY_END -> {
+                //?} else {
+                /*case GLFW.GLFW_KEY_END -> {
+                *///?}
                     this.cursor = v.length();
                     this.allSelected = false;
                 }
+                //? if >=26.3 {
                 case InputConstants.KEY_UP, InputConstants.KEY_DOWN -> {
+                //?} else {
+                /*case GLFW.GLFW_KEY_UP, GLFW.GLFW_KEY_DOWN -> {
+                *///?}
                 }
                 default -> {
                     return false;

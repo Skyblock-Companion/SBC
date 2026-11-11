@@ -2,7 +2,11 @@
 package io.muzy.sbc.ui;
 
 import com.mojang.blaze3d.platform.NativeImage;
+//? if >=26.3 {
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+//?} else {
+/*import com.mojang.blaze3d.pipeline.RenderPipeline;
+*///?}
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.DynamicTexture;

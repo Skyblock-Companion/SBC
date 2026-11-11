@@ -75,9 +75,17 @@ public final class PerfSampler {
 
     private static boolean waitFrame(StackTraceElement f) {
         String c = f.getClassName(), m = f.getMethodName();
+        //? if >=26.3 {
         return m.equals("nSDL_GL_SwapWindow") || m.equals("SDL_GL_SwapWindow") || c.equals("java.lang.Thread") && m.startsWith("sleep")
+        //?} else {
+        /*return m.equals("nglfwSwapBuffers") || m.equals("glfwSwapBuffers") || c.equals("java.lang.Thread") && m.startsWith("sleep")
+        *///?}
                 || c.endsWith("LockSupport") && m.startsWith("park") || c.equals("java.lang.Object") && m.equals("wait") || m.equals("nglClientWaitSync") || m.equals("glClientWaitSync")
+                //? if >=26.3 {
                 || m.equals("glFinish") || m.equals("nglFinish") || m.contains("WaitSync") || m.equals("SDL_WaitEventTimeout") || m.equals("nSDL_WaitEventTimeout");
+                //?} else {
+                /*|| m.equals("glFinish") || m.equals("nglFinish") || m.contains("WaitSync") || m.equals("glfwWaitEventsTimeout") || m.equals("nglfwWaitEventsTimeout");
+                *///?}
     }
 
     private static String key(StackTraceElement f) {

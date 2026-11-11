@@ -247,10 +247,12 @@ public final class Safe {
         ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> run(name, () -> l.afterInit(client, screen, width, height)));
     }
 
+    //? if >=26.3 {
     public static void afterTick(String name, Screen screen, ScreenEvents.AfterTick l) {
         ScreenEvents.afterTick(screen).register(s -> run(name, () -> l.afterTick(s)));
     }
 
+    //?}
     public static void afterExtract(String name, Screen screen, ScreenEvents.AfterExtract l) {
         ScreenEvents.afterExtract(screen).register((s, g, mouseX, mouseY, delta) -> {
             if (resting(name)) return;

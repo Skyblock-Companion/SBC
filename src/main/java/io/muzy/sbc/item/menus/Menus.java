@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni, Skyblocker; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.item.menus;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.core.Patterns;
 import io.muzy.sbc.feature.Feature;
@@ -87,9 +89,18 @@ public final class Menus {
 
     // from SbcMod, where the keys get made
     public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
         AttributeShards.trackKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.track_shard", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
         SlotTexts.key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.slot_text", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*AttributeShards.trackKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.track_shard", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        SlotTexts.key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.slot_text", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        *///?}
         io.muzy.sbc.areas.HuntHelpers.keys(category);
+        //? if >=26.3 {
         MenuExtras.focusKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.focus_mode", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*MenuExtras.focusKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.focus_mode", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        *///?}
     }
 }

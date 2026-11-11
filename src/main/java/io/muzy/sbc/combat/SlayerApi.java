@@ -13,7 +13,11 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.monster.Blaze;
+//? if >=26.3 {
 import net.minecraft.world.entity.monster.Enderman;
+//?} else {
+/*import net.minecraft.world.entity.monster.EnderMan;
+*///?}
 import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 
@@ -34,7 +38,11 @@ public final class SlayerApi {
         REVENANT("Revenant Horror", "REVENANT", Zombie.class, Set.of("Revenant Sycophant", "Revenant Champion", "Deformed Revenant", "Atoned Champion", "Atoned Revenant"), "Atoned Horror"),
         TARANTULA("Tarantula Broodfather", "TARANTULA", Spider.class, Set.of("Tarantula Vermin", "Tarantula Beast", "Mutant Tarantula", "Primordial Jockey", "Primordial Viscount"), "Conjoined Brood"),
         SVEN("Sven Packmaster", "SVEN", Wolf.class, Set.of("Pack Enforcer", "Sven Follower", "Sven Alpha")),
+        //? if >=26.3 {
         VOID("Voidgloom Seraph", "VOID", Enderman.class, Set.of("Voidling Devotee", "Voidling Radical", "Voidcrazed Maniac")),
+        //?} else {
+        /*VOID("Voidgloom Seraph", "VOID", EnderMan.class, Set.of("Voidling Devotee", "Voidling Radical", "Voidcrazed Maniac")),
+        *///?}
         INFERNO("Inferno Demonlord", "INFERNO", Blaze.class, Set.of("Flare Demon", "Kindleheart Demon", "Burningsoul Demon")),
         VAMPIRE("Bloodfiend", "VAMPIRE", Zombie.class, Set.of());
 

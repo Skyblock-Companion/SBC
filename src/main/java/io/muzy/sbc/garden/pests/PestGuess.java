@@ -54,13 +54,24 @@ public final class PestGuess {
             var mc = Minecraft.getInstance();
             if (mc == null || !mc.isSameThread() || mc.player == null || !Features.on(ID) || !GardenPack.garden()) return false;
             boolean hide = GardenPack.on(ID, "hide_particles");
+            //? if >=26.3 {
             var type = p.particle().getType();
+            //?} else {
+            /*var type = p.getParticle().getType();
+            *///?}
             boolean firework = type == ParticleTypes.FIREWORK;
             if (System.currentTimeMillis() - lastUse > 5000) return hide && firework;
+            //? if >=26.3 {
             boolean noOffset = p.xDist() == 0f && p.yDist() == 0f && p.zDist() == 0f;
             if (type == ParticleTypes.ENCHANT && p.count() == 10 && p.xMaxSpeed() == -2f && noOffset) return hide;
             if (!(type == ParticleTypes.ANGRY_VILLAGER && p.count() == 1 && p.xMaxSpeed() == 0f && noOffset)) return hide && firework;
             Vec3 at = new Vec3(p.x(), p.y(), p.z());
+            //?} else {
+            /*boolean noOffset = p.getXDist() == 0f && p.getYDist() == 0f && p.getZDist() == 0f;
+            if (type == ParticleTypes.ENCHANT && p.getCount() == 10 && p.getMaxSpeed() == -2f && noOffset) return hide;
+            if (!(type == ParticleTypes.ANGRY_VILLAGER && p.getCount() == 1 && p.getMaxSpeed() == 0f && noOffset)) return hide && firework;
+            Vec3 at = new Vec3(p.getX(), p.getY(), p.getZ());
+            *///?}
             // emptyCondition: a path starts close to you, one further away is someone elses
             if (FITTER.isEmpty() && at.distanceTo(mc.player.position()) > 5) return hide;
             if (FITTER.tryAdd(at, 3.0)) {

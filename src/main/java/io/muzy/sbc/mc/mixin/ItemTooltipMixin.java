@@ -27,7 +27,11 @@ public abstract class ItemTooltipMixin {
             if (!FancyTooltip.active()) return;
             List<ClientTooltipComponent> comps = FancyTooltip.build(stack, Screen.getTooltipFromItem(Minecraft.getInstance(), stack));
             if (comps == null) return;
+            //? if >=26.3 {
             ((GuiGraphicsAccessor) this).sbc$tooltipLast(font, comps, x, y, DefaultTooltipPositioner.INSTANCE, FancyTooltip.style(), true, true);
+            //?} else {
+            /*((GuiGraphicsAccessor) this).sbc$tooltipLast(font, comps, x, y, DefaultTooltipPositioner.INSTANCE, FancyTooltip.style(), true);
+            *///?}
             ci.cancel();
         } catch (Throwable t) {
             Safe.caught("ItemTooltipMixin.item", t);

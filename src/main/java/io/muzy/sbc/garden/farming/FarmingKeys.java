@@ -180,7 +180,11 @@ public final class FarmingKeys {
     }
 
     private static KeyMapping key(String name, KeyMapping.Category category) {
+        //? if >=26.3 {
         return KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.farming_" + name, InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*return KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.farming_" + name, InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), category));
+        *///?}
     }
 
     private static void map(Minecraft mc) {

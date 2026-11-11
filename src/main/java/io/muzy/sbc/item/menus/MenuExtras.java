@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni, Skyblocker; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.item.menus;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -35,6 +37,9 @@ import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -332,6 +337,14 @@ public final class MenuExtras {
         return keys.length() >= 7 ? keys : "1234567";
     }
 
+    //? if <26.3 {
+    /*private static int glfwKey(char c) {
+        if (c >= '0' && c <= '9') return GLFW.GLFW_KEY_0 + (c - '0');
+        if (c >= 'A' && c <= 'Z') return GLFW.GLFW_KEY_A + (c - 'A');
+        return -1;
+    }
+
+    *///?}
     static void harpMenu(MenuView v) {
         if (!MenuMarks.on("harp", "harp.numbers") || !harpTitle(v.title)) return;
         String keys = harpKeys();
@@ -349,7 +362,11 @@ public final class MenuExtras {
         if (v == null || !harpTitle(v.title) || !MenuMarks.on("harp", "harp.keybinds")) return false;
         String keys = harpKeys();
         for (int i = 0; i < 7; i++) {
+            //? if >=26.3 {
             if (io.muzy.sbc.mc.KeyHeld.keyOf(keys.charAt(i)) != key) continue;
+            //?} else {
+            /*if (glfwKey(keys.charAt(i)) != key) continue;
+            *///?}
             long now = System.currentTimeMillis();
             if (now - harpClick >= 200) {
                 click(37 + i, 2, ContainerInput.CLONE);
@@ -615,7 +632,11 @@ public final class MenuExtras {
         var o = Minecraft.getInstance().options;
         net.minecraft.client.KeyMapping[] keys = {o.keyLeft, o.keyUp, o.keyRight, o.keyDown};
         for (int i = 0; i < 4; i++) {
+            //? if >=26.3 {
             if (InputConstants.getKey(keys[i].saveString()).getValue() != key) continue;
+            //?} else {
+            /*if (com.mojang.blaze3d.platform.InputConstants.getKey(keys[i].saveString()).getValue() != key) continue;
+            *///?}
             long now = System.currentTimeMillis();
             if (now - snakeClick >= 100) {
                 click(SNAKE[i], 2, ContainerInput.CLONE);
@@ -741,7 +762,11 @@ public final class MenuExtras {
         for (String l : LegacyText.lore(mc.player.getMainHandItem())) {
             String plain = GameState.strip(l);
             if (plain.startsWith("Ability:") && plain.contains("RIGHT CLICK")) {
+                //? if >=26.3 {
                 mc.player.swing(InteractionHand.MAIN_HAND, net.minecraft.world.item.component.SwingAnimation.DEFAULT, false);
+                //?} else {
+                /*mc.player.swing(InteractionHand.MAIN_HAND, false);
+                *///?}
                 break;
             }
         }

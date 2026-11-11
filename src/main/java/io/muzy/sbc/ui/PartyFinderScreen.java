@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni, Skyblocker; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.ui;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.core.LegacyItems;
 import io.muzy.sbc.core.LegacyText;
@@ -33,6 +35,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,7 +77,11 @@ public final class PartyFinderScreen extends Screen {
     private long dirtyAt;
     private int signature;
     private SignBlockEntity sign;
+    //? if >=26.3 {
     private net.minecraft.world.level.block.entity.SignTextSlot signFront = net.minecraft.world.level.block.entity.SignTextSlot.FRONT;
+    //?} else {
+    /*private boolean signFront = true;
+    *///?}
     private final Map<String, String> selected = new HashMap<>();
 
     PartyFinderScreen(ChestMenu menu, Inventory inventory, Component name) {
@@ -255,9 +264,17 @@ public final class PartyFinderScreen extends Screen {
     }
 
     // hypixel asks for a level on a sign
+    //? if >=26.3 {
     public boolean onSign(SignBlockEntity sign, net.minecraft.world.level.block.entity.SignTextSlot front) {
+    //?} else {
+    /*public boolean onSign(SignBlockEntity sign, boolean front) {
+    *///?}
         if (aborted || page != Page.RANGE) return false;
+        //? if >=26.3 {
         String asks = sign.getText(front).getMessages(false).get(3).getString().toLowerCase(Locale.ENGLISH);
+        //?} else {
+        /*String asks = sign.getText(front).getMessage(3, false).getString().toLowerCase(Locale.ENGLISH);
+        *///?}
         if (!asks.contains("max") && !asks.contains("min")) return false;
         this.sign = sign;
         signFront = front;
@@ -271,8 +288,13 @@ public final class PartyFinderScreen extends Screen {
     private void answerSign(String text) {
         ClientPacketListener net = minecraft.getConnection();
         if (net != null && sign != null) {
+            //? if >=26.3 {
             java.util.List<Component> lines = sign.getText(signFront).getMessages(minecraft.isTextFilteringEnabled());
             net.send(new ServerboundSignUpdatePacket(sign.getBlockPos(), java.util.List.of(text, lines.get(1).getString(), lines.get(2).getString(), lines.get(3).getString()), signFront));
+            //?} else {
+            /*Component[] lines = sign.getText(signFront).getMessages(minecraft.isTextFilteringEnabled());
+            net.send(new ServerboundSignUpdatePacket(sign.getBlockPos(), signFront, text, lines[1].getString(), lines[2].getString(), lines[3].getString()));
+            *///?}
         }
         sign = null;
         waiting = true;
@@ -361,17 +383,29 @@ public final class PartyFinderScreen extends Screen {
     @Override
     public boolean keyPressed(KeyEvent e) {
         int k = e.key();
+        //? if >=26.3 {
         if (k == InputConstants.KEY_ESCAPE) {
+        //?} else {
+        /*if (k == GLFW.GLFW_KEY_ESCAPE) {
+        *///?}
             if (page == Page.FINDER && !query.isEmpty()) query = "";
             else onClose();
             return true;
         }
+        //? if >=26.3 {
         if (k == InputConstants.KEY_BACKSPACE) {
+        //?} else {
+        /*if (k == GLFW.GLFW_KEY_BACKSPACE) {
+        *///?}
             if (page == Page.SIGN && !signInput.isEmpty()) signInput = signInput.substring(0, signInput.length() - 1);
             else if (page == Page.FINDER && !query.isEmpty()) query = query.substring(0, query.length() - 1);
             return true;
         }
+        //? if >=26.3 {
         if ((k == InputConstants.KEY_RETURN || k == InputConstants.KEY_NUMPADENTER) && page == Page.SIGN && !signInput.isEmpty()) {
+        //?} else {
+        /*if ((k == GLFW.GLFW_KEY_ENTER || k == GLFW.GLFW_KEY_KP_ENTER) && page == Page.SIGN && !signInput.isEmpty()) {
+        *///?}
             answerSign(signInput);
             return true;
         }
@@ -383,8 +417,13 @@ public final class PartyFinderScreen extends Screen {
         if (page == Page.SIGN && sign != null) {
             // leave the sign as it was so nothing changes
             ClientPacketListener net = minecraft.getConnection();
+            //? if >=26.3 {
             java.util.List<Component> lines = sign.getText(signFront).getMessages(minecraft.isTextFilteringEnabled());
             if (net != null) net.send(new ServerboundSignUpdatePacket(sign.getBlockPos(), java.util.List.of(lines.get(0).getString(), lines.get(1).getString(), lines.get(2).getString(), lines.get(3).getString()), signFront));
+            //?} else {
+            /*Component[] lines = sign.getText(signFront).getMessages(minecraft.isTextFilteringEnabled());
+            if (net != null) net.send(new ServerboundSignUpdatePacket(sign.getBlockPos(), signFront, lines[0].getString(), lines[1].getString(), lines[2].getString(), lines[3].getString()));
+            *///?}
             sign = null;
         } else if (minecraft.player != null) minecraft.player.closeContainer();
         super.onClose();

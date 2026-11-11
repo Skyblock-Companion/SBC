@@ -36,9 +36,15 @@ public final class HeldItem {
     public static void place(PoseStack pose, boolean right) {
         float side = right ? 1 : -1;
         pose.translate(side * (float) n("held_item.x", 0), (float) n("held_item.y", 0), (float) n("held_item.z", 0));
+        //? if >=26.3 {
         pose.rotateDegrees(Axis.XP, (float) n("held_item.pitch", 0));
         pose.rotateDegrees(Axis.YP, side * (float) n("held_item.yaw", 0));
         pose.rotateDegrees(Axis.ZP, side * (float) n("held_item.roll", 0));
+        //?} else {
+        /*pose.mulPose(Axis.XP.rotationDegrees((float) n("held_item.pitch", 0)));
+        pose.mulPose(Axis.YP.rotationDegrees(side * (float) n("held_item.yaw", 0)));
+        pose.mulPose(Axis.ZP.rotationDegrees(side * (float) n("held_item.roll", 0)));
+        *///?}
     }
 
     // right before the item is drawn, so it shrinks around itself

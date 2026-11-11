@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of owo-lib; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.ui.layout;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.toasts.Toast;
@@ -14,18 +16,29 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FormattedCharSequence;
+//? if >=26.3 {
 import org.lwjgl.sdl.SDLMouse;
+//?} else {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.List;
 
 // everything the layout asks the game for, in one place so a new mc version only needs one file checked. same
 // calls owo-lib makes
 final class GameLink {
+    //? if >=26.3 {
     static final int KEY_UP = InputConstants.KEY_UP, KEY_DOWN = InputConstants.KEY_DOWN, KEY_LEFT = InputConstants.KEY_LEFT, KEY_RIGHT = InputConstants.KEY_RIGHT,
             KEY_PAGE_UP = InputConstants.KEY_PAGEUP, KEY_PAGE_DOWN = InputConstants.KEY_PAGEDOWN;
     // sdl system cursor ids, the same ones the game's CursorTypes uses
     static final int ARROW_CURSOR = SDLMouse.SDL_SYSTEM_CURSOR_DEFAULT, IBEAM_CURSOR = SDLMouse.SDL_SYSTEM_CURSOR_TEXT,
             HAND_CURSOR = SDLMouse.SDL_SYSTEM_CURSOR_POINTER, MOVE_CURSOR = SDLMouse.SDL_SYSTEM_CURSOR_MOVE;
+    //?} else {
+    /*static final int KEY_UP = GLFW.GLFW_KEY_UP, KEY_DOWN = GLFW.GLFW_KEY_DOWN, KEY_LEFT = GLFW.GLFW_KEY_LEFT, KEY_RIGHT = GLFW.GLFW_KEY_RIGHT,
+            KEY_PAGE_UP = GLFW.GLFW_KEY_PAGE_UP, KEY_PAGE_DOWN = GLFW.GLFW_KEY_PAGE_DOWN;
+    static final int ARROW_CURSOR = GLFW.GLFW_ARROW_CURSOR, IBEAM_CURSOR = GLFW.GLFW_IBEAM_CURSOR, HAND_CURSOR = GLFW.GLFW_HAND_CURSOR,
+            MOVE_CURSOR = GLFW.GLFW_RESIZE_ALL_CURSOR;
+    *///?}
 
     private GameLink() {}
 
@@ -94,12 +107,21 @@ final class GameLink {
         Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(event, 1));
     }
 
+    //? if >=26.3 {
     static long createCursor(int shape) {
         return SDLMouse.SDL_CreateSystemCursor(shape);
+    //?} else {
+    /*static long createCursor(int glfwShape) {
+        return GLFW.glfwCreateStandardCursor(glfwShape);
+    *///?}
     }
 
     static void setCursor(long cursor) {
+        //? if >=26.3 {
         SDLMouse.SDL_SetCursor(cursor == 0 ? SDLMouse.SDL_GetDefaultCursor() : cursor);
+        //?} else {
+        /*GLFW.glfwSetCursor(windowHandle(), cursor);
+        *///?}
     }
 
     static void addToast(Toast toast) {

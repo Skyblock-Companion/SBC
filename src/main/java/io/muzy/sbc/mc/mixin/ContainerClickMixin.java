@@ -15,7 +15,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 // skyhanni SlotClickEvent: click on a container slot, cancellable before its sent
 @Mixin(AbstractContainerScreen.class)
 public abstract class ContainerClickMixin {
+    //? if >=26.3 {
     @Inject(method = "slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ContainerInput;)V", at = @At("HEAD"), cancellable = true, require = 0)
+    //?} else {
+    /*@Inject(method = "slotClicked", at = @At("HEAD"), cancellable = true, require = 0)
+    *///?}
     private void sbc$slotClicked(Slot slot, int slotId, int button, ContainerInput input, CallbackInfo ci) {
         if (Safe.resting("ContainerClickMixin.slotClicked")) return;
         try {

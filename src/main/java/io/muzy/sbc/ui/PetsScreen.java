@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.ui;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.ItemIcons;
 import io.muzy.sbc.core.ItemRepo;
 import io.muzy.sbc.core.Profile;
@@ -10,6 +12,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -91,7 +96,11 @@ public final class PetsScreen extends Screen {
 
     @Override
     public boolean keyPressed(KeyEvent e) {
+        //? if >=26.3 {
         if (e.key() == InputConstants.KEY_ESCAPE) {
+        //?} else {
+        /*if (e.key() == GLFW.GLFW_KEY_ESCAPE) {
+        *///?}
             onClose();
             return true;
         }

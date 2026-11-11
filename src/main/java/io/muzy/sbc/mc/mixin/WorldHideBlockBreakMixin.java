@@ -25,8 +25,13 @@ public abstract class WorldHideBlockBreakMixin {
         }
     }
 
+    //? if >=26.3 {
     @Inject(method = "addBreakingBlockEffects", at = @At("HEAD"), cancellable = true, require = 0)
     private void sbc$breaking(BlockPos pos, Direction direction, boolean sound, CallbackInfo ci) {
+    //?} else {
+    /*@Inject(method = "addBreakingBlockEffect", at = @At("HEAD"), cancellable = true, require = 0)
+    private void sbc$breaking(BlockPos pos, Direction direction, CallbackInfo ci) {
+    *///?}
         if (Safe.resting("WorldHideBlockBreakMixin.breaking")) return;
         try {
             if (io.muzy.sbc.world.WorldHiders.hideBlockBreak()) ci.cancel();

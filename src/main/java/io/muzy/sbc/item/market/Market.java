@@ -440,7 +440,11 @@ public final class Market {
             if (BazaarApi.isBazaarOrderInventory(lastMenuTitle)) BazaarApi.onOrderSlotClick(name);
             // skyblocker ReorderHelper.onClickSlot: only copies, the click still goes through
             if (b(BAZAAR, "market_bazaar.reorder", true) && (slotId == 11 || slotId == 13) && slot.getItem().is(Items.DYED_TERRACOTTA.green())
+                    //? if >=26.3 {
                     && BazaarOrders.ORDER_OPTIONS.matcher(lastMenuTitle).find() && InputConstants.isKeyDown(InputConstants.KEY_LCONTROL)) {
+                    //?} else {
+                    /*&& BazaarOrders.ORDER_OPTIONS.matcher(lastMenuTitle).find() && InputConstants.isKeyDown(mc.getWindow(), InputConstants.KEY_LCONTROL)) {
+                    *///?}
                 List<String> clean = new ArrayList<>();
                 for (String l : LegacyText.lore(slot.getItem())) clean.add(GameState.strip(l));
                 String amount = BazaarOrders.reorderAmount(slotId, clean);

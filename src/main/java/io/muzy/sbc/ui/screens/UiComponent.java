@@ -1,13 +1,18 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.ui.screens;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.Config;
 import io.muzy.sbc.ui.Ui;
 import io.muzy.sbc.ui.layout.BaseUIComponent;
 import io.muzy.sbc.ui.layout.UIGraphics;
 import io.muzy.sbc.ui.layout.Sizing;
 import net.minecraft.client.input.MouseButtonEvent;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 // component painted by our own Ui renderer. thats how the old pages (routine, planner, maps, profile...) live
 // inside the component screens: tree does layout, Ui paints
@@ -64,7 +69,11 @@ public class UiComponent extends BaseUIComponent {
                 dragging.at(mx, my);
                 return true;
             }
+            //? if >=26.3 {
             Runnable r = e.button() == InputConstants.MOUSE_BUTTON_RIGHT && h.right() != null ? h.right() : h.click();
+            //?} else {
+            /*Runnable r = e.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && h.right() != null ? h.right() : h.click();
+            *///?}
             if (r != null) {
                 r.run();
                 Config.save();

@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni, Skyblocker; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.chat;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -238,7 +240,11 @@ public final class PartyCommands {
 
     public static void keys(KeyMapping.Category category) {
         acceptKey = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.party_accept",
+                //? if >=26.3 {
                 InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+                //?} else {
+                /*com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+                *///?}
     }
 
     public static void register() {

@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni, Skyblocker; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.garden.farming;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.chat.ChatBus;
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.core.Patterns;
@@ -137,7 +139,11 @@ public final class MouseLock {
     }
 
     public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
         key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.mouse_lock", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.mouse_lock", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        *///?}
     }
 
     private static final RichCard CARD = new RichCard(ID, "Mouse lock", "Garden", Zone.TOP_LEFT, 39, ID) {

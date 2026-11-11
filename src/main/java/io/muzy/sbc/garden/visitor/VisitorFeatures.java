@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.garden.visitor;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.chat.ChatBus;
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.core.LegacyText;
@@ -20,6 +22,9 @@ import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +61,13 @@ public final class VisitorFeatures {
 
     // called from SbcMod where the keys get made
     public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
         VisitorBlock.bypassKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.visitor_bypass", InputConstants.Type.KEYBOARD, InputConstants.KEY_LCONTROL, category));
         VisitorBlock.acceptKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.visitor_accept", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*VisitorBlock.bypassKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.visitor_bypass", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_CONTROL, category));
+        VisitorBlock.acceptKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.visitor_accept", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        *///?}
     }
 
     public static void register() {

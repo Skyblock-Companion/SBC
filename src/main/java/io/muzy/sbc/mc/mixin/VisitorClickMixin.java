@@ -16,7 +16,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EntityRenderDispatcher.class)
 public abstract class VisitorClickMixin {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true, require = 0)
+    //? if >=26.3 {
     private void sbc$hideClick(Entity entity, Frustum frustum, double x, double y, double z, float partialTick, CallbackInfoReturnable<Boolean> cir) {
+    //?} else {
+    /*private void sbc$hideClick(Entity entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
+    *///?}
         if (Safe.resting("VisitorClickMixin.hideClick")) return;
         try {
             if (io.muzy.sbc.mc.EntityTickCache.test(io.muzy.sbc.mc.EntityTickCache.VISITOR_HIDE, entity, VisitorWorld::hidden)) cir.setReturnValue(false);

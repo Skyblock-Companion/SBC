@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni and Skyblocker; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.areas;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.SbcMod;
 import io.muzy.sbc.chat.ChatBus;
 import io.muzy.sbc.core.Gain;
@@ -646,7 +648,11 @@ public final class HuntHelpers {
     }
 
     private static KeyMapping key(String name, KeyMapping.Category category) {
+        //? if >=26.3 {
         return KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion." + name, InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*return KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion." + name, com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, org.lwjgl.glfw.GLFW.GLFW_KEY_UNKNOWN, category));
+        *///?}
     }
 
     public static void register() {

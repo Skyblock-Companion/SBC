@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.ui;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.AuctionPrices;
 import io.muzy.sbc.core.Gain;
 import io.muzy.sbc.core.ItemInfo;
@@ -18,6 +20,9 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.item.ItemStack;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -515,19 +520,35 @@ public final class ItemList {
     public static boolean key(Screen screen, int key, boolean shift) {
         if (!active(screen)) return true;
         if (focused) {
+            //? if >=26.3 {
             if (key == InputConstants.KEY_BACKSPACE) {
+            //?} else {
+            /*if (key == GLFW.GLFW_KEY_BACKSPACE) {
+            *///?}
                 if (!query.isEmpty()) query = query.substring(0, query.length() - 1);
+            //? if >=26.3 {
             } else if (key == InputConstants.KEY_ESCAPE || key == InputConstants.KEY_RETURN) focused = false;
+            //?} else {
+            /*} else if (key == GLFW.GLFW_KEY_ESCAPE || key == GLFW.GLFW_KEY_ENTER) focused = false;
+            *///?}
             return false;
         }
         String id = hoverId;
         if (id == null) {
             var hovered = ((ContainerAccess) screen).sbc$hovered();
+            //? if >=26.3 {
             if (hovered != null && !hovered.getItem().isEmpty() && (key == InputConstants.KEY_R || key == InputConstants.KEY_U)) {
+            //?} else {
+            /*if (hovered != null && !hovered.getItem().isEmpty() && (key == GLFW.GLFW_KEY_R || key == GLFW.GLFW_KEY_U)) {
+            *///?}
                 ItemStack st = hovered.getItem();
                 String sb = Gain.sbId(st);
                 if (!sb.isEmpty() && ItemRepo.get(sb) != null) {
+                    //? if >=26.3 {
                     ItemScreen.open(sb, key == InputConstants.KEY_U);
+                    //?} else {
+                    /*ItemScreen.open(sb, key == GLFW.GLFW_KEY_U);
+                    *///?}
                     return false;
                 }
             }
@@ -535,13 +556,22 @@ public final class ItemList {
         }
         // stars and recipes are for items
         if (WorldIndex.is(id)) return true;
+        //? if >=26.3 {
         if (key == InputConstants.KEY_F) {
+        //?} else {
+        /*if (key == GLFW.GLFW_KEY_F) {
+        *///?}
             if (!Store.I.favourites.remove(id)) Store.I.favourites.add(id);
             Store.markDirty();
             return false;
         }
+        //? if >=26.3 {
         if (key == InputConstants.KEY_R || key == InputConstants.KEY_U) {
             ItemScreen.open(id, key == InputConstants.KEY_U);
+        //?} else {
+        /*if (key == GLFW.GLFW_KEY_R || key == GLFW.GLFW_KEY_U) {
+            ItemScreen.open(id, key == GLFW.GLFW_KEY_U);
+        *///?}
             return false;
         }
         return true;

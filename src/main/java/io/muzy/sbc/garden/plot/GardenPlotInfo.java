@@ -291,7 +291,11 @@ public final class GardenPlotInfo {
     }
 
     public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
         borderKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.plot_border", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*borderKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.plot_border", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), category));
+        *///?}
     }
 
     public static void register() {

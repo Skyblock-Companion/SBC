@@ -28,6 +28,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.item.ItemStack;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -353,7 +356,11 @@ public final class ComposterPanel implements SideHelper.Content {
     private static boolean ctrl() {
         try {
             var window = Minecraft.getInstance().getWindow();
+            //? if >=26.3 {
             return InputConstants.isKeyDown(InputConstants.KEY_LCONTROL) || InputConstants.isKeyDown(InputConstants.KEY_RCONTROL);
+            //?} else {
+            /*return InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_CONTROL) || InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_CONTROL);
+            *///?}
         } catch (Throwable t) {
             return false;
         }

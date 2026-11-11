@@ -138,7 +138,11 @@ public final class SuperCraft {
         boolean cookie = GameState.hasCookie();
         double warn = millions(cookie ? "super_craft.threshold" : "super_craft.noCookieThreshold", cookie ? 10 : 20);
         double bulk = millions(cookie ? "super_craft.bulkThreshold" : "super_craft.noCookieBulkThreshold", cookie ? 5 : 10);
+        //? if >=26.3 {
         if (InputConstants.isKeyDown(InputConstants.KEY_LCONTROL) || InputConstants.isKeyDown(InputConstants.KEY_RCONTROL)) return false;
+        //?} else {
+        /*if (InputConstants.isKeyDown(mc.getWindow(), InputConstants.KEY_LCONTROL) || InputConstants.isKeyDown(mc.getWindow(), InputConstants.KEY_RCONTROL)) return false;
+        *///?}
         if (!wasteful(profit, craftingAmount, max, warn, bulk)) return false;
         String diff = Prices.coins(-profit);
         if (mc.player != null) {

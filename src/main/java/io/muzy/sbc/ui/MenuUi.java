@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.ui;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.Config;
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.core.LegacyItems;
@@ -24,6 +26,9 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -823,7 +828,11 @@ public final class MenuUi {
 
         @Override
         public boolean onMouseDown(MouseButtonEvent e, boolean doubled) {
+            //? if >=26.3 {
             if (click == null || e.button() != InputConstants.MOUSE_BUTTON_LEFT) return super.onMouseDown(e, doubled);
+            //?} else {
+            /*if (click == null || e.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return super.onMouseDown(e, doubled);
+            *///?}
             SbcWidgets.clickSound();
             click.run();
             return true;

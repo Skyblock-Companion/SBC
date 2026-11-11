@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of Skyblocker; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.ui.panels;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.Config;
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.core.LegacyItems;
@@ -21,6 +23,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.List;
 
@@ -133,7 +138,11 @@ public final class GardenPlotsPanel {
             dragging = false;
             return;
         }
+        //? if >=26.3 {
         if (!io.muzy.sbc.mc.KeyHeld.mouseDown(InputConstants.MOUSE_BUTTON_LEFT)) {
+        //?} else {
+        /*if (GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().handle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) != GLFW.GLFW_PRESS) {
+        *///?}
             dragging = false;
             Config.save();
             return;

@@ -31,7 +31,11 @@ public final class ItemTips {
         if (FancyTooltip.active()) {
             List<ClientTooltipComponent> comps = FancyTooltip.build(stack, lines);
             if (comps != null) {
+                //? if >=26.3 {
                 ((GuiGraphicsAccessor) g).sbc$tooltipLast(mc.font, comps, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, FancyTooltip.style(), true, true);
+                //?} else {
+                /*((GuiGraphicsAccessor) g).sbc$tooltipLast(mc.font, comps, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, FancyTooltip.style(), true);
+                *///?}
                 return;
             }
         }

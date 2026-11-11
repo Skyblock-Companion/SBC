@@ -555,9 +555,17 @@ public final class CustomLooks {
                 .then(literal("armorTrim")
                         .executes(c -> armorTrim(c.getSource(), null, null))
                         .then(argument("material", net.minecraft.commands.arguments.IdentifierArgument.id())
+                                //? if >=26.3 {
                                 .suggests((c, b) -> net.minecraft.commands.SharedSuggestionProvider.listSuggestions(c, b, Registries.TRIM_MATERIAL, net.minecraft.commands.SharedSuggestionProvider.ElementSuggestionType.ELEMENTS))
+                                //?} else {
+                                /*.suggests((c, b) -> c.getSource().suggestRegistryElements(Registries.TRIM_MATERIAL, net.minecraft.commands.SharedSuggestionProvider.ElementSuggestionType.ELEMENTS, b, c))
+                                *///?}
                                 .then(argument("pattern", net.minecraft.commands.arguments.IdentifierArgument.id())
+                                        //? if >=26.3 {
                                         .suggests((c, b) -> net.minecraft.commands.SharedSuggestionProvider.listSuggestions(c, b, Registries.TRIM_PATTERN, net.minecraft.commands.SharedSuggestionProvider.ElementSuggestionType.ELEMENTS))
+                                        //?} else {
+                                        /*.suggests((c, b) -> c.getSource().suggestRegistryElements(Registries.TRIM_PATTERN, net.minecraft.commands.SharedSuggestionProvider.ElementSuggestionType.ELEMENTS, b, c))
+                                        *///?}
                                         .executes(c -> armorTrim(c.getSource(), c.getArgument("material", Identifier.class).toString(), c.getArgument("pattern", Identifier.class).toString())))))
                 .then(literal("animatedDye")
                         .executes(c -> animatedDye(c.getSource(), null, null, 0, false, 0))

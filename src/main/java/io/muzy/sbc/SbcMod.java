@@ -29,6 +29,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,6 +109,7 @@ public class SbcMod implements ClientModInitializer {
         KeyMapping.Category cat = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("sbcompanion", "main"));
         io.muzy.sbc.chat.PartyCommands.keys(cat);
         io.muzy.sbc.commands.CommandPack.keys(cat);
+        //? if >=26.3 {
         openKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.open", InputConstants.Type.KEYBOARD, InputConstants.KEY_K, cat));
         zoomIn = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.zoom_in", InputConstants.Type.KEYBOARD, InputConstants.KEY_ADD, cat));
         zoomOut = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.zoom_out", InputConstants.Type.KEYBOARD, org.lwjgl.sdl.SDLScancode.SDL_SCANCODE_KP_MINUS, cat));
@@ -117,10 +121,29 @@ public class SbcMod implements ClientModInitializer {
         storageKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.storage", InputConstants.Type.KEYBOARD, InputConstants.KEY_B, cat));
         hudEditKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.hudedit", InputConstants.Type.KEYBOARD, InputConstants.KEY_H, cat));
         marketKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.market", InputConstants.Type.KEYBOARD, InputConstants.KEY_Y, cat));
+        //?} else {
+        /*openKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.open", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, cat));
+        zoomIn = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.zoom_in", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_KP_ADD, cat));
+        zoomOut = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.zoom_out", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_KP_SUBTRACT, cat));
+        warpKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.warp", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, cat));
+        mapKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.map", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_N, cat));
+        lockKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.lock", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_L, cat));
+        protectKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.protect", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, cat));
+        sackKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.sack", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, cat));
+        storageKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.storage", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, cat));
+        hudEditKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.hudedit", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_H, cat));
+        marketKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.market", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Y, cat));
+        *///?}
         io.muzy.sbc.item.market.BuyKey.keys(cat);
+        //? if >=26.3 {
         peekKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.peek", InputConstants.Type.KEYBOARD, InputConstants.KEY_GRAVE, cat));
         radialKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.radial", InputConstants.Type.KEYBOARD, InputConstants.KEY_U, cat));
+        //?} else {
+        /*peekKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.peek", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_GRAVE_ACCENT, cat));
+        radialKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.radial", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_U, cat));
+        *///?}
         int unbound = InputConstants.UNKNOWN.getValue();
+        //? if >=26.3 {
         dianaWarpKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.diana_warp", InputConstants.Type.KEYBOARD, unbound, cat));
         hoppityLiveKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.hoppity_live", InputConstants.Type.KEYBOARD, unbound, cat));
         corpseShareKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_corpse", InputConstants.Type.KEYBOARD, unbound, cat));
@@ -129,19 +152,37 @@ public class SbcMod implements ClientModInitializer {
         mineshaftTypeKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_mineshaft", InputConstants.Type.KEYBOARD, unbound, cat));
         underbidKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.copy_underbid", InputConstants.Type.KEYBOARD, unbound, cat));
         io.muzy.sbc.dungeon.DungeonChests.favoriteKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.chest_favorite", InputConstants.Type.KEYBOARD, unbound, cat));
+        //?} else {
+        /*dianaWarpKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.diana_warp", InputConstants.Type.KEYSYM, unbound, cat));
+        hoppityLiveKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.hoppity_live", InputConstants.Type.KEYSYM, unbound, cat));
+        corpseShareKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_corpse", InputConstants.Type.KEYSYM, unbound, cat));
+        rareMobShareKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_rare_mob", InputConstants.Type.KEYSYM, unbound, cat));
+        vanquisherShareKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_vanquisher", InputConstants.Type.KEYSYM, unbound, cat));
+        mineshaftTypeKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.share_mineshaft", InputConstants.Type.KEYSYM, unbound, cat));
+        underbidKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.copy_underbid", InputConstants.Type.KEYSYM, unbound, cat));
+        io.muzy.sbc.dungeon.DungeonChests.favoriteKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.chest_favorite", InputConstants.Type.KEYSYM, unbound, cat));
+        *///?}
         io.muzy.sbc.item.menus.Menus.keys(cat);
         io.muzy.sbc.garden.GardenHelpers.keys(cat);
         io.muzy.sbc.garden.GardenPack.keys(cat);
         io.muzy.sbc.crimson.Crimson.keys(cat);
         io.muzy.sbc.misc.MiscPack.keys(cat);
+        //? if >=26.3 {
         io.muzy.sbc.ui.UiFeatures.wikiKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.wiki_lookup", InputConstants.Type.KEYBOARD, InputConstants.KEY_F1, cat));
         io.muzy.sbc.ui.UiFeatures.priceKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.price_lookup", InputConstants.Type.KEYBOARD, InputConstants.KEY_F6, cat));
         io.muzy.sbc.item.tooltip.FancyTooltip.plainKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.plain_tooltip", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), cat));
+        //?} else {
+        /*io.muzy.sbc.ui.UiFeatures.wikiKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.wiki_lookup", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F1, cat));
+        io.muzy.sbc.ui.UiFeatures.priceKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.price_lookup", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F6, cat));
+        io.muzy.sbc.item.tooltip.FancyTooltip.plainKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.plain_tooltip", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, cat));
+        *///?}
 
 
         Safe.endTick("SbcMod.tick", this::tick);
         Safe.startTick("KeyClashes.settle", mc -> io.muzy.sbc.mc.KeyClashes.settle(mc, lockKey));
+        //? if >=26.3 {
         io.muzy.sbc.mc.TextInput.register();
+        //?}
         // extra tooltip lines from any feature show in vanilla inventories and our own pages the same
         Safe.tooltip("SbcMod.tooltip", (stack, ctx, flag, lines) -> io.muzy.sbc.feature.Features.tooltip(stack, lines));
         // our pages open inside a host screen (host owns the window, the page is one component)
@@ -180,7 +221,11 @@ public class SbcMod implements ClientModInitializer {
                 overlaysDrawn = false;
             });
             Safe.allowMouseClick("SbcMod.allowMouseClick", screen, (s, event) ->
+                    //? if >=26.3 {
                     io.muzy.sbc.ui.ItemList.click(s, event.x(), event.y(), io.muzy.sbc.mc.KeyHeld.clickButton(event.button())) && io.muzy.sbc.ui.panels.Panels.click(s, event) && io.muzy.sbc.ui.SideHelper.click(s, event.x(), event.y(), io.muzy.sbc.mc.KeyHeld.clickButton(event.button())) && io.muzy.sbc.item.QuickNav.click(s, event.x(), event.y(), io.muzy.sbc.mc.KeyHeld.clickButton(event.button())));
+                    //?} else {
+                    /*io.muzy.sbc.ui.ItemList.click(s, event.x(), event.y(), event.button()) && io.muzy.sbc.ui.panels.Panels.click(s, event) && io.muzy.sbc.ui.SideHelper.click(s, event.x(), event.y(), event.button()) && io.muzy.sbc.item.QuickNav.click(s, event.x(), event.y(), event.button()));
+                    *///?}
             Safe.allowMouseScroll("SbcMod.allowMouseScroll", screen, (s, smx, smy, sh, sv) ->
                     io.muzy.sbc.ui.SideHelper.scroll(s, smx, smy, sv) && io.muzy.sbc.ui.ItemList.scroll(s, smx, smy, sv) && !io.muzy.sbc.item.menus.MenuExtras.scroll(s, sv));
             Safe.allowCharType("SbcMod.allowCharType", screen, (s, event) ->
@@ -197,7 +242,11 @@ public class SbcMod implements ClientModInitializer {
                 if (!io.muzy.sbc.garden.pests.PestTraps.key(s, event)) return false;
                 if (io.muzy.sbc.ui.UiFeatures.key(cs, event)) return false;
                 if (!io.muzy.sbc.item.market.BuyKey.key(s, event)) return false;
+                //? if >=26.3 {
                 if (!io.muzy.sbc.ui.ItemList.key(s, event.key(), (event.modifiers() & InputConstants.MOD_SHIFT) != 0)) return false;
+                //?} else {
+                /*if (!io.muzy.sbc.ui.ItemList.key(s, event.key(), (event.modifiers() & GLFW.GLFW_MOD_SHIFT) != 0)) return false;
+                *///?}
                 if (io.muzy.sbc.feature.Features.on("market_search") && marketKey.matches(event) && io.muzy.sbc.ui.MarketSearchScreen.isMarketTitle(cs.getTitle().getString())) {
                     Minecraft.getInstance().gui.setScreen(new io.muzy.sbc.ui.MarketSearchScreen(cs, io.muzy.sbc.ui.MarketSearchScreen.modeFor(cs.getTitle().getString())));
                     return false;
@@ -209,7 +258,11 @@ public class SbcMod implements ClientModInitializer {
                 if (io.muzy.sbc.feature.Features.on("gfs_key") && sackKey.matches(event)) {
                     var hovered = ((io.muzy.sbc.mc.mixin.ContainerAccess) cs).sbc$hovered();
                     if (hovered != null) {
+                        //? if >=26.3 {
                         io.muzy.sbc.item.GetFromSack.press(hovered, (event.modifiers() & InputConstants.MOD_SHIFT) != 0);
+                        //?} else {
+                        /*io.muzy.sbc.item.GetFromSack.press(hovered, (event.modifiers() & GLFW.GLFW_MOD_SHIFT) != 0);
+                        *///?}
                         return false;
                     }
                 }
@@ -241,8 +294,13 @@ public class SbcMod implements ClientModInitializer {
             io.muzy.sbc.item.tooltip.TooltipScroll.reset();
             Safe.allowMouseScroll("SbcMod.allowMouseScroll#2", screen, (s, mx, my, hAmount, vAmount) -> {
                 long win = client.getWindow().handle();
+                //? if >=26.3 {
                 boolean shift = InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)
                         || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
+                //?} else {
+                /*boolean shift = org.lwjgl.glfw.GLFW.glfwGetKey(win, org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT) == org.lwjgl.glfw.GLFW.GLFW_PRESS
+                        || org.lwjgl.glfw.GLFW.glfwGetKey(win, org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_SHIFT) == org.lwjgl.glfw.GLFW.GLFW_PRESS;
+                *///?}
                 return io.muzy.sbc.item.tooltip.TooltipScroll.onScroll(s, vAmount, shift);
             });
         });
@@ -353,7 +411,11 @@ public class SbcMod implements ClientModInitializer {
                     }
                     String url = io.muzy.sbc.web.WebPage.WIKI + "/w/" + name.trim().replace(' ', '_');
                     // the in game browser takes over here when its on (OpenUriMixin)
+                    //? if >=26.3 {
                     mc.execute(() -> com.mojang.blaze3d.Blaze3D.openUri(java.net.URI.create(url)));
+                    //?} else {
+                    /*mc.execute(() -> net.minecraft.util.Util.getPlatform().openUri(java.net.URI.create(url)));
+                    *///?}
                     return 1;
                 }))
                 .then(literal("perf").then(literal("record").executes(c -> record(60))
@@ -552,8 +614,13 @@ public class SbcMod implements ClientModInitializer {
         while (openKey.consumeClick()) {
             if (mc.gui.screen() != null) continue;
             // alt+K opens the small mission card, K alone the full menu
+            //? if >=26.3 {
             boolean alt = InputConstants.isKeyDown(InputConstants.KEY_LALT)
                     || InputConstants.isKeyDown(InputConstants.KEY_RALT);
+            //?} else {
+            /*boolean alt = com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), GLFW.GLFW_KEY_LEFT_ALT)
+                    || com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), GLFW.GLFW_KEY_RIGHT_ALT);
+            *///?}
             mc.gui.setScreen(alt ? new io.muzy.sbc.ui.MissionScreen() : new CompanionScreen());
         }
         if (openNextTick && mc.gui.screen() == null) {
@@ -594,7 +661,11 @@ public class SbcMod implements ClientModInitializer {
             Config.keysToMove = false;
             // protection has V now, the radial menu moves off it if thats where it was saved
             if (radialKey.saveString().equals("key.keyboard.v")) {
+                //? if >=26.3 {
                 radialKey.setKey(InputConstants.Type.KEYBOARD.getOrCreate(InputConstants.KEY_U));
+                //?} else {
+                /*radialKey.setKey(InputConstants.Type.KEYSYM.getOrCreate(GLFW.GLFW_KEY_U));
+                *///?}
                 KeyMapping.resetMapping();
                 mc.options.save();
             }

@@ -13,9 +13,18 @@ public enum CursorStyle {
     HAND(GameLink.HAND_CURSOR),
     MOVE(GameLink.MOVE_CURSOR);
 
+    //? if >=26.3 {
     public final int shape;
+    //?} else {
+    /*public final int glfw;
+    *///?}
 
+    //? if >=26.3 {
     CursorStyle(int shape) {
         this.shape = shape;
+    //?} else {
+    /*CursorStyle(int glfw) {
+        this.glfw = glfw;
+    *///?}
     }
 }

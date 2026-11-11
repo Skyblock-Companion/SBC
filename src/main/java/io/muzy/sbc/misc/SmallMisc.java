@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.misc;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.areas.FishHooks;
 import io.muzy.sbc.areas.FishState;
 import io.muzy.sbc.chat.ChatBus;
@@ -29,6 +31,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -351,7 +356,11 @@ public final class SmallMisc {
     }
 
     public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
         abiphoneKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.abiphone", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*abiphoneKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.abiphone", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
+        *///?}
     }
 
     // --- skyhanni FixDoubleClicks, ColorParticleFix ---

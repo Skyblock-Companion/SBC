@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.commands;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.SbcMod;
 import io.muzy.sbc.chat.ChatBus;
 import io.muzy.sbc.core.GameState;
@@ -29,7 +31,11 @@ public final class TrapperKey {
     private TrapperKey() {}
 
     public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
         key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.trapper", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.trapper", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        *///?}
     }
 
     // skyhanni clickOptionPattern: what the [YES] part runs, after its first word. null if nothing says YES

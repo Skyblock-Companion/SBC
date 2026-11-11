@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.ui;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.AuctionPrices;
 import io.muzy.sbc.core.ItemInfo;
 import io.muzy.sbc.core.ItemRepo;
@@ -15,6 +17,9 @@ import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -210,7 +215,11 @@ public final class AccessoryScreen extends Screen {
 
     private boolean hasShiftDown() {
         long win = minecraft.getWindow().handle();
+        //? if >=26.3 {
         return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT) || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
+        //?} else {
+        /*return GLFW.glfwGetKey(win, GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS || GLFW.glfwGetKey(win, GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS;
+        *///?}
     }
 
     private void clickSlot(int slot, int button) {
@@ -314,7 +323,11 @@ public final class AccessoryScreen extends Screen {
         for (int i = ui.hits.size() - 1; i >= 0; i--) {
             Ui.Hit hit = ui.hits.get(i);
             if (mx < hit.x() || my < hit.y() || mx >= hit.x() + hit.w() || my >= hit.y() + hit.h()) continue;
+            //? if >=26.3 {
             Runnable r = e.button() == InputConstants.MOUSE_BUTTON_RIGHT && hit.right() != null ? hit.right() : hit.click();
+            //?} else {
+            /*Runnable r = e.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT && hit.right() != null ? hit.right() : hit.click();
+            *///?}
             if (r == null) continue;
             typing = false;
             r.run();
@@ -341,11 +354,20 @@ public final class AccessoryScreen extends Screen {
     @Override
     public boolean keyPressed(KeyEvent e) {
         if (typing) {
+            //? if >=26.3 {
             if (e.key() == InputConstants.KEY_BACKSPACE && !query.isEmpty()) query = query.substring(0, query.length() - 1);
             else if (e.key() == InputConstants.KEY_RETURN || e.key() == InputConstants.KEY_ESCAPE) typing = false;
+            //?} else {
+            /*if (e.key() == GLFW.GLFW_KEY_BACKSPACE && !query.isEmpty()) query = query.substring(0, query.length() - 1);
+            else if (e.key() == GLFW.GLFW_KEY_ENTER || e.key() == GLFW.GLFW_KEY_ESCAPE) typing = false;
+            *///?}
             return true;
         }
+        //? if >=26.3 {
         if (e.key() == InputConstants.KEY_TAB) {
+        //?} else {
+        /*if (e.key() == GLFW.GLFW_KEY_TAB) {
+        *///?}
             classic();
             return true;
         }

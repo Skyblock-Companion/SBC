@@ -40,7 +40,11 @@ public final class Panels {
     }
 
     static boolean shiftDown() {
+        //? if >=26.3 {
         return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT) || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
+        //?} else {
+        /*return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_LSHIFT) || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), InputConstants.KEY_RSHIFT);
+        *///?}
     }
 
     public static void register() {
@@ -118,7 +122,11 @@ public final class Panels {
             io.muzy.sbc.ui.ItemList.pressTaken();
             return false;
         }
+        //? if >=26.3 {
         return GardenPlotsPanel.click(s, e.x(), e.y(), io.muzy.sbc.mc.KeyHeld.clickButton(e.button())) && EquipmentSlots.click(s, e.x(), e.y());
+        //?} else {
+        /*return GardenPlotsPanel.click(s, e.x(), e.y(), e.button()) && EquipmentSlots.click(s, e.x(), e.y());
+        *///?}
     }
 
     // false = swallow the key

@@ -1,3 +1,4 @@
+//? if >=26.3 {
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.mc;
 
@@ -28,3 +29,5 @@ public final class TextInput {
         }
     }
 }
+
+//?}

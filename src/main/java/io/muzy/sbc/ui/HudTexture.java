@@ -4,7 +4,11 @@ package io.muzy.sbc.ui;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
+//? if >=26.3 {
 import com.mojang.renderpearl.api.textures.FilterMode;
+//?} else {
+/*import com.mojang.blaze3d.textures.FilterMode;
+*///?}
 import io.muzy.sbc.core.Safe;
 import io.muzy.sbc.feature.Features;
 import io.muzy.sbc.mc.mixin.GameRendererAccess;
@@ -90,7 +94,11 @@ public final class HudTexture {
             p.target.destroyBuffers();
             p.target = null;
         }
+        //? if >=26.3 {
         if (p.target == null) p.target = new TextureTarget("sbc " + name, w, h, com.mojang.renderpearl.api.GpuFormat.RGBA8_UNORM, com.mojang.renderpearl.api.GpuFormat.D32_FLOAT);
+        //?} else {
+        /*if (p.target == null) p.target = new TextureTarget("sbc " + name, w, h, true, com.mojang.blaze3d.GpuFormat.RGBA8_UNORM);
+        *///?}
         if (p.renderer == null) {
             p.state = new GuiRenderState();
             GuiRenderer own = ((GameRendererAccess) mc.gameRenderer).sbc$guiRenderer();

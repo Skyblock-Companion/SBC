@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.garden.pests;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.chat.ChatBus;
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.core.LegacyText;
@@ -213,7 +215,11 @@ public final class PestAlerts {
     }
 
     public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
         teleportKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.pest_teleport", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*teleportKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.pest_teleport", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        *///?}
     }
 
     public static void register() {

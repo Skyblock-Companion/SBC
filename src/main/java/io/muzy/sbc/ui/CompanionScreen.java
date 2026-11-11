@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.ui;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.SbcMod;
 import io.muzy.sbc.core.Config;
 import io.muzy.sbc.core.GameState;
@@ -45,6 +47,9 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -224,7 +229,11 @@ public final class CompanionScreen extends SbcScreen {
             if (open) g.fill(x, y, x + 2, y + h, accent);
         });
         row.mouseDown().subscribe((click, doubled) -> {
+            //? if >=26.3 {
             if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return false;
+            //?} else {
+            /*if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return false;
+            *///?}
             UISounds.playInteractionSound();
             goTo(index);
             return true;
@@ -265,7 +274,11 @@ public final class CompanionScreen extends SbcScreen {
             if (c.isInBoundingBox(mouseOnCanvasX(), mouseOnCanvasY())) g.fill(c.x(), c.y(), c.x() + c.width(), c.y() + c.height(), 0x14FFFFFF);
         });
         row.mouseDown().subscribe((click, doubled) -> {
+            //? if >=26.3 {
             if (click.button() != InputConstants.MOUSE_BUTTON_LEFT) return false;
+            //?} else {
+            /*if (click.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return false;
+            *///?}
             UISounds.playInteractionSound();
             io.muzy.sbc.ui.screens.CreditsScreen.open(this);
             return true;
@@ -671,7 +684,11 @@ public final class CompanionScreen extends SbcScreen {
             screenUi.flushTooltip();
         } else if (tipped != null) {
             g.nextStratum();
+            //? if >=26.3 {
             g.tooltip(minecraft.font, tipped.tooltip(), mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null, true);
+            //?} else {
+            /*g.tooltip(minecraft.font, tipped.tooltip(), mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+            *///?}
         }
     }
 
@@ -733,8 +750,13 @@ public final class CompanionScreen extends SbcScreen {
             return true;
         }
         if (this.uiAdapter.keyPressed(e)) return true;
+        //? if >=26.3 {
         if (!typing && (e.key() == InputConstants.KEY_DOWN || e.key() == InputConstants.KEY_UP)) {
             int step = e.key() == InputConstants.KEY_DOWN ? 1 : -1;
+        //?} else {
+        /*if (!typing && (e.key() == GLFW.GLFW_KEY_DOWN || e.key() == GLFW.GLFW_KEY_UP)) {
+            int step = e.key() == GLFW.GLFW_KEY_DOWN ? 1 : -1;
+        *///?}
             // same order as the sidebar
             int at = 0;
             for (int i = 0; i < TAB_ORDER.length; i++) if (TAB_ORDER[i] == page) at = i;

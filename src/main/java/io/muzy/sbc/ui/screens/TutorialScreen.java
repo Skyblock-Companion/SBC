@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.ui.screens;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.ui.KeyNames;
 import io.muzy.sbc.ui.Ui;
 import io.muzy.sbc.ui.layout.Color;
@@ -18,6 +20,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.List;
 
@@ -211,14 +216,23 @@ public final class TutorialScreen extends SbcScreen {
 
     @Override
     public boolean keyPressed(KeyEvent e) {
+        //? if >=26.3 {
         if (e.key() == InputConstants.KEY_ESCAPE) {
+        //?} else {
+        /*if (e.key() == GLFW.GLFW_KEY_ESCAPE) {
+        *///?}
             onClose();
             return true;
         }
         if (step >= STEPS.size()) return super.keyPressed(e);
         int k = e.key();
+        //? if >=26.3 {
         if (k == InputConstants.KEY_LALT || k == InputConstants.KEY_RALT || k == InputConstants.KEY_LSHIFT || k == InputConstants.KEY_RSHIFT
                 || k == InputConstants.KEY_LCONTROL || k == InputConstants.KEY_RCONTROL) return true;
+        //?} else {
+        /*if (k == GLFW.GLFW_KEY_LEFT_ALT || k == GLFW.GLFW_KEY_RIGHT_ALT || k == GLFW.GLFW_KEY_LEFT_SHIFT || k == GLFW.GLFW_KEY_RIGHT_SHIFT
+                || k == GLFW.GLFW_KEY_LEFT_CONTROL || k == GLFW.GLFW_KEY_RIGHT_CONTROL) return true;
+        *///?}
         Step s = STEPS.get(step);
         if (!pressed(s, KeyNames.binding(s.binding()), e)) {
             note = "Not that one: press " + keyName(s) + ".";

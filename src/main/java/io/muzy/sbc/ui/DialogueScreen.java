@@ -1,12 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.ui;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 // dialogue while theres answers to pick: click or 1-9, esc closes
 public final class DialogueScreen extends Screen {
@@ -54,19 +59,37 @@ public final class DialogueScreen extends Screen {
     @Override
     public boolean keyPressed(KeyEvent e) {
         int key = e.key();
+        //? if >=26.3 {
         if (key >= InputConstants.KEY_1 && key <= InputConstants.KEY_9) {
             Dialogue.choose(key - InputConstants.KEY_1);
+        //?} else {
+        /*if (key >= GLFW.GLFW_KEY_1 && key <= GLFW.GLFW_KEY_9) {
+            Dialogue.choose(key - GLFW.GLFW_KEY_1);
+        *///?}
             return true;
         }
+        //? if >=26.3 {
         if (key >= InputConstants.KEY_NUMPAD1 && key <= InputConstants.KEY_NUMPAD9) {
             Dialogue.choose(key - InputConstants.KEY_NUMPAD1);
+        //?} else {
+        /*if (key >= GLFW.GLFW_KEY_KP_1 && key <= GLFW.GLFW_KEY_KP_9) {
+            Dialogue.choose(key - GLFW.GLFW_KEY_KP_1);
+        *///?}
             return true;
         }
+        //? if >=26.3 {
         if (key == InputConstants.KEY_SPACE || key == InputConstants.KEY_RETURN) {
+        //?} else {
+        /*if (key == GLFW.GLFW_KEY_SPACE || key == GLFW.GLFW_KEY_ENTER) {
+        *///?}
             Dialogue.skip();
             return true;
         }
+        //? if >=26.3 {
         if (key == InputConstants.KEY_ESCAPE) {
+        //?} else {
+        /*if (key == GLFW.GLFW_KEY_ESCAPE) {
+        *///?}
             Dialogue.dismiss();
             onClose();
             return true;

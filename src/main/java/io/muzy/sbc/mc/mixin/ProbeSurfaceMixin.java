@@ -7,10 +7,18 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//? if >=26.3 {
 import com.mojang.renderpearl.frontend.FrontendGpuSurface;
+//?} else {
+/*import com.mojang.blaze3d.systems.GpuSurface;
+*///?}
 
 // /sbc perf record: the frame handed to the graphics card
+//? if >=26.3 {
 @Mixin(FrontendGpuSurface.class)
+//?} else {
+/*@Mixin(GpuSurface.class)
+*///?}
 public abstract class ProbeSurfaceMixin {
     @Inject(method = "present", at = @At("HEAD"), require = 0)
     private void sbc$presentIn(CallbackInfo ci) {

@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.commands;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.muzy.sbc.SbcMod;
@@ -48,7 +50,11 @@ public final class CompactorKey {
     private CompactorKey() {}
 
     public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
         key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.gfs_compactor", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
+        //?} else {
+        /*key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.gfs_compactor", com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM, com.mojang.blaze3d.platform.InputConstants.UNKNOWN.getValue(), category));
+        *///?}
     }
 
     // biggest craft per base. a tie at the top is unclear so none. pure

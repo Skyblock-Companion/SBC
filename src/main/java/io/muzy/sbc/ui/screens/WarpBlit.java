@@ -2,10 +2,19 @@
 // Changed in 2026 from code or data of Modern Warp Menu; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.ui.screens;
 
+//? if >=26.3 {
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+//?} else {
+/*import com.mojang.blaze3d.pipeline.RenderPipeline;
+*///?}
 import com.mojang.blaze3d.systems.RenderSystem;
+//? if >=26.3 {
 import com.mojang.renderpearl.api.textures.FilterMode;
 import com.mojang.renderpearl.api.textures.GpuTextureView;
+//?} else {
+/*import com.mojang.blaze3d.textures.FilterMode;
+import com.mojang.blaze3d.textures.GpuTextureView;
+*///?}
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.muzy.sbc.mc.mixin.GuiGraphicsAccessor;
 import net.minecraft.client.Minecraft;

@@ -36,7 +36,11 @@ public final class Carpets {
     private static void tick(Minecraft mc) {
         if (mc.level == null || mc.player == null || ++ticks < EVERY) return;
         ticks = 0;
+        //? if >=26.3 {
         for (BlockPos p : BlockPos.withinManhattan(mc.player.blockPosition(), RADIUS)) if (carpet(mc, p)) FOUND.add(p.immutable());
+        //?} else {
+        /*for (BlockPos p : BlockPos.withinManhattan(mc.player.blockPosition(), RADIUS, RADIUS, RADIUS)) if (carpet(mc, p)) FOUND.add(p.immutable());
+        *///?}
     }
 
     private static void draw(WorldDraw w) {

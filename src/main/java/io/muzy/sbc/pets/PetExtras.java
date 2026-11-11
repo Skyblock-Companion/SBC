@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.pets;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.muzy.sbc.combat.Combat;
@@ -168,8 +170,13 @@ public final class PetExtras {
     private static void expTooltip(ItemStack stack, List<Component> tip) {
         Feature f = Features.get(TOOLTIP);
         Minecraft mc = Minecraft.getInstance();
+        //? if >=26.3 {
         boolean shift = InputConstants.isKeyDown(InputConstants.KEY_LSHIFT)
                 || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
+        //?} else {
+        /*boolean shift = com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT)
+                || com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_SHIFT);
+        *///?}
         if (!shift && !f.option("pet_xp_tooltip.always").bool()) return;
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         if (data == null) return;

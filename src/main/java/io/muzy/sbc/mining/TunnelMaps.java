@@ -410,8 +410,13 @@ public final class TunnelMaps {
         Safe.endTick("TunnelMaps.keys", TunnelMaps::keys);
         try {
             KeyMapping.Category cat = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("sbcompanion", "mining"));
+            //? if >=26.3 {
             campfireKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.tunnel_campfire", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), cat));
             nextKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.tunnel_next", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), cat));
+            //?} else {
+            /*campfireKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.tunnel_campfire", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), cat));
+            nextKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.tunnel_next", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), cat));
+            *///?}
         } catch (Throwable t) {
             io.muzy.sbc.SbcMod.LOG.warn("Tunnel Maps keys", t);
         }

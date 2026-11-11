@@ -163,7 +163,11 @@ public final class ShortcutsScreen extends SbcScreen {
     @Override
     public boolean keyPressed(KeyEvent e) {
         if (capturing == null) return super.keyPressed(e);
+        //? if >=26.3 {
         if (e.key() == InputConstants.KEY_ESCAPE) {
+        //?} else {
+        /*if (e.key() == org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE) {
+        *///?}
             captured.clear();
             finishCapture();
             return true;

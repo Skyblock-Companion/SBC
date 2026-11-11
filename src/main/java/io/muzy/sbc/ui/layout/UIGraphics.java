@@ -92,7 +92,11 @@ public class UIGraphics extends GuiGraphicsExtractor {
     }
 
     public void drawTooltip(Font textRenderer, int x, int y, List<ClientTooltipComponent> components) {
+        //? if >=26.3 {
         this.tooltip(textRenderer, components, x, y, DefaultTooltipPositioner.INSTANCE, null, true);
+        //?} else {
+        /*this.tooltip(textRenderer, components, x, y, DefaultTooltipPositioner.INSTANCE, null);
+        *///?}
     }
 
     @Override

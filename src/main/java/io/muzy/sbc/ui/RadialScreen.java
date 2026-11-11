@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package io.muzy.sbc.ui;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.ui.theme.Modern;
 import io.muzy.sbc.ui.theme.Theme;
@@ -15,6 +17,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.ItemStack;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -230,7 +235,11 @@ public final class RadialScreen extends Screen {
             if ((e.x() - s.x) * (e.x() - s.x) + (e.y() - s.y) * (e.y() - s.y) >= (TILE / 2) * (TILE / 2)) continue;
             if (minecraft.gameMode == null || minecraft.player == null) return true;
             minecraft.player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 0.35f, 1.25f);
+            //? if >=26.3 {
             minecraft.gameMode.handleContainerInput(menu.containerId, s.slot, e.button() == InputConstants.MOUSE_BUTTON_RIGHT ? 1 : 0, ContainerInput.PICKUP, minecraft.player);
+            //?} else {
+            /*minecraft.gameMode.handleContainerInput(menu.containerId, s.slot, e.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT ? 1 : 0, ContainerInput.PICKUP, minecraft.player);
+            *///?}
             return true;
         }
         return super.mouseClicked(e, doubleClick);
@@ -238,7 +247,11 @@ public final class RadialScreen extends Screen {
 
     @Override
     public boolean keyPressed(KeyEvent e) {
+        //? if >=26.3 {
         if (e.key() == InputConstants.KEY_ESCAPE || (io.muzy.sbc.SbcMod.radialKey != null && io.muzy.sbc.SbcMod.radialKey.matches(e))) {
+        //?} else {
+        /*if (e.key() == GLFW.GLFW_KEY_ESCAPE || (io.muzy.sbc.SbcMod.radialKey != null && io.muzy.sbc.SbcMod.radialKey.matches(e))) {
+        *///?}
             minecraft.gui.setScreen(parent);
             return true;
         }

@@ -73,7 +73,11 @@ public final class MarketPanel {
 
     private static void open(String url) {
         try {
+            //? if >=26.3 {
             com.mojang.blaze3d.Blaze3D.openUri(java.net.URI.create(url));
+            //?} else {
+            /*net.minecraft.util.Util.getPlatform().openUri(java.net.URI.create(url));
+            *///?}
         } catch (RuntimeException ignored) {
         }
     }

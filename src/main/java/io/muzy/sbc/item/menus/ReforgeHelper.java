@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni, NotEnoughUpdates; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.item.menus;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -338,8 +340,13 @@ public final class ReforgeHelper {
     }
 
     static boolean modifierDown() {
+        //? if >=26.3 {
         return Keys.down(InputConstants.KEY_LCONTROL) || Keys.down(InputConstants.KEY_RCONTROL)
                 || (System.getProperty("os.name", "").startsWith("Mac") && (Keys.down(InputConstants.KEY_LGUI) || Keys.down(InputConstants.KEY_RGUI)));
+        //?} else {
+        /*return Keys.down(org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL) || Keys.down(org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_CONTROL)
+                || (System.getProperty("os.name", "").startsWith("Mac") && (Keys.down(org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SUPER) || Keys.down(org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_SUPER)));
+        *///?}
     }
 
     static void register(BooleanSupplier skyblock) {

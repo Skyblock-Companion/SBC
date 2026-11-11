@@ -7,7 +7,11 @@ import io.muzy.sbc.ui.storage.StorageOverlayScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import org.joml.Vector2dc;
+//? if >=26.3 {
 import org.lwjgl.sdl.SDLMouse;
+//?} else {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,7 +32,11 @@ public class StorageOverlayMouseMixin {
     @Shadow
     private double ypos;
 
+    //? if >=26.3 {
     @Inject(method = "releaseMouse", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/InputConstants;releaseMouse(Lcom/mojang/blaze3d/platform/Window;DD)V", shift = At.Shift.AFTER))
+    //?} else {
+    /*@Inject(method = "releaseMouse", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/InputConstants;grabOrReleaseMouse(Lcom/mojang/blaze3d/platform/Window;IDD)V", shift = At.Shift.AFTER))
+    *///?}
     private void sbc$keepMouseInStorageOverlay(CallbackInfo ci) {
         if (Safe.resting("StorageOverlayMouseMixin.keepMouseInStorageOverlay")) return;
         try {
@@ -38,7 +46,11 @@ public class StorageOverlayMouseMixin {
                     this.xpos = position.x();
                     this.ypos = position.y();
                 }
+                //? if >=26.3 {
                 SDLMouse.SDL_WarpMouseInWindow(minecraft.getWindow().handle(), (float) xpos, (float) ypos);
+                //?} else {
+                /*GLFW.glfwSetCursorPos(minecraft.getWindow().handle(), xpos, ypos);
+                *///?}
             }
         } catch (Throwable t) {
             Safe.caught("StorageOverlayMouseMixin.keepMouseInStorageOverlay", t);

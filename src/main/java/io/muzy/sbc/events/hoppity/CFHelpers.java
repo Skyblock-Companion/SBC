@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.events.hoppity;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import io.muzy.sbc.core.GameState;
 import io.muzy.sbc.core.LegacyText;
 import io.muzy.sbc.core.Patterns;
@@ -26,6 +28,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 import java.util.ArrayList;
 import java.util.List;
@@ -243,7 +248,11 @@ public final class CFHelpers {
     private static boolean shiftDown() {
         try {
             var window = Minecraft.getInstance().getWindow();
+            //? if >=26.3 {
             return InputConstants.isKeyDown(InputConstants.KEY_LSHIFT) || InputConstants.isKeyDown(InputConstants.KEY_RSHIFT);
+            //?} else {
+            /*return com.mojang.blaze3d.platform.InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT) || com.mojang.blaze3d.platform.InputConstants.isKeyDown(window, GLFW.GLFW_KEY_RIGHT_SHIFT);
+            *///?}
         } catch (Throwable t) {
             return false;
         }
@@ -253,12 +262,20 @@ public final class CFHelpers {
     public static boolean key(Screen s, int key) {
         if (!HoppityEnv.world.inSkyBlock() || !ChocolateFactory.inChocolateFactory || !(s instanceof ContainerScreen)) return true;
         var mc = Minecraft.getInstance();
+        //? if >=26.3 {
         boolean closes = key == InputConstants.KEY_ESCAPE || mc.options.keyInventory.matches(new net.minecraft.client.input.KeyEvent(key, 0, 0));
+        //?} else {
+        /*boolean closes = key == GLFW.GLFW_KEY_ESCAPE || mc.options.keyInventory.matches(new net.minecraft.client.input.KeyEvent(key, 0, 0));
+        *///?}
         if (closes && CFStray.refusesClosing(shiftDown())) return false;
         if (!on(KEYS)) return true;
         String keys = Hoppity.text(KEYS, "keys", "1234567").toUpperCase(Locale.ROOT);
+        //? if >=26.3 {
         int index = -1;
         for (int i = 0; i < keys.length() && index < 0; i++) if (io.muzy.sbc.mc.KeyHeld.keyOf(keys.charAt(i)) == key) index = i;
+        //?} else {
+        /*int index = key < 128 ? keys.indexOf((char) key) : -1;
+        *///?}
         if (index < 0 || index > 6) return true;
         if (HoppityEnv.passedSince(lastKey) >= 200) {
             lastKey = HoppityEnv.now();

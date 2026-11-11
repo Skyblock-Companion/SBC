@@ -13,6 +13,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
 
 // j over an item in any menu or a line of the item list adds one to the buy list
 public final class BuyKey {
@@ -21,7 +24,11 @@ public final class BuyKey {
     private BuyKey() {}
 
     public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
         key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.buy_list", InputConstants.Type.KEYBOARD, InputConstants.KEY_J, category));
+        //?} else {
+        /*key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.buy_list", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, category));
+        *///?}
     }
 
     // false = taken

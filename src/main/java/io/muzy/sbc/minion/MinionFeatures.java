@@ -2,7 +2,9 @@
 // Changed in 2026 from code or data of SkyHanni; see THIRD_PARTY_NOTICES.md.
 package io.muzy.sbc.minion;
 
+//? if >=26.3 {
 import com.mojang.blaze3d.platform.InputConstants;
+//?}
 import com.google.gson.JsonObject;
 import io.muzy.sbc.chat.ChatBus;
 import io.muzy.sbc.combat.Combat;
@@ -502,8 +504,13 @@ public final class MinionFeatures {
 
     private static boolean ctrl() {
         Minecraft mc = Minecraft.getInstance();
+        //? if >=26.3 {
         return InputConstants.isKeyDown(InputConstants.KEY_LCONTROL)
                 || InputConstants.isKeyDown(InputConstants.KEY_RCONTROL);
+        //?} else {
+        /*return com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL)
+                || com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_CONTROL);
+        *///?}
     }
 
     private static boolean infernoClick(AbstractContainerScreen<?> screen, Slot slot, int slotId, int button) {

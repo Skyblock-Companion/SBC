@@ -34,7 +34,11 @@ public abstract class ProbeFeaturesMixin {
     }
 
     @Inject(method = "renderAllFeatures", at = @At("HEAD"), require = 0)
+    //? if >=26.3 {
     private static void sbc$renderAllFeaturesIn(CallbackInfo ci) {
+    //?} else {
+    /*private void sbc$renderAllFeaturesIn(CallbackInfo ci) {
+    *///?}
         if (!FrameProbe.on) return;
         try {
             FrameProbe.enter(FrameProbe.FEATURE_DRAW);
@@ -44,7 +48,11 @@ public abstract class ProbeFeaturesMixin {
     }
 
     @Inject(method = "renderAllFeatures", at = @At("RETURN"), require = 0)
+    //? if >=26.3 {
     private static void sbc$renderAllFeaturesOut(CallbackInfo ci) {
+    //?} else {
+    /*private void sbc$renderAllFeaturesOut(CallbackInfo ci) {
+    *///?}
         if (!FrameProbe.on) return;
         try {
             FrameProbe.exit(FrameProbe.FEATURE_DRAW);

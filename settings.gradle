@@ -1,7 +1,22 @@
 pluginManagement {
     repositories {
         maven { url = 'https://maven.fabricmc.net/' }
+        // Stonecutter: one source, a jar for each Minecraft version
+        maven { url = 'https://maven.kikugie.dev/releases' }
         gradlePluginPortal()
     }
 }
+
+plugins {
+    id 'dev.kikugie.stonecutter' version '0.9.7'
+}
+
 rootProject.name = 'sbc'
+
+stonecutter {
+    create(rootProject) {
+        versions '26.2', '26.3'
+        // the version the code in git is written for; the other one's lines sit in comments
+        vcsVersion = '26.3'
+    }
+}
