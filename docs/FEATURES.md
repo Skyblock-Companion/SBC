@@ -2,7 +2,7 @@
 
 Every feature, as the settings menu lists them. Press **K** in game and open Settings to switch any of them.
 
-[HUD](#hud) (23) · [Menus](#menus) (50) · [Items](#items) (54) · [Chat](#chat) (80) · [Navigation](#navigation) (9) · [World](#world) (9) · [Commands](#commands) (12) · [Garden](#garden) (77) · [Farming Islands](#farming-islands) (9) · [Mining](#mining) (52) · [Foraging](#foraging) (20) · [Fishing](#fishing) (33) · [Hunting](#hunting) (15) · [Combat](#combat) (34) · [Slayer](#slayer) (42) · [Dungeons](#dungeons) (64) · [Crimson Isle](#crimson-isle) (18) · [Rift](#rift) (32) · [Events](#events) (79) · [Pets](#pets) (8) · [Minions](#minions) (8) · [Skills](#skills) (7) · [Tracking](#tracking) (4) · [Bar parts](#bar-parts) (13) · [Misc](#misc) (26)
+[HUD](#hud) (23) · [Menus](#menus) (51) · [Items](#items) (54) · [Chat](#chat) (80) · [Navigation](#navigation) (9) · [World](#world) (9) · [Commands](#commands) (12) · [Garden](#garden) (78) · [Farming Islands](#farming-islands) (9) · [Mining](#mining) (52) · [Foraging](#foraging) (20) · [Fishing](#fishing) (33) · [Hunting](#hunting) (15) · [Combat](#combat) (34) · [Slayer](#slayer) (42) · [Dungeons](#dungeons) (64) · [Crimson Isle](#crimson-isle) (18) · [Rift](#rift) (32) · [Events](#events) (79) · [Pets](#pets) (8) · [Minions](#minions) (8) · [Skills](#skills) (8) · [Tracking](#tracking) (4) · [Bar parts](#bar-parts) (13) · [Misc](#misc) (26)
 
 
 ## HUD
@@ -40,6 +40,7 @@ Panels beside Hypixel's own menus. Hypixel's menus stay exactly as they are.
 + **Prices inside the Auction House and Bazaar**: Under each auction: the asking price against the market as a percentage (green = below lowest BIN). Under Bazaar items: the instant buy price.
 + **Quick navigation**: Buttons above and below every inventory and chest: SkyBlock Menu, pets, loadouts, equipment, storage, Accessory Bag, Sack of Sacks, bazaar, auction house, Warp Menu, crafting, anvil, enchanting, the Hex. Each one can be edited below: icon, command, tooltip, on or off, double click.
 + **Accessory helper**: Beside your Accessory Bag, on the other side from the Item List: what to get next for the most Magical Power per coin, and how far your purse gets you. The bag itself stays as it is.
++ **Sack helper**: Beside your Sack of Sacks, on the other side from the Item List: which sacks you are missing, the bigger size of the ones you have, and what finishing them costs. The menu itself stays as it is. - Beta 0.2 ([43a8da3](https://github.com/Skyblock-Companion/SBC/commit/43a8da3))
 + **Inventory search (Ctrl+F)**: Ctrl+F in any chest or inventory opens a search; items that do not match are dimmed, matches get a green edge.
 + **Wardrobe number keys**: In the Wardrobe and Loadouts menus, keys 1-9 press that slot's button.
 + **Market search**: In the Auction House and Bazaar the Search button (or Y) opens a search that lists matches as you type - write hyp and Hyperion shows up with its prices. Y also works anywhere in SkyBlock.
@@ -57,6 +58,7 @@ Panels beside Hypixel's own menus. Hypixel's menus stay exactly as they are.
 + **Bits helper**: In the Community Shop: coins per bit on the tooltip, the best of what sells well in green and the best overall in yellow.
 + **Sack display**: Next to an open sack: every item with stored/total and its Bazaar sell value, gemstones by quality, runes by level, Magmafish for trophy sacks, and the total; full sacks are marked red. The amounts are remembered per profile and kept current from the [Sacks] chat lines.
 + **Equipment in the inventory**: Necklace, cloak, belt and gloves beside the player in your inventory, as your menus last showed them: open /equipment or a loadout and they catch up. Click a piece to open the menu. The offhand slot and the recipe book button move right to make room.
+    + A loadout switch shows its equipment at once. - Beta 0.2 ([4a38056](https://github.com/Skyblock-Companion/SBC/commit/4a38056))
 + **Museum helper**: Beside the Museum menu: everything you have not donated yet with its price, by category, sorted by lowest BIN, craft cost or coins per SkyBlock XP, with a search. It learns from the Museum's pages you open and the donations you make.
 + **Complete Museum categories**: In the Museum's menu, a category with every item donated turns green.
 + **Loadout highlighting**: In the Loadouts menu, the loadout you are wearing stands out, and your favourites if you want them to.
@@ -93,6 +95,7 @@ Panels beside Hypixel's own menus. Hypixel's menus stay exactly as they are.
 Tooltips, prices and everything about the items you hold.
 
 + **Prices on item tooltips**: Bazaar, lowest BIN, estimated value, NPC price and craft cost under the item's text.
+    + What the item really sold for: the median of the last 3 days and how many sell a day. - Beta 0.2 ([0265b9d](https://github.com/Skyblock-Companion/SBC/commit/0265b9d))
 + **Item details on tooltips**: Obtained date, dungeon quality, kill counters and the cost of the next star.
 + **Value breakdown**: Hold Shift on a modified item to see what its estimated value is made of.
 + **Accessory status**: Tells you on an accessory whether it is new to your bag, an upgrade, or already outdone.
@@ -101,6 +104,8 @@ Tooltips, prices and everything about the items you hold.
 + **Slot locking and item protection**: L over a slot locks it, V protects the item in it: no dragging, shift-clicking, swapping or dropping by mistake.
 + **Chest value**: What the things in an open chest or container would sell for.
 + **Item list and recipes**: Panel beside every inventory with all SkyBlock items: search, filters, stars, recipe and used-in cards (R / U over an item).
+    + Finds NPCs, bosses, mobs, places and warps too, each with its own page: where it is, Navigate, its warp and the wiki. - Beta 0.2 ([473f158](https://github.com/Skyblock-Companion/SBC/commit/473f158))
+    + Every Hunting shard, with prices and its own page. - Beta 0.2 ([473f158](https://github.com/Skyblock-Companion/SBC/commit/473f158))
 + **Item pickup log**: What you gained and lost in the last seconds with the coin value, in the bottom right corner: inventory changes, sack changes and coins.
 + **Numbers on items**: A small number on an item's icon at the bottom right: pests in a vacuum, Kuudra Key and Crimson armor tiers, Dungeon Potion levels, skill and collection levels in their menus, and more. Each can be switched off.
 + **Armor dye**: Colours the armor you wear (only you see it). Set it with /sbc dye &lt;head|chest|legs|feet|all&gt; &lt;RRGGBB|off&gt;.
@@ -246,14 +251,14 @@ Cleaner chat, every filter switchable.
 
 ## World
 
-+ **Party member outlines**: Your party members get an outline in the world, so you find them. Not in dungeons. It shows through walls.
++ **Party member outlines**: Party members get an outline in the world, so you find them. Not in dungeons.
 + **Night Vision strength**: How bright a Night Vision effect makes the world, in SkyBlock. /sbc nightvision &lt;0-100&gt;, off or full.
 + **Builder's Wand preview**: On your Private Island and Garden: the blocks a Builder's Wand or Builder's Ruler would place, or remove while you sneak with the ruler.
 + **Teleport overlay**: The block a teleport item would put you on, while you hold it.
 + **Gyrokinetic Wand reach**: The ten blocks the wand pulls from, around where you aim it, while you hold it.
 + **Smooth teleports**: The camera slides to where a teleport item put you instead of jumping.
 + **Hide things in the world**: Tick what you would rather not see.
-+ **Outline on dropped items**: Items on the ground get an outline in their rarity's colour, which also shows through walls.
++ **Outline on dropped items**: Items on the ground get an outline in their rarity's colour.
 + **Marked players in the world**: Players you marked get an outline when you can see them.
 
 ## Commands
@@ -285,7 +290,7 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 + **Composter card**: Time left and stored compost, then organic matter and fuel; a warning when it runs low.
 + **Jacob's contest**: The contest's crops with your last measured crops per second, the crop you farm and the boosted crop picked out, and the time left or until it starts.
 + **Optimal farming speed**: The speed the held tool's crop wants (93 / 155 / 233 / 328 / 464) against your current speed on a gauge, with your farming fortune.
-+ **Pest boxes**: A bright red box on every pest, seen through walls, with nothing written on it, so you spot them at once.
++ **Pest boxes**: A bright red box on every pest, with nothing written on it, so you spot them at once.
 + **Pest finder**: Infested plots get lines on their walls in the world with the pest count while you hold a vacuum. Where the vacuum's ability points is the Pest guess.
 + **Visitor offer prices**: In a visitor's menu, the Accept Offer button says what the items cost, what you pay per copper, how many crops they are and how long you farm them.
 + **Visitor offer block**: In a visitor's menu, Refuse Offer takes no click when the visitor has a reward on your list or you never accepted an offer from it. Hold the bypass key to click anyway. The copper and coin limits are off until you switch them on.
@@ -323,9 +328,10 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 + **Pest trap warnings**: Tells you again and again that a trap is full or out of bait, until you dealt with it. Needs the Pest Traps widget in your tab list.
 + **Mantid bonus**: With the Mantid reforge: how far your kill bonus is out of 20 and when the next pests fall out of it. Counted while you wear it, and it starts over when you change world.
 + **Pesthunter profit**: Beside Pesthunter's Wares: what each trade is worth per pest you give for it, best first.
-+ **Pest highlight**: A box around each pest on the Garden, through walls: green for the running contest's crop, blue for the vinyl you play.
++ **Pest highlight**: A box around each pest on the Garden: green for the running contest's crop, blue for the vinyl you play.
 + **DNA Analyzer solver**: In the DNA Analyzer, the two strands to swap next are green, for the fewest swaps. You do the clicking.
 + **Crop Diagnostics colours**: In the Crop Diagnostics menu: the Growth Status is green when the crop can be harvested, and the Water Status green when it has enough water.
++ **Analyzed mutations**: A greenhouse mutation's tooltip says whether you have analyzed it. It learns from the message when an analysis completes, and from the All Mutations menu. - Beta 0.2 ([e6a6b3e](https://github.com/Skyblock-Companion/SBC/commit/e6a6b3e))
 + **Phantomleaf solver**: While you look for a Phantomleaf, its hiding spot in green, worked out from the sounds it makes. Stand still for best results.
 + **Paste Greenhouse**: Copy a layout link, then /sbc greenhouse paste: the layout shows in your Greenhouse plot as a guide. /sbc greenhouse end removes it; rotate left, rotate right and mirror turn it, save &lt;name&gt; keeps the copied link, paste &lt;name&gt; brings it back.
 + **Crop Milestones menu**: In the Crop Milestones menu: the tier on each crop, the average of them, and in the tooltip the road to the last tier.
@@ -367,7 +373,7 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 
 ## Mining
 
-+ **Mining emissaries**: The name of every emissary that gives Commissions, and how far away it is, through walls.
++ **Mining emissaries**: The name of every emissary that gives Commissions, and how far away it is.
 + **Mining profit**: What mining brings in at NPC and market prices, per hour, on every mining island.
 + **Excavator profit**: What the Fossil Excavator finds at the Fossil Research Center, its Glacite Powder, and what the Suspicious Scrap cost.
 + **Corpse profit**: What corpses in the Glacite Mineshafts give at market prices, what the keys cost, keys saved by Resourceful.
@@ -434,7 +440,7 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 + **Tree felled title**: A title when you fell a whole tree.
 + **Sweep details**: Your sweep, the tree's toughness, the logs and what the last hit lost, for five seconds after it.
 + **Sweep overlay**: Holding an axe, marks the logs your hit would cut with your Sweep. Needs Sweep in your tab list.
-+ **Foraging highlights**: Lushlilac and Sea Lumies on Galatea, full Honeyhives and Ruby Veilshrooms in the Torrhus Canyon. Not through walls.
++ **Foraging highlights**: Lushlilac and Sea Lumies on Galatea, full Honeyhives and Ruby Veilshrooms in the Torrhus Canyon.
 + **Temple puzzles**: The clicks each block of the Forest Temple needs; in the Desert Temple the order of the buttons and where the statues go.
 + **Foraging beacon**: Solves tuning the Moonglade Beacon: the clicks each setting needs, and what it should be. Says when the beacon is ready.
 + **Heart of the Forest**: Perks in green when on and red when off, Tokens on the Heart, and what each perk took and will take in Forest Whispers.
@@ -484,8 +490,8 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 + **Hunting profit**: The shards you catch at market prices, mobs caught and shards collected.
 + **Shard tracker**: Shards you picked with the Track shard key: how many are in your Hunting Box against what you need, and what you gained of them.
 + **Pure Reptile alert**: A sound and a note when a fusion gives a Pure Reptile.
-+ **Hunting highlights**: A box with name and distance on the mobs you hunt on Galatea and in the Torrhus Canyon, when you are near them. Not through walls.
-+ **Floor drops**: Marks a shard lying on the floor while it sparkles. Not through walls.
++ **Hunting highlights**: A box with name and distance on the mobs you hunt on Galatea and in the Torrhus Canyon, when you are near them.
++ **Floor drops**: Marks a shard lying on the floor while it sparkles.
 + **Lasso**: How far your lasso's bar has gone, and when to reel.
 + **Fusion**: Beside the Fusion Box, how many of the shard you last fused are in your Hunting Box, and your Pure Reptiles since. Keys to repeat and confirm a fusion can be bound in the controls.
 + **Hunting keys**: The keys to repeat and confirm a fusion and to show the next Shulker. Bind them in the controls.
@@ -504,7 +510,8 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 + **Ender Node profit**: What Ender Nodes give you in The End, and how many you mined.
 + **Sacrifice profit**: Dragon Essence and bonus loot from the Draconic Altar, per item sacrificed.
 + **Mob health bars**: A bar of health over the name of each mob, from the numbers in its name. Other helpers read those numbers too, so taking them out of the name starts off.
-+ **Combat session**: Armor stacks from the action bar, cocoons, ghost drops and bag-of-cash coins.
++ **Combat session**: Cocoons, ghost drops and bag-of-cash coins, and your armor stacks when you switch them on.
+    + Armor stacks, as an option. - Beta 0.2 ([1671484](https://github.com/Skyblock-Companion/SBC/commit/1671484))
 + **Dragon fight**: Which dragon spawned and when, its HP and your damage from the sidebar; ender node drops.
 + **Mob names**: Works out which SkyBlock mob each one is from its name tag; the slayer and combat helpers ask it.
 + **Combat highlights**: Keeps track of which mobs the slayer and combat helpers highlight or hide.
@@ -537,7 +544,7 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 ## Slayer
 
 + **Slayer profit**: Drops and coins of your slayer quests at NPC and market prices, what the quests cost, and what a boss is worth.
-+ **Slayer helper**: Times the kill against your best, counts bosses to the next level and marks Voidgloom beacons. It can also mark your boss, through walls.
++ **Slayer helper**: Times the kill against your best, counts bosses to the next level and marks Voidgloom beacons. It can also mark your boss.
 + **Carry tracker**: The slayer carries you do on a card: who, what, how many done and what is paid. /sbc carry &lt;player&gt; &lt;type like rev5&gt; &lt;amount&gt; adds one, /sbc carry &lt;type&gt; &lt;price&gt; sets its price.
 + **Slayer progress**: Kills towards the boss and the quest's progress from the sidebar and auto-slayer coins spent, on the Slayer card.
 + **Boss spawn warning**: A warning when the quest progress passes the percentage.
@@ -586,8 +593,10 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 + **Who joined your party**: When someone joins your dungeon party: their Cata and class levels, Magical Power, armor, whether they own the key items, and their runs, in chat. It reads other players, so it stays quiet without the Advanced setting.
 + **Party Finder**: Hypixel's Party Finder in the mod's design: every party as a card with faces, classes and levels, search, filters, your class marked, paid carries marked, and level ranges typed right there.
 + **Room detection and secrets**: Recognises the room you are in and marks its secrets in the world (chests, items, bats, levers, wither essence); a secret disappears when you reach it.
-+ **Secret routes**: Leads you secret after secret: the path, the etherwarp, mine, TNT and interact spots, and the secret itself; reaching it moves to the next step. Set with /sbc route set fow|3ppopka|pearl|normal, skip with /sbc route next.
++ **Secret routes**: Leads you secret after secret: the path, a jump arc for each etherwarp, the spots to mine with Dungeon Breaker, blow up with Superboom or pull a lever at, and the secret itself; opening, picking up or killing the secret moves to the next step. Set with /sbc route set normal|fow|3ppopka|pearl|fastest, skip with /sbc route next.
+    + Says what to do at each spot: Pull lever, Mine (Dungeon Breaker), Superboom, Etherwarp or Pearl, with a lever before its locked chest. - Beta 0.2 ([b4869c9](https://github.com/Skyblock-Companion/SBC/commit/b4869c9))
 + **Room map**: A small map of the floor with every room you have been in, coloured by kind, and where you stand.
+    + Hypixel's own map from your last hotbar slot, with your arrow where you stand. - Beta 0.2 ([16fb99f](https://github.com/Skyblock-Companion/SBC/commit/16fb99f))
 + **Floor 7 terminals and devices**: Marks the terminals and devices of the Goldor phase when you are close to them.
 + **Livid finder**: In the floor 5 boss fight, outlines the real Livid among the nine (the wool block's colour names it) with a line to it.
 + **Blaze room**: Outlines the blaze to hit next (green) and the one after (white) with a line between them.
@@ -628,11 +637,11 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 + **Dungeon objects background**: Watches what is lying and moving around for the features below.
 + **Hide things in dungeons**: Leaves things out of the world in a dungeon. Each one has its own switch; nothing is hidden until you turn it on.
 + **Marks on dungeon mobs**: Marks moving skeleton skulls, Deathmites and Fel skulls where you can see them.
-+ **Starred mobs**: Starred mobs, minibosses and bats glow, which also shows them through walls.
-+ **Class colour on teammates**: Teammates glow in the colour of their class, which also shows them through walls.
++ **Starred mobs**: Starred mobs, minibosses and bats glow.
++ **Class colour on teammates**: Teammates glow in the colour of their class.
 + **Clicked blocks**: Levers, chests and wither essence you click light up for three seconds and say what they were. Hides the lever line in chat.
 + **Clean end**: When the block that ends the run appears in chat: hides all mobs and particles, except the chests and other players. Hypixel's music is not stopped, and until that block everything stays as it is.
-+ **Blood camp helper**: Shows where each blood mob will stop once it starts moving, so you can wait there. Drawn through walls.
++ **Blood camp helper**: Shows where each blood mob will stop once it starts moving, so you can wait there.
 + **Dungeon chat filter**: Hides kinds of lines in dungeons, each with its own switch. Nothing is hidden until you turn it on.
 + **Dungeon Hub races**: Shows the way through the races of the Dungeon Hub while you run one.
 + **Reward chest profit**: Beside a dungeon or Kuudra reward chest: what it holds, what it costs and the profit. At a run in Croesus: every chest, with the best one lit up.
@@ -704,7 +713,7 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 
 ## Events
 
-+ **Century Party Invitation**: With the invitation in hand, players with a level colour you still need get one outline and the others another. It shows through walls.
++ **Century Party Invitation**: With the invitation in hand, players with a level colour you still need get one outline and the others another.
 + **Jerry's Workshop profit**: What Jerry's Workshop brings in at market prices, with Frozen Treasures, Compact finds and the ice they make.
 + **Stray rabbits**: Strays you caught in the Chocolate Factory by rarity, the production time they are worth, and the Golden ones by kind.
 + **Shiny Orb profit**: What Shiny Orbs give in the Year of the Pig, less what the orbs cost.
@@ -773,7 +782,7 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 + **Season-locked places**: When Hypixel says something is only open in another season, how long until that season.
 + **Stonks Auction**: While the Stock Exchange perk runs: a card with the time left in the round and your bid, a line when a new round starts and a warning in its last minute. Open the Stonks Auction once for the exact time.
 + **Shiny Orb lines**: In the Year of the Pig: a line from you to the Shiny Pig that carries your orb, and from it to the orb.
-+ **Century cake teams through walls**: In the Century Celebration, holding a Slice of Cake: players of that team glow in its colour, the others grey, also through walls.
++ **Century cake team colours**: In the Century Celebration, holding a Slice of Cake: players of that team glow in its colour, the others grey.
 + **Raffle tasks**: In the Century Celebration's Raffle Tasks menu, what is not done yet is red.
 + **Great Spook answers in chat**: A chat line with the answer to Quick Maths or for the Public Speaking Demon. Clicking it sends it to all chat; nothing goes out by itself.
 + **Perkpocalypse mayor reminder**: While Jerry is mayor: a line to open the calendar when the temporary mayor is not known or has run out.
@@ -799,7 +808,7 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 
 + **Inferno Minion profit**: What you collect from Inferno Minions at market prices, less the fuel and eyedrops.
 + **Minion names**: Over your minions when you stand close: name and tier, and how long ago the hopper was emptied.
-+ **Last clicked minion**: Marks the minion you last opened for a little while, through walls.
++ **Last clicked minion**: Marks the minion you last opened for a little while.
 + **Minion panel**: Beside a minion's menu: coins a day from its hopper, and where the next upgrade's items come from, with a click to the Bazaar or your sacks.
 + **XP from a minion**: On the items in a minion and on Collect All: the skill XP you get for taking them.
 + **Hide mob names near minions**: Mob name tags within 5 blocks of your minions.
@@ -809,6 +818,7 @@ Shorter commands and your own. `/sbc` lists every command of the mod.
 ## Skills
 
 + **Experiments profit**: What the Experimentation Table gives you at market prices, its Enchanting XP, what the bottles and charges cost, and how many rewards you claimed. Shows near the table.
++ **Maxed skills in gold**: In Your Skills, a maxed skill's slot is gold. - Beta 0.2 ([13f4d56](https://github.com/Skyblock-Companion/SBC/commit/13f4d56))
 + **Skill ETA**: The skill you are levelling: how long to the next level or your goal, XP per hour, and how long this session has run. All three pause when XP stops coming in. The skill progress bar shows the same, so this is off unless you want the card.
 + **All skills**: Every skill with its level and its XP out of what the next level needs. Hide a skill in the HUD editor.
 + **Skill goals**: A level you are working towards, set with /sbc skills goal: the bar and the cards count to it instead of to the next level.

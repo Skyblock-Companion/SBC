@@ -1,0 +1,173 @@
+SkyBlock Companion frame recording, 2026-11-09 10:50:05
+17739 frames in 60 s, 296 fps average, 1% low 132 fps, 1433 frames (8.1%) slower than 4.17 ms
+
+== settings
+frame cap: unlimited (judged against 240)   budget a frame: 4.17 ms
+vsync: false   refresh rate: 239.76 Hz   fullscreen: true   window: 1920x1080   gui scale: 2
+render distance: 14   simulation distance: 5   entity distance: 100%   graphics: CUSTOM   particles: DECREASED
+gpu: NVIDIA GeForce RTX 4060 Ti/PCIe/SSE2 (NVIDIA Corporation, OpenGL)
+shaders: no Iris
+java 25.0.3   cores: 12   max memory: 6144 MB   collectors: [G1 Young Generation, G1 Concurrent GC, G1 Old Generation]
+java options: -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -XX:StackShadowPages=32 -Xmx6144M
+os: Windows 11 10.0
+mods: c2me 0.4.2-alpha.0.116+26.3, cloth-config 26.3.159, entityculling 1.11.3, immediatelyfast 1.17.1+26.3, modmenu 21.0.0, placeholder-api 3.2.0+26.3, reeses-sodium-options 2.2.6-beta.1+mc26.3, sbcompanion 0.2.0-beta, sodium 0.9.3-beta.1+mc26.3, sodium-extra 0.9.6-beta.1+mc26.3
+this mod: HUD as a picture 96% of frames, perf overlay off
+
+== frame time (ms, the whole frame, waiting included)
+average 3.38   median 3.16   90% 3.95   99% 6.55   99.9% 9.31   worst 14.18
+1% low 132 fps (7.56 ms)   0.1% low 96 fps (10.38 ms)
+slower than: 4.17 ms (240 fps) 1541   6.94 ms (144 fps) 105   8.33 ms (120 fps) 36   16.67 ms (60 fps) 0   33.33 ms (30 fps) 0   
+spread: 0.00-2.00: 45   2.00-3.00: 4805   3.00-4.00: 11181   4.00-4.17: 168   4.17-5.00: 313   5.00-6.00: 837   6.00-8.00: 347   8.00-10.00: 35   10.00-15.00: 8   15.00-25.00: 0   25.00-50.00: 0   over 50.00: 0   
+
+== where a frame goes (ms, average) - all frames / frames that made it / slow frames / how much more in a slow one
+poll events                   0.01    0.01    0.01    +0.00
+packets                       0.00    0.00    0.01    +0.00
+tasks                         0.00    0.00    0.00    +0.00
+game tick                     0.14    0.00    1.67    +1.67
+  entity tick                 0.07    0.00    0.90    +0.90
+  particle tick               0.00    0.00    0.02    +0.02
+extract                       1.02    0.99    1.32    +0.32
+  world extract               0.59    0.58    0.69    +0.12
+    entity extract            0.47    0.46    0.54    +0.08
+    particle extract          0.02    0.02    0.02    +0.00
+  gui extract                 0.42    0.40    0.60    +0.20
+    hud picture redraw        0.00    0.00    0.00    +0.00
+render                        1.89    1.86    2.22    +0.36
+  world render                1.08    1.06    1.25    +0.19
+    chunk compile             0.00    0.00    0.00    +0.00
+    feature prepare           0.52    0.51    0.60    +0.09
+    feature draw              0.07    0.07    0.07    +0.01
+  gui draw                    0.60    0.59    0.67    +0.08
+present (gpu)                 0.17    0.17    0.19    +0.02
+frame limiter wait            0.00    0.00    0.00    +0.00
+mod (timed parts)             1.04    0.96    2.03    +1.08
+other (between the parts)     0.15    0.14    0.26    +0.12
+
+== what a frame had (average) - all / made it / slow
+entities drawn                 271.1     270.9     273.2
+players drawn                    2.0       2.0       2.0
+armor stands drawn             268.1     267.9     270.3
+entities ticked                 18.4       0.0     228.3
+game ticks                       0.1       0.0       0.8
+gui pieces                     142.0     141.9     142.8
+texts                          107.2     107.2     107.6
+gui items                       18.3      18.3      18.3
+memory made (KB)                1002       955      1536
+hud picture redrawn             0.0% of frames that made it,   0.0% of slow frames
+a menu open                     5.5% of frames that made it,   8.0% of slow frames
+a memory collection ended       0.0% of frames that made it,   3.0% of slow frames
+
+== in each slow frame, the part furthest over its usual time
+game tick                                 1197 frames (84%)
+world render                               149 frames (10%)
+world extract                               36 frames (3%)
+gui extract                                 21 frames (1%)
+gui draw                                    21 frames (1%)
+present (gpu)                                4 frames (0%)
+poll events                                  3 frames (0%)
+entity extract                               1 frames (0%)
+feature prepare                              1 frames (0%)
+
+== the 40 slowest frames: when (s), ms, then each part over 0.3 ms, counts, flags
+  32.64s   14.18 | game tick 8.24, entity tick 6.57, world extract 1.01, entity extract 0.59, gui extract 1.62, world render 1.58, feature prepare 0.68, gui draw 0.68, mod (timed parts) 3.52, | ticks 1, entities 270, players 2, alloc 1315 KB, collection
+  43.79s   11.45 | game tick 3.86, entity tick 1.92, world extract 1.08, entity extract 0.92, gui extract 2.04, world render 1.85, feature prepare 0.90, gui draw 1.20, present (gpu) 0.65, mod (timed parts) 4.56, | ticks 1, entities 270, players 2, alloc 2709 KB
+  46.29s   11.36 | game tick 7.23, entity tick 0.96, world extract 0.63, entity extract 0.48, gui extract 1.11, world render 1.10, feature prepare 0.52, gui draw 0.55, mod (timed parts) 7.80, | ticks 1, entities 270, players 2, alloc 7829 KB
+  44.84s   10.78 | game tick 5.17, entity tick 3.56, world extract 1.10, entity extract 0.63, gui extract 1.06, world render 1.61, feature prepare 0.68, gui draw 0.76, mod (timed parts) 3.43, | ticks 1, entities 270, players 2, alloc 1228 KB, collection
+  51.09s   10.70 | game tick 5.67, entity tick 1.27, world extract 0.84, entity extract 0.56, gui extract 0.77, world render 1.39, feature prepare 0.64, gui draw 0.86, mod (timed parts) 3.47, | ticks 1, entities 297, players 2, alloc 1531 KB, menu
+  56.84s   10.70 | world extract 1.06, entity extract 0.62, gui extract 1.01, world render 1.70, feature prepare 0.76, gui draw 0.73, mod (timed parts) 1.13, | ticks 0, entities 296, players 2, alloc 985 KB
+  38.74s   10.11 | world extract 0.66, entity extract 0.53, gui extract 0.42, world render 1.70, feature prepare 0.71, gui draw 0.66, mod (timed parts) 0.97, | ticks 0, entities 270, players 2, alloc 924 KB, collection
+  48.82s   10.07 | world extract 0.60, entity extract 0.47, gui extract 0.38, world render 7.85, feature prepare 7.03, gui draw 0.59, mod (timed parts) 0.86, | ticks 0, entities 296, players 1, alloc 994 KB, collection
+  21.07s    9.97 | world extract 0.67, entity extract 0.54, gui extract 0.81, world render 6.89, feature prepare 0.64, gui draw 0.73, mod (timed parts) 1.09, | ticks 0, entities 270, players 2, alloc 1051 KB, collection
+  45.01s    9.84 | world extract 5.89, entity extract 5.63, gui extract 0.96, world render 1.58, feature prepare 0.69, gui draw 0.66, mod (timed parts) 1.11, | ticks 0, entities 270, players 2, alloc 925 KB, collection
+  26.90s    9.82 | world extract 5.78, entity extract 0.51, particle extract 5.06, gui extract 1.02, world render 1.55, feature prepare 0.66, gui draw 0.71, mod (timed parts) 1.21, | ticks 0, entities 270, players 2, alloc 960 KB, collection
+  51.07s    9.73 | world extract 0.69, entity extract 0.56, gui extract 0.41, world render 7.21, feature prepare 0.80, gui draw 0.67, mod (timed parts) 0.98, | ticks 0, entities 297, players 2, alloc 985 KB, collection
+   3.99s    9.67 | world extract 0.77, entity extract 0.61, gui extract 5.93, world render 1.54, feature prepare 0.67, gui draw 0.67, mod (timed parts) 0.98, | ticks 0, entities 270, players 2, alloc 946 KB, collection
+  28.70s    9.59 | world extract 4.44, entity extract 0.78, gui extract 1.46, world render 2.02, feature prepare 0.91, gui draw 0.78, mod (timed parts) 1.09, | ticks 0, entities 270, players 2, alloc 1055 KB, collection
+   3.83s    9.53 | world extract 4.51, entity extract 4.19, gui extract 1.36, world render 2.08, feature prepare 0.94, gui draw 0.74, mod (timed parts) 1.07, | ticks 0, entities 270, players 2, alloc 945 KB, collection
+  50.89s    9.46 | game tick 1.85, entity tick 0.99, world extract 0.84, entity extract 0.68, gui extract 0.40, world render 4.75, feature prepare 0.96, gui draw 0.71, mod (timed parts) 1.82, | ticks 1, entities 297, players 2, alloc 1309 KB, collection
+   1.90s    9.43 | world extract 0.62, entity extract 0.46, gui extract 0.40, world render 7.17, feature prepare 0.56, gui draw 0.60, mod (timed parts) 0.90, | ticks 0, entities 270, players 2, alloc 945 KB, collection
+  24.78s    9.31 | world extract 6.46, entity extract 0.54, gui extract 0.44, world render 1.18, feature prepare 0.60, gui draw 0.62, mod (timed parts) 0.94, | ticks 0, entities 270, players 2, alloc 960 KB, collection
+  16.00s    9.30 | world extract 4.18, entity extract 3.91, gui extract 1.30, world render 2.28, feature prepare 0.90, gui draw 0.74, mod (timed parts) 1.10, | ticks 0, entities 270, players 2, alloc 934 KB, collection
+  16.16s    9.29 | world extract 0.80, entity extract 0.65, gui extract 0.43, world render 6.58, feature prepare 5.77, gui draw 0.70, mod (timed parts) 1.19, | ticks 0, entities 270, players 2, alloc 924 KB, collection
+  39.99s    9.15 | game tick 3.06, entity tick 1.85, world extract 1.13, entity extract 0.95, gui extract 0.65, world render 1.90, feature prepare 0.93, gui draw 1.25, mod (timed parts) 3.16, | ticks 1, entities 270, players 2, alloc 1283 KB
+  26.72s    8.90 | world extract 4.32, entity extract 4.04, gui extract 1.22, world render 1.72, feature prepare 0.71, gui draw 0.83, mod (timed parts) 1.15, | ticks 0, entities 270, players 2, alloc 959 KB, collection
+  16.04s    8.83 | packets 0.33, game tick 3.47, entity tick 1.42, world extract 0.69, entity extract 0.51, gui extract 1.52, world render 1.24, feature prepare 0.59, gui draw 0.63, mod (timed parts) 4.68, | ticks 1, entities 270, players 2, alloc 2584 KB
+  56.69s    8.76 | game tick 2.99, entity tick 1.24, world extract 0.72, entity extract 0.54, gui extract 1.65, world render 1.59, feature prepare 0.75, gui draw 0.65, mod (timed parts) 3.71, | ticks 1, entities 296, players 2, alloc 1412 KB
+   9.67s    8.76 | world extract 4.04, entity extract 3.78, gui extract 1.25, world render 2.03, feature prepare 0.81, gui draw 0.71, mod (timed parts) 1.05, | ticks 0, entities 270, players 2, alloc 945 KB, collection
+  13.64s    8.68 | game tick 2.75, entity tick 1.77, world extract 0.98, entity extract 0.79, gui extract 1.00, world render 1.81, feature prepare 0.87, gui draw 1.09, mod (timed parts) 2.38, | ticks 1, entities 270, players 2, alloc 1280 KB
+   9.83s    8.67 | world extract 0.68, entity extract 0.54, gui extract 0.42, world render 1.11, feature prepare 0.63, gui draw 5.75, mod (timed parts) 0.98, | ticks 0, entities 270, players 2, alloc 945 KB, collection
+  11.74s    8.67 | game tick 4.89, entity tick 1.02, world extract 0.68, entity extract 0.53, gui extract 0.39, world render 1.30, feature prepare 0.66, gui draw 0.66, mod (timed parts) 11.10, | ticks 1, entities 270, players 2, alloc 1234 KB, collection
+  32.49s    8.58 | game tick 4.37, entity tick 1.44, world extract 0.75, entity extract 0.57, gui extract 0.61, world render 1.32, feature prepare 0.56, gui draw 0.61, mod (timed parts) 7.21, | ticks 1, entities 270, players 2, alloc 2613 KB
+  13.24s    8.58 | game tick 2.97, entity tick 1.80, world extract 0.95, entity extract 0.77, gui extract 0.61, world render 1.84, feature prepare 0.90, gui draw 1.09, mod (timed parts) 2.49, | ticks 1, entities 270, players 2, alloc 1240 KB
+  55.79s    8.52 | game tick 2.60, entity tick 1.07, world extract 1.23, entity extract 1.03, gui extract 2.10, world render 1.23, feature prepare 0.61, gui draw 0.59, mod (timed parts) 3.40, | ticks 1, entities 296, players 2, alloc 2776 KB
+  38.75s    8.51 | game tick 2.97, entity tick 1.24, world extract 1.17, entity extract 0.66, gui extract 1.62, world render 1.16, feature prepare 0.57, gui draw 0.60, mod (timed parts) 4.02, | ticks 1, entities 270, players 2, alloc 1330 KB
+  51.04s    8.49 | game tick 2.70, entity tick 1.08, world extract 1.12, entity extract 0.88, gui extract 1.83, world render 1.39, feature prepare 0.71, gui draw 0.61, mod (timed parts) 3.59, | ticks 1, entities 297, players 2, alloc 2631 KB
+  26.79s    8.48 | game tick 2.94, entity tick 1.08, world extract 0.75, entity extract 0.58, gui extract 1.62, world render 1.32, feature prepare 0.63, gui draw 0.95, mod (timed parts) 4.43, | ticks 1, entities 270, players 2, alloc 2749 KB
+  55.74s    8.43 | game tick 2.00, entity tick 1.05, world extract 0.74, entity extract 0.57, gui extract 0.43, world render 2.51, feature prepare 1.25, gui draw 1.05, mod (timed parts) 2.15, | ticks 1, entities 296, players 2, alloc 1407 KB
+  13.74s    8.35 | game tick 2.86, entity tick 1.80, world extract 0.93, entity extract 0.75, gui extract 0.63, world render 1.77, feature prepare 0.86, gui draw 1.05, mod (timed parts) 2.30, | ticks 1, entities 270, players 2, alloc 1240 KB
+  42.78s    8.33 | world extract 0.57, entity extract 0.46, gui extract 5.46, world render 1.13, feature prepare 0.54, gui draw 0.59, mod (timed parts) 0.93, | ticks 0, entities 270, players 2, alloc 924 KB, collection
+  13.19s    8.31 | game tick 2.48, entity tick 1.37, world extract 1.10, entity extract 0.90, gui extract 0.63, world render 1.78, feature prepare 0.90, gui draw 1.02, mod (timed parts) 2.43, | ticks 1, entities 270, players 2, alloc 1242 KB
+  32.59s    8.25 | game tick 2.80, entity tick 1.69, world extract 0.97, entity extract 0.80, gui extract 0.68, world render 1.75, feature prepare 0.87, gui draw 0.96, mod (timed parts) 2.65, | ticks 1, entities 270, players 2, alloc 1317 KB
+  38.56s    8.16 | world extract 0.57, entity extract 0.46, gui extract 3.53, world render 2.33, feature prepare 1.02, gui draw 0.76, mod (timed parts) 0.93, | ticks 0, entities 270, players 2, alloc 924 KB, collection
+
+== second by second: frames, slow frames, worst ms | where, players, entities, particles, memory MB, cpu game/all, collections, menu
+  0s  306   20    6.80 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 93 T 93, 421 MB, cpu -100%/-100%, 0 collections
+  1s  300   21    9.43 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 107 T 107, 720 MB, cpu -100%/-100%, 1 collections
+  2s  309   21    6.93 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 90 T 90, 447 MB, cpu -100%/-100%, 0 collections
+  3s  300   24    9.67 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 93 T 93, 749 MB, cpu -100%/-100%, 2 collections
+  4s  309   20    7.89 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 93 T 93, 463 MB, cpu -100%/-100%, 1 collections
+  5s  308   22    7.02 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 83 T 83, 765 MB, cpu -100%/-100%, 1 collections
+  6s  310   20    8.03 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 98 T 98, 489 MB, cpu -100%/-100%, 0 collections
+  7s  306   21    7.19 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 96 T 96, 791 MB, cpu -100%/-100%, 1 collections
+  8s  310   20    6.54 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 90 T 90, 503 MB, cpu -100%/-100%, 0 collections
+  9s  294   23    8.76 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 83 T 83, 807 MB, cpu -100%/-100%, 3 collections
+ 10s  297   20    7.56 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 103 T 103, 504 MB, cpu -100%/-100%, 0 collections
+ 11s  305   20    8.67 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 88 T 88, 788 MB, cpu -100%/-100%, 1 collections
+ 12s  312   21    7.42 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 92 T 92, 492 MB, cpu -100%/-100%, 0 collections
+ 13s  248   52    8.68 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 92 T 92, 790 MB, cpu -100%/-100%, 1 collections
+ 14s  289   26    7.29 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 80 T 80, 438 MB, cpu -100%/-100%, 0 collections
+ 15s  304   21    9.30 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 101 T 101, 716 MB, cpu -100%/-100%, 1 collections
+ 16s  293   24    9.29 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 91 T 91, 417 MB, cpu -100%/-100%, 2 collections
+ 17s  308   22    6.27 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 87 T 87, 709 MB, cpu -100%/-100%, 1 collections
+ 18s  310   21    6.64 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 85 T 85, 413 MB, cpu -100%/-100%, 0 collections
+ 19s  309   20    6.94 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 93 T 93, 709 MB, cpu -100%/-100%, 1 collections
+ 20s  291   26    8.04 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 96 T 96, 414 MB, cpu -100%/-100%, 1 collections
+ 21s  276   27    9.97 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 100 T 100, 502 MB, cpu -100%/-100%, 2 collections
+ 22s  289   22    7.42 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 89 T 89, 774 MB, cpu -100%/-100%, 1 collections
+ 23s  305   21    6.32 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 88 T 88, 476 MB, cpu -100%/-100%, 0 collections
+ 24s  295   22    9.31 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 85 T 85, 778 MB, cpu -100%/-100%, 1 collections
+ 25s  302   21    6.53 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 99 T 99, 492 MB, cpu -100%/-100%, 0 collections
+ 26s  291   24    9.82 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 91 T 91, 790 MB, cpu -100%/-100%, 3 collections
+ 27s  304   23    7.07 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 92 T 92, 501 MB, cpu -100%/-100%, 0 collections
+ 28s  302   22    9.59 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 93 T 93, 803 MB, cpu -100%/-100%, 1 collections
+ 29s  304   25    6.67 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 100 T 100, 523 MB, cpu -100%/-100%, 0 collections
+ 30s  310   22    7.40 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 92 T 92, 849 MB, cpu -100%/-100%, 1 collections
+ 31s  310   20    6.44 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 92 T 92, 563 MB, cpu -100%/-100%, 0 collections
+ 32s  289   32   14.18 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 87 T 87, 865 MB, cpu -100%/-100%, 3 collections
+ 33s  306   22    6.96 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 105 T 105, 569 MB, cpu -100%/-100%, 0 collections
+ 34s  309   21    6.92 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 99 T 99, 861 MB, cpu -100%/-100%, 1 collections
+ 35s  292   24    6.90 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 103 T 103, 575 MB, cpu -100%/-100%, 0 collections
+ 36s  301   30    7.81 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 97 T 97, 857 MB, cpu -100%/-100%, 1 collections
+ 37s  307   21    6.42 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 93 T 93, 561 MB, cpu -100%/-100%, 0 collections
+ 38s  286   30   10.11 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 98 T 98, 855 MB, cpu -100%/-100%, 3 collections
+ 39s  286   35    9.15 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 99 T 99, 544 MB, cpu -100%/-100%, 0 collections
+ 40s  296   27    6.83 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 101 T 101, 816 MB, cpu -100%/-100%, 1 collections
+ 41s  292   29    7.56 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 91 T 91, 515 MB, cpu -100%/-100%, 0 collections
+ 42s  299   22    8.33 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 86 T 86, 795 MB, cpu -100%/-100%, 1 collections
+ 43s  302   21   11.45 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 95 T 95, 496 MB, cpu -100%/-100%, 0 collections
+ 44s  286   22   10.78 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 101 T 101, 784 MB, cpu -100%/-100%, 3 collections
+ 45s  310   21    9.84 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 94 T 94, 471 MB, cpu -100%/-100%, 0 collections
+ 46s  312   21   11.36 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 91 T 91, 771 MB, cpu -100%/-100%, 1 collections
+ 47s  310   21    6.90 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 103 T 103, 491 MB, cpu -100%/-100%, 0 collections
+ 48s  278   22   10.07 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 98 T 98, 781 MB, cpu -100%/-100%, 1 collections
+ 49s  339   19    6.67 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 102 T 102, 487 MB, cpu -100%/-100%, 0 collections
+ 50s  280   25    9.46 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 90 T 90, 759 MB, cpu -100%/-100%, 2 collections
+ 51s  248   40   10.70 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 85 T 85, 456 MB, cpu -100%/-100%, 1 collections
+ 52s  260   26    7.22 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 96 T 96, 764 MB, cpu -100%/-100%, 1 collections, ChatScreen
+ 53s  266   23    6.84 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 90 T 90, 496 MB, cpu -100%/-100%, 0 collections, ChatScreen
+ 54s  262   29    7.79 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 87 T 87, 818 MB, cpu -100%/-100%, 1 collections, ChatScreen
+ 55s  280   24    8.52 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 91 T 91, 549 MB, cpu -100%/-100%, 0 collections
+ 56s  269   28   10.70 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 102 T 102, 835 MB, cpu -100%/-100%, 3 collections
+ 57s  291   21    6.84 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 100 T 100, 521 MB, cpu -100%/-100%, 0 collections
+ 58s  288   23    7.26 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 90 T 90, 817 MB, cpu -100%/-100%, 1 collections
+ 59s  289   20    7.34 | PRIVATE_ISLAND Your Island, 2 players, 338 entities, particles SQ 87 T 87, 521 MB, cpu -100%/-100%, 0 collections

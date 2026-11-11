@@ -19,6 +19,7 @@ Every `/sbc <word>` also works as one word: `/sbc nav` is `/sbcnav`, `/sbc wp ad
 - `/sbc credits` - Opens the credits.
 - `/sbc setup` - Opens the first start setup.
 - `/sbc tutorial` - Opens the key tutorial.
+- `/sbc whatsnew` - Opens what came with this version, with its new helpers to switch on. - Beta 0.2 ([fa86fd3](https://github.com/Skyblock-Companion/SBC/commit/fa86fd3))
 - `/sbc discord` - Prints a clickable link to the Discord server.
 - `/sbc help [word]` - Lists every `/sbc` command, or the ones matching the word.
 

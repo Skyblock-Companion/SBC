@@ -32,9 +32,9 @@ Yes. If that mod's settings are in the same game folder, `/sbc import` copies it
 
 Trackers read Hypixel's `[Sacks]` chat message. Turn it on in Hypixel's settings: `Settings -> Personal -> Chat Feedback -> Sack Notifications`.
 
-### A helper does not know my accessories or pets
+### A helper does not know my accessories, pets or sacks
 
-The helpers learn from your profile and from Hypixel's own menus. Open the Accessory Bag or the Pets menu once, and they pick it up.
+The helpers learn from your profile and from Hypixel's own menus. Open the Accessory Bag, the Pets menu or the Sack of Sacks once, and they pick it up.
 
 ### I see two scoreboards or two tab lists
 
@@ -46,7 +46,7 @@ Prices update while you play, and game data every time the game starts. If a dow
 
 ### The game crashes when it starts
 
-Make sure Fabric Loader is up to date and, in launchers like Prism or MultiMC, that the instance uses Java 25. Then send the crash report from the `crash-reports` folder in the [Discord server](https://discord.gg/QrqX3pgVW2).
+Make sure Fabric Loader and Fabric API are up to date and, in launchers like Prism or MultiMC, that the instance uses Java 25. Then send the crash report from the `crash-reports` folder in the [Discord server](https://discord.gg/QrqX3pgVW2).
 
 ### Something is wrong, how do I report it?
 
