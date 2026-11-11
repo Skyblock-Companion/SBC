@@ -28,7 +28,9 @@ dependencies {
 processResources {
     def props = [version: project.version, minecraft: mc, fabric_api: project.fabric_version.split('[+]')[0]]
     inputs.properties props
-    filesMatching('fabric.mod.json') { expand props }
+    // escapeBackslash keeps the \n in the description as written: without it the json gets a real line break, which
+    // the loader lets through but Modrinth's launcher can't read, so it showed no name or icon for the mod
+    filesMatching('fabric.mod.json') { expand(props) { escapeBackslash = true } }
     from(rootProject.file('LICENSE')) { rename { 'LICENSE-SkyBlockCompanion.txt' } }
     from(rootProject.file('THIRD_PARTY_NOTICES.md'))
     // what's new reads the changelog from the jar
