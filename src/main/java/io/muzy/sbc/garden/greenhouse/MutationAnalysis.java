@@ -8,11 +8,16 @@ import io.muzy.sbc.core.Store;
 import io.muzy.sbc.feature.Feature;
 import io.muzy.sbc.feature.Features;
 import io.muzy.sbc.garden.GardenData;
+import io.muzy.sbc.item.menus.MenuMarks;
+import io.muzy.sbc.item.menus.MenuView;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,9 +30,32 @@ public final class MutationAnalysis {
     private MutationAnalysis() {}
 
     public static void register() {
-        Feature f = Features.add(new Feature(ID, "Garden", "Analyzed mutations", "A greenhouse mutation's tooltip says whether you have analyzed it. It learns from the message when an analysis completes.", "")
-                .tooltip(MutationAnalysis::tooltip));
+        Feature f = Features.add(new Feature(ID, "Garden", "Analyzed mutations", "A greenhouse mutation's tooltip says whether you have analyzed it. It learns from the message when an analysis completes, and from the All Mutations menu.", "")
+                .tooltip(MutationAnalysis::tooltip)
+                .tick(MutationAnalysis::tick));
         ChatBus.register(ChatBus.OBSERVE + 19, ID, f, MutationAnalysis::onChat);
+    }
+
+    private static int ticks;
+
+    // the All Mutations menu shows every mutation, so ones analyzed before the mod knew about it are learned there
+    private static void tick(Minecraft mc) {
+        if (++ticks % 10 != 0 || !(mc.gui.screen() instanceof AbstractContainerScreen<?>)) return;
+        MenuView v = MenuMarks.current();
+        if (v == null || !GameState.strip(v.title).trim().endsWith("All Mutations")) return;
+        if (fromMenu(v.items, GardenData.get().analyzedMutations)) Store.markDirty();
+    }
+
+    // each mutation in All Mutations: "Mutation Crop" first, then ANALYZED or UNKNOWN. pure, for tests
+    static boolean fromMenu(MenuView.Item[] items, Set<String> done) {
+        boolean changed = false;
+        for (MenuView.Item it : items) {
+            if (it == null || it.cleanLore.isEmpty() || !it.cleanLore.get(0).trim().equals("Mutation Crop")) continue;
+            String name = key(it.clean);
+            if (it.cleanLore.stream().anyMatch(l -> l.trim().equals("ANALYZED"))) changed |= done.add(name);
+            else if (it.cleanLore.stream().anyMatch(l -> l.trim().equals("UNKNOWN"))) changed |= done.remove(name);
+        }
+        return changed;
     }
 
     private static ChatBus.Result onChat(ChatBus.Line line) {
