@@ -1,0 +1,173 @@
+SkyBlock Companion frame recording, 2026-11-09 10:51:20
+25275 frames in 60 s, 421 fps average, 1% low 150 fps, 1166 frames (4.6%) slower than 4.17 ms
+
+== settings
+frame cap: unlimited (judged against 240)   budget a frame: 4.17 ms
+vsync: false   refresh rate: 239.76 Hz   fullscreen: true   window: 1920x1080   gui scale: 2
+render distance: 14   simulation distance: 5   entity distance: 100%   graphics: CUSTOM   particles: DECREASED
+gpu: NVIDIA GeForce RTX 4060 Ti/PCIe/SSE2 (NVIDIA Corporation, OpenGL)
+shaders: no Iris
+java 25.0.3   cores: 12   max memory: 6144 MB   collectors: [G1 Young Generation, G1 Concurrent GC, G1 Old Generation]
+java options: -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -XX:StackShadowPages=32 -Xmx6144M
+os: Windows 11 10.0
+mods: c2me 0.4.2-alpha.0.116+26.3, cloth-config 26.3.159, entityculling 1.11.3, immediatelyfast 1.17.1+26.3, modmenu 21.0.0, placeholder-api 3.2.0+26.3, reeses-sodium-options 2.2.6-beta.1+mc26.3, sbcompanion 0.2.0-beta, sodium 0.9.3-beta.1+mc26.3, sodium-extra 0.9.6-beta.1+mc26.3
+this mod: HUD as a picture 96% of frames, perf overlay off
+
+== frame time (ms, the whole frame, waiting included)
+average 2.37   median 2.15   90% 3.06   99% 5.52   99.9% 8.06   worst 25.30
+1% low 150 fps (6.68 ms)   0.1% low 93 fps (10.70 ms)
+slower than: 4.17 ms (240 fps) 1339   6.94 ms (144 fps) 59   8.33 ms (120 fps) 22   16.67 ms (60 fps) 2   33.33 ms (30 fps) 0   
+spread: 0.00-2.00: 7488   2.00-3.00: 15120   3.00-4.00: 1251   4.00-4.17: 77   4.17-5.00: 849   5.00-6.00: 345   6.00-8.00: 119   8.00-10.00: 18   10.00-15.00: 5   15.00-25.00: 2   25.00-50.00: 1   over 50.00: 0   
+
+== where a frame goes (ms, average) - all frames / frames that made it / slow frames / how much more in a slow one
+poll events                   0.01    0.01    0.02    +0.02
+packets                       0.01    0.01    0.01    +0.01
+tasks                         0.00    0.00    0.00    +0.00
+game tick                     0.11    0.01    2.09    +2.08
+  entity tick                 0.04    0.00    0.71    +0.71
+  particle tick               0.02    0.00    0.39    +0.39
+extract                       0.69    0.67    0.96    +0.29
+  world extract               0.52    0.51    0.62    +0.11
+    entity extract            0.28    0.27    0.33    +0.06
+    particle extract          0.08    0.08    0.09    +0.01
+  gui extract                 0.16    0.15    0.31    +0.16
+    hud picture redraw        0.06    0.05    0.17    +0.12
+render                        1.28    1.26    1.60    +0.34
+  world render                0.76    0.75    0.96    +0.21
+    chunk compile             0.00    0.00    0.00    +0.00
+    feature prepare           0.32    0.32    0.37    +0.06
+    feature draw              0.07    0.07    0.07    +0.00
+  gui draw                    0.30    0.30    0.34    +0.04
+present (gpu)                 0.16    0.16    0.20    +0.04
+frame limiter wait            0.00    0.00    0.00    +0.00
+mod (timed parts)             0.26    0.20    1.47    +1.28
+other (between the parts)     0.13    0.12    0.35    +0.22
+
+== what a frame had (average) - all / made it / slow
+entities drawn                  20.5      20.5      21.0
+players drawn                    4.2       4.2       4.2
+armor stands drawn               6.0       6.0       6.0
+entities ticked                  3.0       0.4      58.6
+game ticks                       0.0       0.0       0.9
+gui pieces                      29.3      28.4      48.1
+texts                            9.2       8.8      15.6
+gui items                       10.5      10.4      11.0
+memory made (KB)                 352       320      1008
+hud picture redrawn             4.6% of frames that made it,  10.7% of slow frames
+a menu open                     1.8% of frames that made it,   2.6% of slow frames
+a memory collection ended       0.0% of frames that made it,   2.0% of slow frames
+
+== in each slow frame, the part furthest over its usual time
+game tick                                 1065 frames (91%)
+gui extract                                 55 frames (5%)
+world render                                21 frames (2%)
+hud picture redraw                          10 frames (1%)
+world extract                                9 frames (1%)
+poll events                                  3 frames (0%)
+feature prepare                              1 frames (0%)
+gui draw                                     1 frames (0%)
+present (gpu)                                1 frames (0%)
+
+== the 40 slowest frames: when (s), ms, then each part over 0.3 ms, counts, flags
+   3.40s   25.30 | world extract 0.56, entity extract 0.35, world render 22.62, feature prepare 1.15, gui draw 0.85, | ticks 0, entities 21, players 5, alloc 499 KB
+  19.64s   16.90 | poll events 0.88, game tick 10.99, entity tick 0.86, particle tick 0.51, world extract 0.63, entity extract 0.34, gui extract 2.27, hud picture redraw 1.80, world render 1.02, feature prepare 0.33, gui draw 0.40, mod (timed parts) 3.42, | ticks 1, entities 21, players 4, alloc 4573 KB, hud redraw, menu
+  21.98s   15.15 | poll events 12.10, world extract 0.73, entity extract 0.36, world render 1.02, feature prepare 0.41, gui draw 0.37, present (gpu) 0.40, | ticks 0, entities 57, players 4, alloc 368 KB
+  22.94s   13.94 | game tick 3.85, entity tick 1.42, particle tick 0.49, world extract 1.20, entity extract 0.51, gui extract 0.32, world render 1.66, feature prepare 0.58, gui draw 0.40, mod (timed parts) 5.32, | ticks 1, entities 57, players 4, alloc 871 KB
+  23.14s   12.12 | game tick 5.76, entity tick 1.61, particle tick 0.63, world extract 0.83, entity extract 0.42, gui extract 3.48, hud picture redraw 3.33, world render 0.92, feature prepare 0.34, mod (timed parts) 5.84, | ticks 1, entities 21, players 4, alloc 2580 KB, hud redraw
+  19.99s   12.08 | game tick 9.04, entity tick 0.77, particle tick 7.43, world extract 0.59, entity extract 0.32, world render 1.03, feature prepare 0.33, gui draw 0.42, mod (timed parts) 0.95, | ticks 1, entities 21, players 4, alloc 1010 KB, menu, collection
+  31.64s   10.18 | game tick 7.37, entity tick 0.71, particle tick 0.44, world extract 0.61, entity extract 0.33, world render 1.00, feature prepare 0.36, mod (timed parts) 7.07, | ticks 1, entities 21, players 5, alloc 6210 KB
+  12.81s   10.04 | world extract 6.08, entity extract 5.58, gui extract 0.52, world render 1.96, feature prepare 0.54, gui draw 0.49, mod (timed parts) 0.34, | ticks 0, entities 20, players 4, alloc 287 KB, collection
+  37.43s    9.85 | world extract 0.47, gui extract 7.54, hud picture redraw 1.81, world render 1.01, feature prepare 0.43, | ticks 0, entities 19, players 4, alloc 1738 KB, hud redraw, collection
+  23.11s    9.74 | world extract 0.72, entity extract 0.39, world render 7.33, feature prepare 0.54, gui draw 0.60, | ticks 0, entities 57, players 4, alloc 358 KB, collection
+   1.86s    9.53 | world extract 0.94, entity extract 0.40, gui extract 0.64, world render 1.30, feature prepare 0.47, gui draw 0.46, | ticks 0, entities 19, players 4, alloc 489 KB
+   1.69s    9.40 | game tick 1.99, entity tick 0.71, particle tick 0.36, world extract 0.53, world render 0.72, feature prepare 4.75, gui draw 0.55, mod (timed parts) 1.20, | ticks 1, entities 19, players 4, alloc 815 KB, collection
+  44.91s    9.40 | world extract 6.65, entity extract 6.19, gui extract 0.32, world render 1.27, feature prepare 0.48, gui draw 0.42, | ticks 0, entities 19, players 4, alloc 265 KB, collection
+  41.04s    9.26 | world extract 0.56, world render 7.67, feature prepare 0.34, gui draw 0.33, | ticks 0, entities 19, players 4, alloc 275 KB, collection
+  30.41s    9.23 | world extract 0.40, world render 7.87, feature prepare 0.38, gui draw 0.34, | ticks 0, entities 20, players 4, alloc 283 KB, collection
+  34.34s    9.15 | world extract 0.93, entity extract 0.52, world render 1.17, feature prepare 0.54, gui draw 0.51, present (gpu) 0.31, | ticks 0, entities 19, players 4, alloc 277 KB, collection
+  55.89s    8.80 | game tick 5.65, entity tick 1.24, particle tick 0.54, world extract 0.65, entity extract 0.34, world render 1.01, feature prepare 0.45, gui draw 0.38, mod (timed parts) 7.69, | ticks 1, entities 20, players 5, alloc 2361 KB
+  33.64s    8.79 | game tick 3.31, entity tick 0.77, particle tick 0.46, world extract 0.63, gui extract 2.65, hud picture redraw 2.49, world render 1.07, feature prepare 0.42, gui draw 0.40, mod (timed parts) 3.34, | ticks 1, entities 20, players 4, alloc 2993 KB, hud redraw
+  59.39s    8.63 | game tick 4.19, entity tick 1.23, particle tick 0.79, world extract 1.08, entity extract 0.54, world render 1.33, feature prepare 0.64, gui draw 0.61, mod (timed parts) 3.45, | ticks 1, entities 20, players 5, alloc 978 KB
+   3.64s    8.57 | game tick 4.09, entity tick 0.89, particle tick 0.43, world extract 0.86, entity extract 0.45, world render 1.75, feature prepare 0.59, gui draw 0.56, mod (timed parts) 4.07, | ticks 1, entities 21, players 5, alloc 1323 KB
+  34.17s    8.50 | world extract 0.41, gui extract 4.97, world render 1.89, feature prepare 0.71, gui draw 0.43, | ticks 0, entities 19, players 4, alloc 275 KB, collection
+  56.03s    8.44 | world extract 0.56, gui extract 5.29, world render 1.41, feature prepare 0.54, gui draw 0.42, | ticks 0, entities 20, players 5, alloc 290 KB, collection
+  44.73s    8.23 | world extract 0.42, world render 6.54, feature prepare 5.80, gui draw 0.49, | ticks 0, entities 19, players 4, alloc 265 KB, collection
+  59.44s    8.14 | game tick 3.37, entity tick 1.27, particle tick 0.75, world extract 0.98, entity extract 0.52, world render 1.64, feature prepare 0.79, gui draw 0.71, mod (timed parts) 1.45, | ticks 1, entities 20, players 5, alloc 781 KB
+  40.89s    8.13 | game tick 5.07, entity tick 1.26, particle tick 0.57, world extract 0.79, entity extract 0.39, world render 0.77, feature prepare 0.42, gui draw 0.46, mod (timed parts) 6.94, | ticks 1, entities 19, players 4, alloc 2302 KB
+  12.99s    8.06 | game tick 3.46, entity tick 1.04, particle tick 0.66, world extract 1.07, entity extract 0.45, gui extract 0.32, world render 1.53, feature prepare 0.48, gui draw 0.40, mod (timed parts) 2.68, | ticks 1, entities 20, players 4, alloc 815 KB
+  59.43s    7.91 | world extract 1.03, entity extract 0.56, gui extract 3.42, hud picture redraw 3.22, world render 1.72, feature prepare 0.85, gui draw 0.69, | ticks 0, entities 20, players 5, alloc 1761 KB, hud redraw
+  52.17s    7.77 | world extract 5.93, entity extract 5.63, world render 0.75, feature prepare 0.34, gui draw 0.33, | ticks 0, entities 19, players 4, alloc 258 KB, collection
+  53.89s    7.75 | game tick 3.37, entity tick 0.74, particle tick 0.40, world extract 0.54, gui extract 1.97, hud picture redraw 1.86, world render 0.88, feature prepare 0.37, mod (timed parts) 4.82, | ticks 1, entities 20, players 5, alloc 3849 KB, hud redraw
+  13.89s    7.75 | game tick 3.46, entity tick 0.77, particle tick 0.46, world extract 0.61, entity extract 0.33, gui extract 1.71, hud picture redraw 1.60, world render 0.93, feature prepare 0.34, mod (timed parts) 4.69, | ticks 1, entities 21, players 4, alloc 3895 KB, hud redraw
+  33.89s    7.70 | game tick 3.56, entity tick 0.86, particle tick 0.44, world extract 0.56, gui extract 1.76, hud picture redraw 1.65, world render 0.73, feature prepare 0.32, mod (timed parts) 4.77, | ticks 1, entities 20, players 4, alloc 3889 KB, hud redraw
+  16.43s    7.69 | world extract 5.64, entity extract 5.34, world render 0.96, feature prepare 0.35, gui draw 0.32, | ticks 0, entities 21, players 4, alloc 288 KB, collection
+   9.01s    7.68 | world extract 0.47, world render 0.76, feature prepare 0.31, gui draw 5.77, | ticks 0, entities 20, players 4, alloc 312 KB, collection
+  12.89s    7.67 | game tick 4.48, entity tick 0.98, particle tick 0.50, world extract 0.73, entity extract 0.35, world render 1.04, feature prepare 0.36, gui draw 0.34, mod (timed parts) 5.85, | ticks 1, entities 20, players 4, alloc 2386 KB
+   3.14s    7.63 | game tick 2.51, entity tick 0.69, particle tick 0.40, world extract 0.57, entity extract 0.32, gui extract 2.53, hud picture redraw 2.41, world render 0.89, feature prepare 0.40, gui draw 0.39, mod (timed parts) 2.43, | ticks 1, entities 20, players 5, alloc 2656 KB, hud redraw
+  44.74s    7.59 | packets 0.44, game tick 3.20, entity tick 1.06, particle tick 0.41, world extract 1.10, entity extract 0.41, gui extract 0.35, world render 1.12, feature prepare 0.42, gui draw 0.33, mod (timed parts) 2.69, | ticks 1, entities 19, players 4, alloc 771 KB
+  21.84s    7.58 | game tick 2.18, entity tick 0.80, particle tick 0.45, world extract 1.51, world render 1.80, feature prepare 0.45, gui draw 0.40, mod (timed parts) 2.95, | ticks 1, entities 21, players 4, alloc 1019 KB
+   5.37s    7.56 | world extract 5.39, entity extract 0.48, world render 1.05, feature prepare 0.34, gui draw 0.33, mod (timed parts) 4.69, | ticks 0, entities 20, players 4, alloc 310 KB, collection
+  26.67s    7.55 | world extract 0.55, world render 6.00, feature prepare 5.20, gui draw 0.35, | ticks 0, entities 21, players 4, alloc 287 KB, collection
+  22.99s    7.54 | game tick 2.41, entity tick 0.98, particle tick 0.45, world extract 0.70, entity extract 0.40, gui extract 2.15, hud picture redraw 2.03, world render 1.13, feature prepare 0.42, mod (timed parts) 1.06, | ticks 1, entities 57, players 4, alloc 1321 KB, hud redraw
+
+== second by second: frames, slow frames, worst ms | where, players, entities, particles, memory MB, cpu game/all, collections, menu
+  0s  460   14    5.44 | HUB Bank, 47 players, 623 entities, particles SQ 344 T 344, 732 MB, cpu -100%/-100%, 0 collections
+  1s  431   17    9.53 | HUB Bank, 47 players, 625 entities, particles SQ 385 T 385, 892 MB, cpu -100%/-100%, 3 collections
+  2s  439   18    6.08 | HUB Bank, 47 players, 625 entities, particles SQ 410 T 410, 495 MB, cpu -100%/-100%, 0 collections
+  3s  354   27   25.30 | HUB Bank, 48 players, 626 entities, particles SQ 449 T 449, 655 MB, cpu -100%/-100%, 0 collections
+  4s  373   21    7.46 | HUB Bank, 48 players, 627 entities, particles SQ 461 T 461, 796 MB, cpu -100%/-100%, 0 collections
+  5s  388   23    7.56 | HUB Bank, 48 players, 628 entities, particles SQ 478 T 478, 944 MB, cpu -100%/-100%, 1 collections
+  6s  397   21    6.29 | HUB Bank, 48 players, 628 entities, particles SQ 498 T 498, 548 MB, cpu -100%/-100%, 0 collections
+  7s  389   21    7.48 | HUB Bank, 48 players, 628 entities, particles SQ 508 T 508, 700 MB, cpu -100%/-100%, 0 collections
+  8s  378   21    6.66 | HUB Bank, 48 players, 628 entities, particles SQ 527 T 527, 850 MB, cpu -100%/-100%, 1 collections
+  9s  406   21    7.68 | HUB Bank, 48 players, 628 entities, particles SQ 557 T 557, 441 MB, cpu -100%/-100%, 0 collections
+ 10s  403   21    7.24 | HUB Bank, 48 players, 628 entities, particles SQ 571 T 571, 595 MB, cpu -100%/-100%, 0 collections
+ 11s  401   22    6.93 | HUB Bank, 48 players, 628 entities, particles SQ 565 T 565, 739 MB, cpu -100%/-100%, 0 collections
+ 12s  393   25   10.04 | HUB Bank, 48 players, 628 entities, particles SQ 573 T 573, 883 MB, cpu -100%/-100%, 2 collections
+ 13s  408   20    7.75 | HUB Bank, 48 players, 628 entities, particles SQ 589 T 589, 467 MB, cpu -100%/-100%, 1 collections
+ 14s  401   20    6.15 | HUB Bank, 48 players, 637 entities, particles SQ 597 T 597, 613 MB, cpu -100%/-100%, 0 collections
+ 15s  363   22    7.29 | HUB Bank, 48 players, 636 entities, particles SQ 581 T 581, 769 MB, cpu -100%/-100%, 0 collections
+ 16s  382   24    7.69 | HUB Bank, 48 players, 636 entities, particles SQ 552 T 552, 919 MB, cpu -100%/-100%, 1 collections
+ 17s  415   21    6.69 | HUB Bank, 48 players, 636 entities, particles SQ 566 T 566, 529 MB, cpu -100%/-100%, 0 collections
+ 18s  419   18    6.34 | HUB Bank, 48 players, 634 entities, particles SQ 541 T 541, 679 MB, cpu -100%/-100%, 0 collections
+ 19s  401   22   16.90 | HUB Bank, 48 players, 633 entities, particles SQ 530 T 530, 829 MB, cpu -100%/-100%, 1 collections
+ 20s  373   22    6.56 | HUB Bank, 48 players, 631 entities, particles SQ 547 T 547, 446 MB, cpu -100%/-100%, 0 collections, ChatScreen
+ 21s  398   24   15.15 | HUB Bank, 48 players, 631 entities, particles SQ 539 T 539, 656 MB, cpu -100%/-100%, 0 collections
+ 22s  367   23   13.94 | HUB Bank, 48 players, 631 entities, particles SQ 537 T 537, 806 MB, cpu -100%/-100%, 1 collections
+ 23s  411   22   12.12 | HUB Bank, 48 players, 631 entities, particles SQ 507 T 507, 454 MB, cpu -100%/-100%, 2 collections
+ 24s  415   22    6.64 | HUB Bank, 48 players, 632 entities, particles SQ 531 T 531, 606 MB, cpu -100%/-100%, 0 collections
+ 25s  420   20    5.74 | HUB Bank, 48 players, 633 entities, particles SQ 515 T 515, 754 MB, cpu -100%/-100%, 0 collections
+ 26s  422   21    7.55 | HUB Bank, 48 players, 635 entities, particles SQ 507 T 507, 904 MB, cpu -100%/-100%, 1 collections
+ 27s  422   21    6.63 | HUB Bank, 48 players, 636 entities, particles SQ 511 T 511, 496 MB, cpu -100%/-100%, 0 collections
+ 28s  426   20    6.70 | HUB Bank, 48 players, 636 entities, particles SQ 505 T 505, 646 MB, cpu -100%/-100%, 0 collections
+ 29s  420   21    5.91 | HUB Bank, 48 players, 630 entities, particles SQ 477 T 477, 796 MB, cpu -100%/-100%, 0 collections
+ 30s  411   23    9.23 | HUB Bank, 48 players, 630 entities, particles SQ 496 T 496, 946 MB, cpu -100%/-100%, 1 collections
+ 31s  400   22   10.18 | HUB Bank, 47 players, 626 entities, particles SQ 504 T 504, 529 MB, cpu -100%/-100%, 0 collections
+ 32s  415   21    6.23 | HUB Bank, 47 players, 624 entities, particles SQ 523 T 523, 682 MB, cpu -100%/-100%, 0 collections
+ 33s  410   19    8.79 | HUB Bank, 47 players, 624 entities, particles SQ 567 T 567, 831 MB, cpu -100%/-100%, 0 collections
+ 34s  428   20    9.15 | HUB Bank, 47 players, 623 entities, particles SQ 538 T 538, 978 MB, cpu -100%/-100%, 3 collections
+ 35s  455   17    6.30 | HUB Bank, 47 players, 623 entities, particles SQ 542 T 542, 566 MB, cpu -100%/-100%, 0 collections
+ 36s  447   19    6.14 | HUB Bank, 47 players, 622 entities, particles SQ 545 T 545, 718 MB, cpu -100%/-100%, 0 collections
+ 37s  452   14    9.85 | HUB Bank, 47 players, 622 entities, particles SQ 559 T 559, 944 MB, cpu -100%/-100%, 1 collections
+ 38s  450   15    5.99 | HUB Bank, 47 players, 622 entities, particles SQ 515 T 515, 537 MB, cpu -100%/-100%, 0 collections
+ 39s  464   15    6.48 | HUB Bank, 47 players, 622 entities, particles SQ 509 T 509, 689 MB, cpu -100%/-100%, 0 collections
+ 40s  460   11    8.13 | HUB Bank, 47 players, 622 entities, particles SQ 531 T 531, 845 MB, cpu -100%/-100%, 1 collections
+ 41s  453   18    9.26 | HUB Bank, 47 players, 622 entities, particles SQ 494 T 494, 440 MB, cpu -100%/-100%, 0 collections
+ 42s  460   15    6.62 | HUB Bank, 46 players, 621 entities, particles SQ 495 T 495, 593 MB, cpu -100%/-100%, 0 collections
+ 43s  466   12    5.71 | HUB Bank, 46 players, 621 entities, particles SQ 499 T 499, 743 MB, cpu -100%/-100%, 0 collections
+ 44s  444   17    9.40 | HUB Bank, 46 players, 621 entities, particles SQ 489 T 489, 897 MB, cpu -100%/-100%, 3 collections
+ 45s  466   15    6.03 | HUB Bank, 46 players, 621 entities, particles SQ 474 T 474, 481 MB, cpu -100%/-100%, 0 collections
+ 46s  469   15    5.95 | HUB Bank, 46 players, 621 entities, particles SQ 501 T 501, 633 MB, cpu -100%/-100%, 0 collections
+ 47s  451   18    6.10 | HUB Bank, 46 players, 621 entities, particles SQ 500 T 500, 785 MB, cpu -100%/-100%, 0 collections
+ 48s  465   18    7.45 | HUB Bank, 46 players, 622 entities, particles SQ 533 T 533, 935 MB, cpu -100%/-100%, 1 collections
+ 49s  472   15    6.16 | HUB Bank, 46 players, 622 entities, particles SQ 550 T 550, 527 MB, cpu -100%/-100%, 0 collections
+ 50s  464   13    6.21 | HUB Bank, 47 players, 623 entities, particles SQ 507 T 507, 681 MB, cpu -100%/-100%, 0 collections
+ 51s  466   17    5.73 | HUB Bank, 47 players, 623 entities, particles SQ 505 T 505, 831 MB, cpu -100%/-100%, 0 collections
+ 52s  453   19    7.77 | HUB Bank, 47 players, 623 entities, particles SQ 486 T 486, 983 MB, cpu -100%/-100%, 1 collections
+ 53s  424   18    7.75 | HUB Bank, 47 players, 623 entities, particles SQ 489 T 489, 570 MB, cpu -100%/-100%, 0 collections
+ 54s  438   17    6.27 | HUB Bank, 47 players, 623 entities, particles SQ 505 T 505, 722 MB, cpu -100%/-100%, 0 collections
+ 55s  422   18    8.80 | HUB Bank, 47 players, 623 entities, particles SQ 455 T 455, 880 MB, cpu -100%/-100%, 2 collections
+ 56s  436   18    8.44 | HUB Bank, 47 players, 623 entities, particles SQ 468 T 468, 461 MB, cpu -100%/-100%, 1 collections
+ 57s  422   19    7.41 | HUB Bank, 47 players, 623 entities, particles SQ 453 T 453, 619 MB, cpu -100%/-100%, 0 collections
+ 58s  374   28    6.81 | HUB Bank, 48 players, 624 entities, particles SQ 460 T 460, 767 MB, cpu -100%/-100%, 0 collections
+ 59s  363   25    8.63 | HUB Bank, 48 players, 624 entities, particles SQ 498 T 498, 901 MB, cpu -100%/-100%, 0 collections

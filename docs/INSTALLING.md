@@ -6,20 +6,21 @@
 |---|---|
 | **Loader** | [Fabric Loader](https://fabricmc.net/use/installer/) |
 | **Minecraft** | The version the download page lists for the file |
-| **Fabric API** | Already inside the jar, nothing to add |
+| **Fabric API** | Required: [Modrinth](https://modrinth.com/mod/fabric-api) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fabric-api), for the same Minecraft version |
 | **Side** | Client only |
 
 ## Install
 
 1. Install Fabric Loader for the Minecraft version the download page lists. In a launcher like Modrinth, Prism or CurseForge, make a new Fabric instance for that version instead.
-2. Download the jar from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/sbc-hypixel-skyblock-companion) or [GitHub](https://github.com/Skyblock-Companion/SBC/releases/latest).
-3. Put it in your `mods` folder and start the game.
+2. Download [Fabric API](https://modrinth.com/mod/fabric-api) for the same version and put it in your `mods` folder. Launchers that install mods from Modrinth or CurseForge add it by themselves.
+3. Download the jar from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/sbc-hypixel-skyblock-companion) or [GitHub](https://github.com/Skyblock-Companion/SBC/releases/latest).
+4. Put it in your `mods` folder and start the game. Without Fabric API the game stops at start and says it is missing.
 
 The first time, a short setup asks what you play and how it should look, then shows you the keys one by one. After that, press **K** for the menu and **H** for the HUD editor. `/sbc setup` and `/sbc tutorial` bring the setup back.
 
 ## Updating
 
-Replace the old jar in `mods` with the new one. Your settings stay: they live in `config/sbcompanion`.
+Replace the old jar in `mods` with the new one, and update Fabric API when the new version needs a newer one. Your settings stay: they live in `config/sbcompanion`.
 When a new version is out, the mod tells you once when the game starts, with the download links.
 
 ## With other mods

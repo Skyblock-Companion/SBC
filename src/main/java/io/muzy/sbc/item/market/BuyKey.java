@@ -1,0 +1,48 @@
+// SPDX-License-Identifier: GPL-3.0-only
+package io.muzy.sbc.item.market;
+
+import com.mojang.blaze3d.platform.InputConstants;
+import io.muzy.sbc.core.Gain;
+import io.muzy.sbc.core.GameState;
+import io.muzy.sbc.core.ItemRepo;
+import io.muzy.sbc.mc.mixin.ContainerAccess;
+import io.muzy.sbc.ui.ItemList;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.network.chat.Component;
+//? if <26.3 {
+/*import org.lwjgl.glfw.GLFW;
+*///?}
+
+// j over an item in any menu or a line of the item list adds one to the buy list
+public final class BuyKey {
+    private static KeyMapping key;
+
+    private BuyKey() {}
+
+    public static void keys(KeyMapping.Category category) {
+        //? if >=26.3 {
+        key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.buy_list", InputConstants.Type.KEYBOARD, InputConstants.KEY_J, category));
+        //?} else {
+        /*key = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.sbcompanion.buy_list", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, category));
+        *///?}
+    }
+
+    // false = taken
+    public static boolean key(Screen s, KeyEvent event) {
+        if (key == null || !key.matches(event)) return true;
+        String id = ItemList.hoveredId();
+        if (id == null && s instanceof ContainerAccess a) {
+            var slot = a.sbc$hovered();
+            if (slot != null && !slot.getItem().isEmpty()) id = Gain.sbId(slot.getItem());
+        }
+        if (id == null || id.isEmpty()) return true;
+        int n = MoreMarket.add(id, 1);
+        var p = Minecraft.getInstance().player;
+        if (p != null) p.sendSystemMessage(Component.literal("§b[SBC] §7Buy list: §f" + GameState.strip(ItemRepo.name(id)) + " §7x" + n + "§7. It shows beside every menu till you clear it."));
+        return false;
+    }
+}

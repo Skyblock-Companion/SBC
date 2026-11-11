@@ -2,5 +2,6 @@
   "_about": "Regular expressions the mod matches against Hypixel text. Copy this file to config/sbcompanion/patterns/ to override entries without rebuilding; use /sbc reload.",
   "MinionCatalog.ID": "^(.+)_GENERATOR_(\\d+)$",
   "MinionCatalog.DELAY": "Time Between Actions: ([\\d.]+)s",
-  "MinionCatalog.STORAGE": "Max Storage: ([\\d,]+)"
+  "MinionCatalog.STORAGE": "Max Storage: ([\\d,]+)",
+  "MinionCatalog.NAME": "^(.+?) Minion ([IVXL]+|\\d+)$"
 }

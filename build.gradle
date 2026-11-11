@@ -2,8 +2,11 @@ plugins {
     id 'net.fabricmc.fabric-loom' version '1.18.4'
 }
 
+// each Minecraft version is its own project under versions/, all built from the same src/ by Stonecutter
+def mc = stonecutter.current.version
+
 version = project.mod_version
-group = 'dev.zmuzy'
+group = 'io.muzy'
 base { archivesName = 'sbc' }
 
 repositories {
@@ -13,33 +16,57 @@ repositories {
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // fabric api is a dependency the player installs next to the mod, not packed in the jar
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    // packed inside the jar so nobody has to download it. a newer copy the player already has wins
-    include "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // hypixel mod api, comes from the HypixelModAPI mod at runtime (optional)
-    compileOnly files('libs/mod-api-1.0.2.jar')
+    compileOnly rootProject.files('libs/mod-api-1.0.2.jar')
     // parser tests run on real text from /sbc dump (src/test/resources/samples)
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 processResources {
-    inputs.property 'version', project.version
-    filesMatching('fabric.mod.json') { expand 'version': project.version }
-    from('LICENSE') { rename { 'LICENSE-SkyBlockCompanion.txt' } }
-    from('THIRD_PARTY_NOTICES.md')
+    def props = [version: project.version, minecraft: mc, fabric_api: project.fabric_version.split('[+]')[0]]
+    inputs.properties props
+    // escapeBackslash keeps the \n in the description as written: without it the json gets a real line break, which
+    // the loader lets through but Modrinth's launcher can't read, so it showed no name or icon for the mod
+    filesMatching('fabric.mod.json') { expand(props) { escapeBackslash = true } }
+    from(rootProject.file('LICENSE')) { rename { 'LICENSE-SkyBlockCompanion.txt' } }
+    from(rootProject.file('THIRD_PARTY_NOTICES.md'))
+    // what's new reads the changelog from the jar
+    from(rootProject.file('docs/CHANGELOG.md')) { into 'assets/sbcompanion'; rename { 'changelog.md' } }
 }
 
-tasks.named('jar') { archiveFileName = "${project.jar_name}.jar" }
+// sbc-beta-0.2-mc26.3.jar: the Minecraft version in the name, like SkyHanni's jars
+tasks.named('jar') { archiveFileName = "${project.jar_name}-mc${mc}.jar" }
 
-tasks.named('test', Test) { useJUnitPlatform() }
+// the tests read src/ and docs/ where they run, and write to build/ there. they run in a copy of this version's own
+// source, so each Minecraft version checks its own code and not the other one's lines in comments
+def testRoot = layout.buildDirectory.dir('test-root')
+def prepareTestRoot = tasks.register('prepareTestRoot', Sync) {
+    dependsOn 'compileJava', 'compileTestJava', 'processResources', 'processTestResources'
+    into testRoot
+    from(sourceSets.main.java.srcDirs) { into 'src/main/java' }
+    from(sourceSets.main.resources.srcDirs) { into 'src/main/resources' }
+    from(sourceSets.test.resources.srcDirs) { into 'src/test/resources' }
+    from(rootProject.file('docs')) { into 'docs' }
+    from(rootProject.file('audit')) { into 'audit' }
+    from(rootProject.file('gradle.properties'))
+    // what the tests wrote last time stays
+    preserve { include 'build/**' }
+}
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    dependsOn prepareTestRoot
+    workingDir = testRoot.get().asFile
+}
 
 tasks.withType(JavaCompile).configureEach { it.options.release = 25 }
 java { sourceCompatibility = JavaVersion.VERSION_25; targetCompatibility = JavaVersion.VERSION_25 }
 
 loom {
     // what ui/layout needs from the games graphics object + screen
-    accessWidenerPath = file('src/main/resources/sbcompanion.accesswidener')
+    accessWidenerPath = rootProject.file('src/main/resources/sbcompanion.accesswidener')
     runs {
         client {
             vmArg '-Dsbc.dev=true'

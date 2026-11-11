@@ -362,7 +362,7 @@
  "SH.data.kuudra.chat.complete": "§.\\s*(?:§.)*KUUDRA DOWN!",
  "SH.data.kuudra.internalname.armor": "(?<tier>HOT|BURNING|FIERY|INFERNAL|)_?(?<type>AURORA|CRIMSON|TERROR|HOLLOW|FERVOR)_(?:HELMET|CHESTPLATE|LEGGINGS|BOOTS)",
  "SH.data.kuudra.kuudrachest": "(?<chesttype>(?:Paid|Free) Chest)(?: Chest)?",
- "SH.data.kuudra.scoreboard.tier": " §7⏣ §cKuudra's Hollow §8\\(T(?<tier>\\d+)\\)",
+ "SH.data.kuudra.scoreboard.tier": " §7[⏣\uE067] §cKuudra's Hollow §8\\(T(?<tier>\\d+)\\)",
  "SH.data.maxwell.chat.power": "§eYou selected the §a(?<power>.*) §e(?:power )?for your §aAccessory Bag§e!",
  "SH.data.maxwell.chat.power.unlocked": "§eYour selected power was set to (?:§r)*§a(?<power>.*)(?:§r)*§e!",
  "SH.data.maxwell.collection.redstone.requirement": "(?:§.)*Requires (?:§.)*Redstone Collection I+(?:§.)*\\.",
